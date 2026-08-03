@@ -1,0 +1,63 @@
+{
+  "_synthetic": true,
+  "_note": "Caso completamente inventado (District 1234567), sin relación con 507999.bitmap ni 7187.bitmap. Demuestra, en un solo vector: rechazo por is_json, rechazo por content_type_hex incorrecto, rechazo por bloque inexistente, y que la primera reclamación válida gana por inscription_number ascendente — no por orden de llegada ni por posición de transacción.",
+  "district": 1234567,
+  "district_name": "1234567.bitmap",
+  "blocks_ascending": [
+    {
+      "block_height": 1000000,
+      "candidates": [
+        {
+          "inscription_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbi0",
+          "inscription_number": 5,
+          "content_hex": "313233343536372e6269746d6170",
+          "is_json": false,
+          "content_type_hex": "746578742f706c61696e",
+          "block_height": 1000000,
+          "_rejected_reason": "bitmap_number (1234567) > block_height (1000000): block does not exist yet"
+        }
+      ]
+    },
+    {
+      "block_height": 2000000,
+      "candidates": [
+        {
+          "inscription_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeei0",
+          "inscription_number": 40,
+          "content_hex": "313233343536372e6269746d6170",
+          "is_json": true,
+          "content_type_hex": "6170706c69636174696f6e2f6a736f6e",
+          "block_height": 2000000,
+          "_rejected_reason": "is_json is true"
+        },
+        {
+          "inscription_id": "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddi0",
+          "inscription_number": 30,
+          "content_hex": "313233343536372e6269746d6170",
+          "is_json": false,
+          "content_type_hex": "6170706c69636174696f6e2f6a736f6e",
+          "block_height": 2000000,
+          "_rejected_reason": "content_type_hex does not start with the text/plain hex prefix"
+        },
+        {
+          "inscription_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccci0",
+          "inscription_number": 20,
+          "content_hex": "313233343536372e6269746d6170",
+          "is_json": false,
+          "content_type_hex": "746578742f706c61696e",
+          "block_height": 2000000,
+          "_rejected_reason": null
+        },
+        {
+          "inscription_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai0",
+          "inscription_number": 10,
+          "content_hex": "313233343536372e6269746d6170",
+          "is_json": false,
+          "content_type_hex": "746578742f706c61696e",
+          "block_height": 2000000,
+          "_rejected_reason": null
+        }
+      ]
+    }
+  ]
+}

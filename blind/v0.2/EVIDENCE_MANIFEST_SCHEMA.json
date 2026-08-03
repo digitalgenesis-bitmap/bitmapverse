@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/blind/v0.2/evidence-manifest.schema.json",
+  "title": "Bitmapverse Blind B1 Evidence Manifest v0.2",
+  "description": "Manifiesto dependiente de la observación. A diferencia de resolution_result y candidate_set, no es estable entre implementadores — documenta cómo ESTA implementación observó la evidencia. Exige el invariante observed = eligible + excluded y una prueba de ancestralidad con evidencia registrada, no una afirmación booleana. Ver CONTRACT.md §4-5.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract_version",
+    "resolution_snapshot",
+    "observation_tip",
+    "observed_through_observation_tip_count",
+    "eligible_through_resolution_snapshot_count",
+    "excluded_after_resolution_snapshot_count",
+    "chain_ancestry_proof",
+    "bitmap_discovery",
+    "resolution_result_canonical_sha256",
+    "candidate_set_canonical_sha256"
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.evidence_manifest.v0.2" },
+    "contract_version": { "const": "0.2.0" },
+    "resolution_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "block_timestamp": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Contexto opcional únicamente. No determina el corte de elegibilidad — la altura lo hace. Ausente o null si la evidencia disponible no lo declara; nunca inventado."
+        }
+      }
+    },
+    "observation_tip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Debe ser >= resolution_snapshot.height — restricción entre campos verificada en código."
+        },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "observed_through_observation_tip_count": { "type": "integer", "minimum": 0 },
+    "eligible_through_resolution_snapshot_count": { "type": "integer", "minimum": 0 },
+    "excluded_after_resolution_snapshot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Invariante obligatorio (verificado en código, no expresable como restricción aritmética en JSON Schema puro): observed_through_observation_tip_count = eligible_through_resolution_snapshot_count + excluded_after_resolution_snapshot_count."
+    },
+    "chain_ancestry_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "operator", "evidence_captured", "evidence_sha256", "result", "limitations"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Cómo se verificó que resolution_snapshot es ancestro de observation_tip — p. ej. seguimiento de cabeceras de bloque, consulta a un servicio que expone la cadena de ancestros."
+        },
+        "operator": {
+          "type": ["string", "null"],
+          "description": "Quién o qué infraestructura ejecutó la verificación. null solo si genuinamente no está disponible — nunca fabricado."
+        },
+        "evidence_captured": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Referencia o descripción de la evidencia capturada que sustenta el resultado — no basta con el resultado solo."
+        },
+        "evidence_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ancestor"],
+          "properties": {
+            "ancestor": { "type": "boolean" }
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "bitmap_discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "implementation", "operator"],
+      "properties": {
+        "profile": { "const": "bitmapverse.bitmap_discovery.v0.2" },
+        "implementation": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Software concreto usado para aplicar el perfil normativo — puede diferir entre implementadores conformes (ver BITMAP_DISCOVERY_PROFILE.md, niveles B1a/B1b)."
+        },
+        "operator": {
+          "type": ["string", "null"],
+          "description": "Quién ejecutó esa implementación. null si genuinamente no está disponible."
+        }
+      }
+    },
+    "resolution_result_canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 JCS de resolution_result.v0.2 emparejado con este manifiesto."
+    },
+    "candidate_set_canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 JCS de candidate_set_through_resolution_snapshot.v0.2 emparejado con este manifiesto."
+    }
+  }
+}

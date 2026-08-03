@@ -1,0 +1,38 @@
+{
+  "schema": "bitmapverse.blind_package_manifest.v0.2",
+  "package_id": "same-sat-latest-b1-prep-v0.2",
+  "created_at": "2026-07-31",
+  "purpose": "Preparación de Prueba B1 — reconstrucción independiente de evidencia. No incluye fixtures, candidatos, IDs, sats ni hashes de contenido reales.",
+  "self_exclusion_note": "Este manifiesto se excluye a sí mismo de su propio listado 'files' para evitar circularidad (no puede hashear sus propios bytes finales antes de terminar de escribirse). La completitud del paquete se verifica comparando la lista de archivos en disco contra Object.keys(files) más 'PACKAGE_MANIFEST.json' — ver tests/blind-v02-package.test.mjs.",
+  "files": {
+    "BITMAP_DISCOVERY_PROFILE.md": "b8a66ad1a8baded4227edbf7d14408d6981ce20d5b04c88715e866c7d582eff8",
+    "CANDIDATE_SET_SCHEMA.json": "eff8ddb225f756918e500f56ae34d74f98942f782dc63f18183e66481787c0b5",
+    "CANONICALIZATION.md": "f8560435c3e076be2e1a4143e51d64cffd610fbb14a6c41a265741d00b585646",
+    "CONTRACT.md": "072d4996d034e263fadd32d2384d84dd86555a3699ec31e53c999cf5d8a8baf2",
+    "EVIDENCE_MANIFEST_SCHEMA.json": "c8bf73a32e57aa8fe358e7c7f85ea72caa28b077c5c01b6f6d654344bf4b348d",
+    "FIELD_PROVENANCE.md": "743cc75debcffc03efdc2be71c872c1deca1c91e9d4d00d5b0023824abedb7b3",
+    "ORACLE_COMMITMENT.txt": "f0999fa13ccd9bc2058586fc33424c3978fd8279d5e3848a91096b0c6274da24",
+    "README.md": "deed68263e527088a45fd998a6df1256c069663db74dc9d8b33bb80d2b256d34",
+    "RESOLUTION_RESULT_SCHEMA.json": "5ed1e5391170469cb721420f083604f7da90b54b40e583049104a0e6302d314c",
+    "TASK.md": "43f0589e54c7b9a5e2b05b65a97a1b82249100bc350fc80492513eb02ca520d9",
+    "test-vectors/canonicalization-vectors.json": "11a54574580b866f0bbf5c658a0b8695cc786b0ff07083af8d8690f7dc4a5025",
+    "test-vectors/synthetic-count-split.expected.json": "effd2368ecabf4674bf694d9507bad59c90df98ab2c0aeeedbc8b60580a6fd01",
+    "test-vectors/synthetic-count-split.input.json": "d4050fb05cff46713eb497c483705884f6298192916b18c7c83449afe02ad12d"
+  },
+  "excluded": [
+    "oráculo reservado",
+    "nonce del oráculo reservado",
+    "instrucciones de revelación del oráculo reservado",
+    "fixtures reales",
+    "candidatos reales",
+    "inscription IDs reales",
+    "sats reales",
+    "hashes de contenido reales",
+    "resultado de Prueba A",
+    "hashes canónicos de resultados reales",
+    "código de los resolutores existentes",
+    "código de la capa de conformidad de Prueba A",
+    "pruebas anteriores",
+    "herramientas de preparación (scripts/b1-prep/)"
+  ]
+}

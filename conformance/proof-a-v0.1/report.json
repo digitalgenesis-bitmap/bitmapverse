@@ -1,0 +1,486 @@
+{
+  "schema": "bitmapverse.proof_a_conformance_report.v0.1",
+  "version": "0.2.0",
+  "generated_at": "2026-07-31T17:30:30.850Z",
+  "status": "NO CONFORME",
+  "core_status": "CONFORME",
+  "full_conformance_possible_from_sealed_data_alone": false,
+  "claims": {
+    "full": "NO CONFORME: el result.json sellado de Python no puede satisfacer resolution_result.v0.1 sin consultar evidencia externa (el fixture congelado) para eligible_candidate_count.",
+    "core": "CONFORME para el núcleo común de selección y posición: district, district_name, resolver, original_inscription_id, selected_inscription_id, selected_content_sha256, sat, selected_position y snapshot son semántica y canónicamente idénticos entre JavaScript y Python en ambos fixtures.",
+    "pending_successor_contract": "La conformidad completa (incluyendo eligible_candidate_count) queda pendiente de una v0.2 de blind/v0.1/CONTRACT.md que especifique si `candidate_count` en la salida mínima de Python significa total observado o elegible tras el snapshot, y que declare explícitamente el campo `resolver`."
+  },
+  "custody": {
+    "before": {
+      "allVerifiedMatch": true,
+      "results": [
+        {
+          "path": "bitmapverse-blind-submission-a-001.zip",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "e882577e231043a0556d22a8348e4d90f607ccee188250341c1415df64ed1de3",
+          "actual_sha256": "e882577e231043a0556d22a8348e4d90f607ccee188250341c1415df64ed1de3",
+          "matches": true,
+          "commitment_source": "blind/audits/proof-a-001.md, \"SHA-256 de la entrega preservada\" (recorded at Prueba A close, 2026-07-31T15:44:40Z)"
+        },
+        {
+          "path": "bitmapverse-blind-v0.1.zip",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "20e2e66890a469e853487acb124e2e938c3a3bb303bd6d9439fa538af25ae0d4",
+          "actual_sha256": "20e2e66890a469e853487acb124e2e938c3a3bb303bd6d9439fa538af25ae0d4",
+          "matches": true,
+          "commitment_source": "blind/audits/proof-a-001.md, \"SHA-256 del paquete\""
+        },
+        {
+          "path": "blind/v0.1/README.md",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "fc5d11129fce937895fd61603ac769f9c01f0d1ed751aeb4dfcfbb07e691fd7d",
+          "actual_sha256": "fc5d11129fce937895fd61603ac769f9c01f0d1ed751aeb4dfcfbb07e691fd7d",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/TASK.md",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "4f5d8aa727929f7e792f9f9bb0776da3de00d23b30044c1b130fb0b4ad4a351b",
+          "actual_sha256": "4f5d8aa727929f7e792f9f9bb0776da3de00d23b30044c1b130fb0b4ad4a351b",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/CONTRACT.md",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "17f324e383ca6f1cc27525e725a59ffd6486dfd6553529d70b714f427668986f",
+          "actual_sha256": "17f324e383ca6f1cc27525e725a59ffd6486dfd6553529d70b714f427668986f",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/ORACLE_COMMITMENT.txt",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "f092879266f086c09d128f9c1ed703cfcd7187b398f6751e3acb6f2b61a4a717",
+          "actual_sha256": "f092879266f086c09d128f9c1ed703cfcd7187b398f6751e3acb6f2b61a4a717",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/case.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "61a32295bb3e7c36ca69732b0fef63faca21a845cd3dc37c4eb313d0ba36699d",
+          "actual_sha256": "61a32295bb3e7c36ca69732b0fef63faca21a845cd3dc37c4eb313d0ba36699d",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/fixtures/507999.snapshot.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "5a935afb166b8af613885593874f9a4d166d06b875b6e3de5cf824002b9e96d8",
+          "actual_sha256": "5a935afb166b8af613885593874f9a4d166d06b875b6e3de5cf824002b9e96d8",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/fixtures/7187.snapshot.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "d9d374df1fb651c51786f6002c0846f575a080f0a7073cedcd057b06149c6d36",
+          "actual_sha256": "d9d374df1fb651c51786f6002c0846f575a080f0a7073cedcd057b06149c6d36",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "oracle/reserved/same-sat-latest-v01.oracle.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "2db6191f46954904e51e29daac4900d475cb5fac1d2159ec5b7bda8dd9879783",
+          "actual_sha256": "2db6191f46954904e51e29daac4900d475cb5fac1d2159ec5b7bda8dd9879783",
+          "matches": true,
+          "commitment_source": "blind/v0.1/ORACLE_COMMITMENT.txt (published before the oracle was revealed), corroborated by blind/audits/proof-a-001.md"
+        },
+        {
+          "path": "blind/audits/proof-a-001.md",
+          "kind": "new_baseline",
+          "actual_sha256": "ad373899b1157523085604bf9cf4d4c5974408f8832a7fc1cf93f3fb052d8308",
+          "commitment_source": null,
+          "note": "Su integridad retrospectiva no puede demostrarse criptográficamente; se establece una línea base desde esta revisión."
+        }
+      ]
+    },
+    "after": {
+      "allVerifiedMatch": true,
+      "results": [
+        {
+          "path": "bitmapverse-blind-submission-a-001.zip",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "e882577e231043a0556d22a8348e4d90f607ccee188250341c1415df64ed1de3",
+          "actual_sha256": "e882577e231043a0556d22a8348e4d90f607ccee188250341c1415df64ed1de3",
+          "matches": true,
+          "commitment_source": "blind/audits/proof-a-001.md, \"SHA-256 de la entrega preservada\" (recorded at Prueba A close, 2026-07-31T15:44:40Z)"
+        },
+        {
+          "path": "bitmapverse-blind-v0.1.zip",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "20e2e66890a469e853487acb124e2e938c3a3bb303bd6d9439fa538af25ae0d4",
+          "actual_sha256": "20e2e66890a469e853487acb124e2e938c3a3bb303bd6d9439fa538af25ae0d4",
+          "matches": true,
+          "commitment_source": "blind/audits/proof-a-001.md, \"SHA-256 del paquete\""
+        },
+        {
+          "path": "blind/v0.1/README.md",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "fc5d11129fce937895fd61603ac769f9c01f0d1ed751aeb4dfcfbb07e691fd7d",
+          "actual_sha256": "fc5d11129fce937895fd61603ac769f9c01f0d1ed751aeb4dfcfbb07e691fd7d",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/TASK.md",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "4f5d8aa727929f7e792f9f9bb0776da3de00d23b30044c1b130fb0b4ad4a351b",
+          "actual_sha256": "4f5d8aa727929f7e792f9f9bb0776da3de00d23b30044c1b130fb0b4ad4a351b",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/CONTRACT.md",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "17f324e383ca6f1cc27525e725a59ffd6486dfd6553529d70b714f427668986f",
+          "actual_sha256": "17f324e383ca6f1cc27525e725a59ffd6486dfd6553529d70b714f427668986f",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/ORACLE_COMMITMENT.txt",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "f092879266f086c09d128f9c1ed703cfcd7187b398f6751e3acb6f2b61a4a717",
+          "actual_sha256": "f092879266f086c09d128f9c1ed703cfcd7187b398f6751e3acb6f2b61a4a717",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/case.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "61a32295bb3e7c36ca69732b0fef63faca21a845cd3dc37c4eb313d0ba36699d",
+          "actual_sha256": "61a32295bb3e7c36ca69732b0fef63faca21a845cd3dc37c4eb313d0ba36699d",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/fixtures/507999.snapshot.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "5a935afb166b8af613885593874f9a4d166d06b875b6e3de5cf824002b9e96d8",
+          "actual_sha256": "5a935afb166b8af613885593874f9a4d166d06b875b6e3de5cf824002b9e96d8",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "blind/v0.1/fixtures/7187.snapshot.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "d9d374df1fb651c51786f6002c0846f575a080f0a7073cedcd057b06149c6d36",
+          "actual_sha256": "d9d374df1fb651c51786f6002c0846f575a080f0a7073cedcd057b06149c6d36",
+          "matches": true,
+          "commitment_source": "blind/v0.1/PACKAGE_MANIFEST.json (sealed inside the blind package itself)"
+        },
+        {
+          "path": "oracle/reserved/same-sat-latest-v01.oracle.json",
+          "kind": "verified_against_prior_commitment",
+          "expected_sha256": "2db6191f46954904e51e29daac4900d475cb5fac1d2159ec5b7bda8dd9879783",
+          "actual_sha256": "2db6191f46954904e51e29daac4900d475cb5fac1d2159ec5b7bda8dd9879783",
+          "matches": true,
+          "commitment_source": "blind/v0.1/ORACLE_COMMITMENT.txt (published before the oracle was revealed), corroborated by blind/audits/proof-a-001.md"
+        },
+        {
+          "path": "blind/audits/proof-a-001.md",
+          "kind": "new_baseline",
+          "actual_sha256": "ad373899b1157523085604bf9cf4d4c5974408f8832a7fc1cf93f3fb052d8308",
+          "commitment_source": null,
+          "note": "Su integridad retrospectiva no puede demostrarse criptográficamente; se establece una línea base desde esta revisión."
+        }
+      ]
+    },
+    "audit_file_unchanged_during_run": true
+  },
+  "cases": {
+    "507999-at-959531": {
+      "js": {
+        "resolution_result_full": {
+          "schema": "bitmapverse.resolution_result.v0.1",
+          "district": 507999,
+          "district_name": "507999.bitmap",
+          "resolver": "same_sat_latest_v0.1",
+          "original_inscription_id": "2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0i0",
+          "selected_inscription_id": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675i0",
+          "selected_content_sha256": "177e29dbaaf7cb10440535b4da29cd669332a336779dd96f0b0a408d4909775f",
+          "sat": 1931628970942295,
+          "selected_position": {
+            "block_height": 959318,
+            "block_hash": "00000000000000000000fccfe411b1b15ebaf223f31c68ffab02eadb4fa3d06c",
+            "transaction_id": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675",
+            "transaction_index": 2781,
+            "inscription_index": 0
+          },
+          "snapshot": {
+            "block_height": 959531,
+            "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+            "block_timestamp": null
+          },
+          "eligible_candidate_count": 2,
+          "status": "experimental"
+        },
+        "resolution_result_full_schema_valid": true,
+        "resolution_result_core_canonical_sha256": "94ab3b07427ccf41fa3bb5cf88865a156da83b187f35c6ff5f6b5d8a6fd5b533",
+        "evidence_manifest": {
+          "schema": "bitmapverse.evidence_manifest.v0.1",
+          "observed_at": "2026-07-30",
+          "observed_candidate_count": 2,
+          "eligible_candidate_count": 2,
+          "excluded_after_snapshot": 0,
+          "enumeration_complete_through_snapshot": true,
+          "reconstruction_method": {
+            "district_discovery": "opi",
+            "sat_resolution": "ord",
+            "candidate_enumeration": "same_sat",
+            "snapshot_boundary": "bitcoin_block"
+          },
+          "sources": {
+            "opi": {
+              "operator": null,
+              "implementation": "https://github.com/bestinslot-xyz/OPI",
+              "version": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+              "query_or_endpoint": "/v1/bitmap/get_inscription_id_of_bitmap?bitmap_number=507999",
+              "response_status": "not_captured_no_public_instance",
+              "response_sha256": null
+            },
+            "ord": {
+              "operator": null,
+              "implementation": "ord server via ordinals.com",
+              "version": "not_exposed_by_public_server",
+              "query_or_endpoint": "https://ordinals.com/r/sat/1931628970942295",
+              "response_status": "captured",
+              "response_sha256": "91aeb721b2293f01f136827c6ab7e3139766ff6ffaec338e415f81ab60bfe74d"
+            }
+          },
+          "resolution_result_canonical_sha256": "c6ba5a8382548b9f701897671cfb4cae9b53c4e70a2f01727dab4d513cfe6666"
+        },
+        "evidence_manifest_schema_valid": true
+      },
+      "python": {
+        "resolution_result_core": {
+          "schema": "bitmapverse.resolution_result.v0.1",
+          "district": 507999,
+          "district_name": "507999.bitmap",
+          "resolver": "same_sat_latest_v0.1",
+          "original_inscription_id": "2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0i0",
+          "selected_inscription_id": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675i0",
+          "selected_content_sha256": "177e29dbaaf7cb10440535b4da29cd669332a336779dd96f0b0a408d4909775f",
+          "sat": 1931628970942295,
+          "selected_position": {
+            "block_height": 959318,
+            "block_hash": "00000000000000000000fccfe411b1b15ebaf223f31c68ffab02eadb4fa3d06c",
+            "transaction_id": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675",
+            "transaction_index": 2781,
+            "inscription_index": 0
+          },
+          "snapshot": {
+            "block_height": 959531,
+            "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+            "block_timestamp": null
+          },
+          "status": "experimental"
+        },
+        "resolution_result_core_canonical_sha256": "94ab3b07427ccf41fa3bb5cf88865a156da83b187f35c6ff5f6b5d8a6fd5b533",
+        "resolution_result_full_error": "python-adapter: cannot produce a schema-valid resolution_result.v0.1 from sealed_result alone. sealed_result['candidate_count'] = 2, but resolver.py defined that field as the fixture's TOTAL observed candidate count, not the post-snapshot ELIGIBLE subset resolution_result.eligible_candidate_count means (see AMBIGUITIES-SUCCESSOR.md #12). The sealed output carries no eligible/excluded breakdown, so there is no way to tell from this input alone whether the two numbers coincide. A pure adapter must not consult the frozen fixture to settle this — that would silently convert an unverified semantic claim into a fact. All fields except eligible_candidate_count are available and schema-conformant via to_resolution_result_core() (district=507999, selected_inscription_id=16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675i0).",
+        "resolution_result_core_validated_against_full_schema": {
+          "valid": false,
+          "errors": [
+            "$: missing required property \"eligible_candidate_count\""
+          ]
+        },
+        "evidence_manifest": {
+          "schema": "bitmapverse.evidence_manifest.v0.1",
+          "observed_at": "2026-07-30",
+          "observed_candidate_count": 2,
+          "eligible_candidate_count": 2,
+          "excluded_after_snapshot": 0,
+          "enumeration_complete_through_snapshot": true,
+          "reconstruction_method": {
+            "district_discovery": "opi",
+            "sat_resolution": "ord",
+            "candidate_enumeration": "same_sat",
+            "snapshot_boundary": "bitcoin_block"
+          },
+          "sources": {
+            "opi": {
+              "operator": null,
+              "implementation": "https://github.com/bestinslot-xyz/OPI",
+              "version": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+              "query_or_endpoint": "/v1/bitmap/get_inscription_id_of_bitmap?bitmap_number=507999",
+              "response_status": "not_captured_no_public_instance",
+              "response_sha256": null
+            },
+            "ord": {
+              "operator": null,
+              "implementation": "ord server via ordinals.com",
+              "version": "not_exposed_by_public_server",
+              "query_or_endpoint": "https://ordinals.com/r/sat/1931628970942295",
+              "response_status": "captured",
+              "response_sha256": "91aeb721b2293f01f136827c6ab7e3139766ff6ffaec338e415f81ab60bfe74d"
+            }
+          },
+          "resolution_result_canonical_sha256": "94ab3b07427ccf41fa3bb5cf88865a156da83b187f35c6ff5f6b5d8a6fd5b533"
+        },
+        "evidence_manifest_schema_valid": true
+      },
+      "core_semantic_equal": true,
+      "core_canonical_bytes_equal": true,
+      "core_canonical_sha256_equal": true,
+      "core_canonical_sha256": "94ab3b07427ccf41fa3bb5cf88865a156da83b187f35c6ff5f6b5d8a6fd5b533"
+    },
+    "7187-at-959531": {
+      "js": {
+        "resolution_result_full": {
+          "schema": "bitmapverse.resolution_result.v0.1",
+          "district": 7187,
+          "district_name": "7187.bitmap",
+          "resolver": "same_sat_latest_v0.1",
+          "original_inscription_id": "50123b2d404f0ca8d97d07a98bd897d748b2db3d611496fa4eb1288171e8ea61i0",
+          "selected_inscription_id": "a40f8c3af2058c9178c758d500f16f314ef2384fcf8a28a233ceda5ec7fd698ei0",
+          "selected_content_sha256": "582234b818783e0e5a31a5ea4b6694f87ac142b5bc776ee803a937bb5815a74d",
+          "sat": 1598464714258840,
+          "selected_position": {
+            "block_height": 959531,
+            "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+            "transaction_id": "a40f8c3af2058c9178c758d500f16f314ef2384fcf8a28a233ceda5ec7fd698e",
+            "transaction_index": 2381,
+            "inscription_index": 0
+          },
+          "snapshot": {
+            "block_height": 959531,
+            "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+            "block_timestamp": null
+          },
+          "eligible_candidate_count": 3,
+          "status": "experimental"
+        },
+        "resolution_result_full_schema_valid": true,
+        "resolution_result_core_canonical_sha256": "961e2151f276810043c923331a96d881945c7a0fad03eb3eab4cb784368b9599",
+        "evidence_manifest": {
+          "schema": "bitmapverse.evidence_manifest.v0.1",
+          "observed_at": "2026-07-30",
+          "observed_candidate_count": 3,
+          "eligible_candidate_count": 3,
+          "excluded_after_snapshot": 0,
+          "enumeration_complete_through_snapshot": true,
+          "reconstruction_method": {
+            "district_discovery": "opi",
+            "sat_resolution": "ord",
+            "candidate_enumeration": "same_sat",
+            "snapshot_boundary": "bitcoin_block"
+          },
+          "sources": {
+            "opi": {
+              "operator": null,
+              "implementation": "https://github.com/bestinslot-xyz/OPI",
+              "version": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+              "query_or_endpoint": "/v1/bitmap/get_inscription_id_of_bitmap?bitmap_number=7187",
+              "response_status": "not_captured_no_public_instance",
+              "response_sha256": null
+            },
+            "ord": {
+              "operator": null,
+              "implementation": "ord server via ordinals.com",
+              "version": "not_exposed_by_public_server",
+              "query_or_endpoint": "https://ordinals.com/r/sat/1598464714258840",
+              "response_status": "captured",
+              "response_sha256": "e60793c18caeea659507e837f2ca8b3cd68eb254e8d8eee6d5ab798a3af18727"
+            }
+          },
+          "resolution_result_canonical_sha256": "1a8e9e8d76c9d7abfd4d335aa86c9613025b8d4affa21b28efe6412885cd4d80"
+        },
+        "evidence_manifest_schema_valid": true
+      },
+      "python": {
+        "resolution_result_core": {
+          "schema": "bitmapverse.resolution_result.v0.1",
+          "district": 7187,
+          "district_name": "7187.bitmap",
+          "resolver": "same_sat_latest_v0.1",
+          "original_inscription_id": "50123b2d404f0ca8d97d07a98bd897d748b2db3d611496fa4eb1288171e8ea61i0",
+          "selected_inscription_id": "a40f8c3af2058c9178c758d500f16f314ef2384fcf8a28a233ceda5ec7fd698ei0",
+          "selected_content_sha256": "582234b818783e0e5a31a5ea4b6694f87ac142b5bc776ee803a937bb5815a74d",
+          "sat": 1598464714258840,
+          "selected_position": {
+            "block_height": 959531,
+            "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+            "transaction_id": "a40f8c3af2058c9178c758d500f16f314ef2384fcf8a28a233ceda5ec7fd698e",
+            "transaction_index": 2381,
+            "inscription_index": 0
+          },
+          "snapshot": {
+            "block_height": 959531,
+            "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+            "block_timestamp": null
+          },
+          "status": "experimental"
+        },
+        "resolution_result_core_canonical_sha256": "961e2151f276810043c923331a96d881945c7a0fad03eb3eab4cb784368b9599",
+        "resolution_result_full_error": "python-adapter: cannot produce a schema-valid resolution_result.v0.1 from sealed_result alone. sealed_result['candidate_count'] = 3, but resolver.py defined that field as the fixture's TOTAL observed candidate count, not the post-snapshot ELIGIBLE subset resolution_result.eligible_candidate_count means (see AMBIGUITIES-SUCCESSOR.md #12). The sealed output carries no eligible/excluded breakdown, so there is no way to tell from this input alone whether the two numbers coincide. A pure adapter must not consult the frozen fixture to settle this — that would silently convert an unverified semantic claim into a fact. All fields except eligible_candidate_count are available and schema-conformant via to_resolution_result_core() (district=7187, selected_inscription_id=a40f8c3af2058c9178c758d500f16f314ef2384fcf8a28a233ceda5ec7fd698ei0).",
+        "resolution_result_core_validated_against_full_schema": {
+          "valid": false,
+          "errors": [
+            "$: missing required property \"eligible_candidate_count\""
+          ]
+        },
+        "evidence_manifest": {
+          "schema": "bitmapverse.evidence_manifest.v0.1",
+          "observed_at": "2026-07-30",
+          "observed_candidate_count": 3,
+          "eligible_candidate_count": 3,
+          "excluded_after_snapshot": 0,
+          "enumeration_complete_through_snapshot": true,
+          "reconstruction_method": {
+            "district_discovery": "opi",
+            "sat_resolution": "ord",
+            "candidate_enumeration": "same_sat",
+            "snapshot_boundary": "bitcoin_block"
+          },
+          "sources": {
+            "opi": {
+              "operator": null,
+              "implementation": "https://github.com/bestinslot-xyz/OPI",
+              "version": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+              "query_or_endpoint": "/v1/bitmap/get_inscription_id_of_bitmap?bitmap_number=7187",
+              "response_status": "not_captured_no_public_instance",
+              "response_sha256": null
+            },
+            "ord": {
+              "operator": null,
+              "implementation": "ord server via ordinals.com",
+              "version": "not_exposed_by_public_server",
+              "query_or_endpoint": "https://ordinals.com/r/sat/1598464714258840",
+              "response_status": "captured",
+              "response_sha256": "e60793c18caeea659507e837f2ca8b3cd68eb254e8d8eee6d5ab798a3af18727"
+            }
+          },
+          "resolution_result_canonical_sha256": "961e2151f276810043c923331a96d881945c7a0fad03eb3eab4cb784368b9599"
+        },
+        "evidence_manifest_schema_valid": true
+      },
+      "core_semantic_equal": true,
+      "core_canonical_bytes_equal": true,
+      "core_canonical_sha256_equal": true,
+      "core_canonical_sha256": "961e2151f276810043c923331a96d881945c7a0fad03eb3eab4cb784368b9599"
+    }
+  },
+  "tests": {
+    "command": "node --test conformance/proof-a-v0.1/tests/conformance.test.mjs",
+    "total": 25,
+    "passed": 25,
+    "failed": 0,
+    "ok": true
+  },
+  "limits": [
+    "El result.json sellado de Python nunca declaró un desglose elegible/excluido; su candidate_count es el total observado por definición de resolver.py, no el subconjunto elegible que exige resolution_result.v0.1.",
+    "snapshot.block_timestamp no está declarado en ningún fixture congelado; ambos lados emiten null (ver CANONICALIZATION.md).",
+    "El lado JavaScript es derived_after_prueba_a (generado ahora contra los fixtures congelados); no existe una salida JavaScript históricamente sellada equivalente al result.json de Python.",
+    "evidence_manifest.sources.*.operator es null en ambos lados: ningún fixture congelado declara quién operó la consulta OPI o la enumeración Ord.",
+    "blind/audits/proof-a-001.md no tiene un compromiso criptográfico previo registrado en este repositorio; su hash se trata como una línea base nueva desde esta revisión, no como una verificación retrospectiva."
+  ]
+}

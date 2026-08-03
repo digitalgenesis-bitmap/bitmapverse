@@ -1,0 +1,22 @@
+{
+  "schema": "bitmapverse.blind_package_manifest.v0.1",
+  "package_id": "same-sat-latest-proof-a-001",
+  "created_at": "2026-07-31",
+  "purpose": "Independencia del resolver sobre evidencia congelada",
+  "files": {
+    "README.md": "fc5d11129fce937895fd61603ac769f9c01f0d1ed751aeb4dfcfbb07e691fd7d",
+    "TASK.md": "4f5d8aa727929f7e792f9f9bb0776da3de00d23b30044c1b130fb0b4ad4a351b",
+    "CONTRACT.md": "17f324e383ca6f1cc27525e725a59ffd6486dfd6553529d70b714f427668986f",
+    "ORACLE_COMMITMENT.txt": "f092879266f086c09d128f9c1ed703cfcd7187b398f6751e3acb6f2b61a4a717",
+    "case.json": "61a32295bb3e7c36ca69732b0fef63faca21a845cd3dc37c4eb313d0ba36699d",
+    "fixtures/507999.snapshot.json": "5a935afb166b8af613885593874f9a4d166d06b875b6e3de5cf824002b9e96d8",
+    "fixtures/7187.snapshot.json": "d9d374df1fb651c51786f6002c0846f575a080f0a7073cedcd057b06149c6d36"
+  },
+  "excluded": [
+    "oráculo reservado",
+    "código de la primera implementación",
+    "pruebas de la primera implementación",
+    "ejecuciones históricas",
+    "resultados esperados"
+  ]
+}

@@ -1,0 +1,197 @@
+{
+  "_synthetic": true,
+  "_note": "Salida esperada, calculada con una implementacion de referencia del perfil JCS restringido v0.2.2 mantenida fuera de este paquete, a partir de synthetic-count-split.input.json bajo el contrato v0.2.2.",
+  "resolution_result": {
+    "schema": "bitmapverse.resolution_result.v0.2.2",
+    "contract_version": "0.2.2",
+    "resolver": "same_sat_latest_v0.1",
+    "bitmap_discovery_profile": "bitmapverse.bitmap_discovery_opi_v1",
+    "district": 999999999,
+    "district_name": "999999999.bitmap",
+    "original_inscription_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai0",
+    "sat": 1111111111111111,
+    "selected_inscription_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccci0",
+    "selected_content_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "selected_position": {
+      "block_height": 999999,
+      "block_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "transaction_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "transaction_index": 5,
+      "inscription_index": 0
+    },
+    "resolution_snapshot": {
+      "height": 1000000,
+      "block_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "eligible_through_resolution_snapshot_count": 2,
+    "status": "experimental"
+  },
+  "candidate_set_through_resolution_snapshot": {
+    "schema": "bitmapverse.candidate_set.v0.2.2",
+    "contract_version": "0.2.2",
+    "district": 999999999,
+    "district_name": "999999999.bitmap",
+    "sat": 1111111111111111,
+    "resolution_snapshot": {
+      "height": 1000000,
+      "block_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "candidates": [
+      {
+        "inscription_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai0",
+        "sat": 1111111111111111,
+        "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "canonical_position": {
+          "block_height": 900000,
+          "block_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "transaction_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "transaction_index": 1,
+          "inscription_index": 0
+        }
+      },
+      {
+        "inscription_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccci0",
+        "sat": 1111111111111111,
+        "content_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "canonical_position": {
+          "block_height": 999999,
+          "block_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "transaction_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "transaction_index": 5,
+          "inscription_index": 0
+        }
+      }
+    ],
+    "candidate_count": 2,
+    "status": "experimental"
+  },
+  "evidence_manifest": {
+    "schema": "bitmapverse.evidence_manifest.v0.2.2",
+    "contract_version": "0.2.2",
+    "resolution_snapshot": {
+      "height": 1000000,
+      "block_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "observation_tip": {
+      "height": 1000050,
+      "block_hash": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "observed_through_observation_tip_count": 3,
+    "eligible_through_resolution_snapshot_count": 2,
+    "excluded_after_resolution_snapshot_count": 1,
+    "chain_ancestry_proof": {
+      "source_id": "synthetic-chain-ancestry",
+      "artifact_ids": [
+        "sha256:a9c226aa67d479103a4723089bbf430b6db498e635413aba3a735689b2cb0e8c"
+      ],
+      "method": "synthetic_test_vector_no_real_chain_verification",
+      "result": {
+        "ancestor": true
+      },
+      "limitations": [
+        "Este es un vector sintético; no representa una verificación de cadena real."
+      ]
+    },
+    "sources": [
+      {
+        "source_id": "synthetic-candidate-enumeration",
+        "role": "candidate_enumeration",
+        "implementation_identity": {
+          "name": "synthetic-test-vector-enumerator",
+          "verification_method": "binary_sha256",
+          "binary_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        },
+        "operator": null,
+        "request": {
+          "method": "GET",
+          "path": "/synthetic/enumeration",
+          "parameters": {
+            "sat": 1111111111111111
+          }
+        },
+        "artifact_ids": [
+          "sha256:5fe5f87d2271f2a0932cbae5d3b9ff58b39846679ce646d2ac00623b96565ee6"
+        ],
+        "capture_status": "captured",
+        "pagination": {
+          "complete": true,
+          "page_count": 1,
+          "pages": [
+            {
+              "page_index": 0,
+              "artifact_id": "sha256:5fe5f87d2271f2a0932cbae5d3b9ff58b39846679ce646d2ac00623b96565ee6"
+            }
+          ]
+        },
+        "limitations": []
+      },
+      {
+        "source_id": "synthetic-chain-ancestry",
+        "role": "chain_ancestry",
+        "implementation_identity": {
+          "name": "synthetic-test-vector-ancestry-checker",
+          "verification_method": "binary_sha256",
+          "binary_sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+        },
+        "operator": null,
+        "request": {
+          "method": "GET",
+          "path": "/synthetic/ancestry",
+          "parameters": {
+            "from": 1000000,
+            "to": 1000050
+          }
+        },
+        "artifact_ids": [
+          "sha256:a9c226aa67d479103a4723089bbf430b6db498e635413aba3a735689b2cb0e8c"
+        ],
+        "capture_status": "captured",
+        "pagination": {
+          "complete": true,
+          "page_count": 1,
+          "pages": [
+            {
+              "page_index": 0,
+              "artifact_id": "sha256:a9c226aa67d479103a4723089bbf430b6db498e635413aba3a735689b2cb0e8c"
+            }
+          ]
+        },
+        "limitations": []
+      }
+    ],
+    "captured_artifacts": [
+      {
+        "artifact_id": "sha256:5fe5f87d2271f2a0932cbae5d3b9ff58b39846679ce646d2ac00623b96565ee6",
+        "source_id": "synthetic-candidate-enumeration",
+        "size_bytes": 234,
+        "content_type": "application/json",
+        "observed_at": "synthetic"
+      },
+      {
+        "artifact_id": "sha256:a9c226aa67d479103a4723089bbf430b6db498e635413aba3a735689b2cb0e8c",
+        "source_id": "synthetic-chain-ancestry",
+        "size_bytes": 39,
+        "content_type": "application/json",
+        "observed_at": "synthetic"
+      }
+    ],
+    "resolution_result_canonical_sha256": "e6d7c7eda390a45274434775b440bea1f58711e36824fb76dfd395163c90c104",
+    "candidate_set_canonical_sha256": "2d77b8232e3938d4c85e504849b5a9e57d31606f4fafbdefff16a7fb03f02e43"
+  },
+  "canonical_hashes": {
+    "resolution_result": "e6d7c7eda390a45274434775b440bea1f58711e36824fb76dfd395163c90c104",
+    "candidate_set_through_resolution_snapshot": "2d77b8232e3938d4c85e504849b5a9e57d31606f4fafbdefff16a7fb03f02e43"
+  },
+  "invariant_check": {
+    "observed_through_observation_tip_count": 3,
+    "eligible_through_resolution_snapshot_count": 2,
+    "excluded_after_resolution_snapshot_count": 1,
+    "holds": true
+  },
+  "stability_demonstration": {
+    "claim": "resolution_result's canonical SHA-256 is identical whether or not the post-snapshot candidate is known to exist, because it is not eligible.",
+    "resolution_result_canonical_sha256_with_excluded_candidate_known": "e6d7c7eda390a45274434775b440bea1f58711e36824fb76dfd395163c90c104",
+    "resolution_result_canonical_sha256_if_excluded_candidate_had_never_been_observed": "e6d7c7eda390a45274434775b440bea1f58711e36824fb76dfd395163c90c104",
+    "identical": true
+  }
+}

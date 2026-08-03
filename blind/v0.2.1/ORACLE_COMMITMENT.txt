@@ -1,0 +1,31 @@
+Reserved oracle commitment — Prueba B1 (bitmapverse.b1.oracle.v0.2.1)
+
+Sucesor del compromiso v0.2. El compromiso v0.2 anterior no queda
+invalidado por este documento (blind/v0.2/ORACLE_COMMITMENT.txt no fue
+modificado); este es un compromiso independiente para un nonce, un
+oráculo y un contrato distintos (v0.2.1).
+
+commitment (SHA-256): 0108d43656a55b9d5ffcf307e481c11c8176f0c8cfe732375eb2d37a711fbe9f
+algorithm: SHA-256
+domain: bitmapverse:b1:oracle:v0.2.1
+nonce_length_bytes: 32
+canonicalization: "perfil JCS restringido" v0.2.1 (subconjunto documentado
+  de RFC 8785; ver blind/v0.2.1/CANONICALIZATION.md para el alcance
+  exacto y las diferencias frente a RFC 8785 completo).
+commitment formula: SHA-256(UTF8(domain) || 0x00 || nonce_32_bytes || 0x00 || JCS(oracle.json))
+
+Este compromiso fija el oráculo reservado (resolution_result.v0.2.1 y
+candidate_set_through_resolution_snapshot.v0.2.1 para ambos Districts bajo
+prueba) antes de recibir cualquier entrega independiente de Prueba B1. Ni
+el contenido del oráculo, ni los datos de resolución/candidatos que
+contiene, ni el nonce están incluidos en este paquete ni en el
+repositorio. Viven exclusivamente en una carpeta privada fuera del
+repositorio, con permisos restringidos (700 en directorios, 600 en
+archivos), y deben permanecer no divulgados hasta que una entrega
+independiente esté sellada.
+
+Instrucciones de verificación (a seguir solamente después de sellar una
+entrega B1): recomputar la fórmula de compromiso anterior usando el
+oráculo y el nonce revelados, y confirmar que es igual al compromiso aquí
+publicado. El procedimiento completo de revelación se conserva junto al
+oráculo reservado, no en este paquete.

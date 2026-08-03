@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/blind/v0.2/resolution-result.schema.json",
+  "title": "Bitmapverse Blind B1 Resolution Result v0.2",
+  "description": "Resultado histórico estable de same_sat_latest_v0.1 bajo el contrato de salida v0.2. Estable para el mismo District, el mismo bitmap_discovery_profile, el mismo resolver, el mismo resolution_snapshot y la misma cadena Bitcoin observada, con enumeración completa hasta el snapshot. No incluye block_timestamp ni ningún dato que dependa de qué tan lejos observó un operador concreto — eso vive en evidence_manifest.v0.2, un objeto distinto.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract_version",
+    "resolver",
+    "bitmap_discovery_profile",
+    "district",
+    "district_name",
+    "original_inscription_id",
+    "sat",
+    "selected_inscription_id",
+    "selected_content_sha256",
+    "selected_position",
+    "resolution_snapshot",
+    "eligible_through_resolution_snapshot_count",
+    "status"
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.resolution_result.v0.2" },
+    "contract_version": { "const": "0.2.0" },
+    "resolver": { "const": "same_sat_latest_v0.1" },
+    "bitmap_discovery_profile": { "const": "bitmapverse.bitmap_discovery.v0.2" },
+    "district": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "district_name === `${district}.bitmap` es una restricción entre campos verificada en código, no expresable en JSON Schema puro — ver CANONICALIZATION.md."
+    },
+    "district_name": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.bitmap$"
+    },
+    "original_inscription_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}i[0-9]+$"
+    },
+    "sat": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991,
+      "description": "Acotado al rango entero seguro de ECMAScript (2^53-1) por requisito de canonicalización JCS — ver CANONICALIZATION.md."
+    },
+    "selected_inscription_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}i[0-9]+$"
+    },
+    "selected_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "selected_position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "block_height",
+        "block_hash",
+        "transaction_id",
+        "transaction_index",
+        "inscription_index"
+      ],
+      "properties": {
+        "block_height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "transaction_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "transaction_index": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "inscription_index": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "resolution_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "description": "Deliberadamente sin block_timestamp: el timestamp de bloque no determina el corte de elegibilidad, la altura sí. Si un implementador quiere registrar el timestamp como contexto, pertenece a evidence_manifest.v0.2, no aquí."
+    },
+    "eligible_through_resolution_snapshot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Debe coincidir exactamente con candidate_set.candidate_count para el mismo District y resolution_snapshot, y con evidence_manifest.eligible_through_resolution_snapshot_count."
+    },
+    "status": { "const": "experimental" }
+  }
+}

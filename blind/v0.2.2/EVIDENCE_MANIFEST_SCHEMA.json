@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/blind/v0.2.2/evidence-manifest.schema.json",
+  "title": "Bitmapverse Blind B1 Evidence Manifest v0.2.2",
+  "description": "Manifiesto dependiente de la observación (CONTRACT.md). No estable entre implementadores; nunca se compara byte a byte contra el de otro operador — se valida por esquema, hashes, procedencia, conjunto semántico de candidatos, posiciones canónicas, integridad de artefactos, conteos/invariantes y prueba de ancestralidad (ver comparison-protocol y CONTRACT.md, sección de comparación normativa). Artefactos direccionados por contenido: artifact_id = 'sha256:<64-hex-minúsculas>', sin ningún campo de ruta declarada — la ubicación se deriva siempre como artifacts/sha256/<64-hex-minúsculas>.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract_version",
+    "resolution_snapshot",
+    "observation_tip",
+    "observed_through_observation_tip_count",
+    "eligible_through_resolution_snapshot_count",
+    "excluded_after_resolution_snapshot_count",
+    "chain_ancestry_proof",
+    "sources",
+    "captured_artifacts",
+    "resolution_result_canonical_sha256",
+    "candidate_set_canonical_sha256"
+  ],
+  "x_referential_integrity_rules": [
+    "source_id es único dentro de sources[].",
+    "artifact_id es único dentro de captured_artifacts[] y cumple exactamente ^sha256:[0-9a-f]{64}$ — sin '/', sin '\\\\', sin mayúsculas, sin otro prefijo.",
+    "Cada entrada de sources[].artifact_ids debe existir como captured_artifacts[].artifact_id, y ese artefacto debe declarar el mismo source_id de vuelta (coherencia bidireccional). Un artifact_id no puede pertenecer a más de una fuente.",
+    "Cada captured_artifacts[].source_id debe existir entre sources[].source_id.",
+    "Cada sources[].pagination.pages[].artifact_id debe existir en captured_artifacts[] y pertenecer a esa misma fuente.",
+    "Si sources[].capture_status !== \"captured\": artifact_ids debe ser [], pagination.complete debe ser false, pagination.pages debe ser [], y limitations no puede estar vacío (debe explicar por qué no se capturó).",
+    "chain_ancestry_proof.source_id debe existir entre sources[].source_id y esa fuente debe tener role === \"chain_ancestry\". Cada artifact_id en chain_ancestry_proof.artifact_ids debe existir en captured_artifacts[] y pertenecer a esa misma fuente.",
+    "sources[].implementation_identity se valida según el rol: bitmap_discovery exige verification_method === \"commit\", repository === el repositorio oficial de OPI, y commit === el commit fijado en OPI_SOURCE_PROVENANCE.json. Los demás roles exigen al menos una identidad reproducible coherente con verification_method (commit+repository, o release+release_hash_sha256, o binary_sha256, o container_digest).",
+    "Verificación física de artefactos (fuera del alcance de JSON Schema): archivo regular en artifacts/sha256/<hex> (nunca symlink), sha256 del contenido igual al hex del artifact_id, tamaño igual a captured_artifacts[].size_bytes.",
+    "Estas reglas no son expresables en JSON Schema (2020-12) puro sin extensiones no estándar; un implementador debe verificarlas en código propio."
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.evidence_manifest.v0.2.2" },
+    "contract_version": { "const": "0.2.2" },
+    "resolution_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "block_timestamp": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Contexto opcional. No determina el corte de elegibilidad. null si la evidencia disponible no lo declara — nunca inventado."
+        }
+      }
+    },
+    "observation_tip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Debe ser >= resolution_snapshot.height — verificado en código."
+        },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "observed_through_observation_tip_count": { "type": "integer", "minimum": 0 },
+    "eligible_through_resolution_snapshot_count": { "type": "integer", "minimum": 0 },
+    "excluded_after_resolution_snapshot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Invariante obligatorio (verificado en código): observed = eligible + excluded."
+    },
+    "chain_ancestry_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "artifact_ids", "method", "result", "limitations"],
+      "description": "No es un sistema paralelo de procedencia: referencia una fuente ya declarada en sources[] (role === \"chain_ancestry\") y sus propios artifact_ids ya declarados en captured_artifacts[]. No lleva evidence_captured ni evidence_sha256 propios — esos datos viven exclusivamente en captured_artifacts[].",
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Debe existir entre sources[].source_id, y esa fuente debe tener role === \"chain_ancestry\"."
+        },
+        "artifact_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+          "description": "Cada uno debe existir en captured_artifacts[] y pertenecer a la fuente referenciada por source_id."
+        },
+        "method": { "type": "string", "minLength": 1 },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ancestor"],
+          "properties": { "ancestor": { "type": "boolean" } }
+        },
+        "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Una entrada por fuente consultada. Ver x_referential_integrity_rules.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "role", "implementation_identity", "operator", "request", "artifact_ids", "capture_status", "pagination", "limitations"],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Único dentro de sources[] — verificado en código."
+          },
+          "role": {
+            "enum": ["bitmap_discovery", "sat_resolution", "candidate_enumeration", "chain_ancestry"]
+          },
+          "implementation_identity": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "verification_method"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "verification_method": {
+                "enum": ["commit", "release_hash", "binary_sha256", "container_digest"]
+              },
+              "repository": { "type": "string", "minLength": 1 },
+              "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+              "release": { "type": "string", "minLength": 1 },
+              "release_hash_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "binary_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "container_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+            },
+            "description": "Validado según el rol en código (no expresable como if/then dependiente de un campo hermano en este subconjunto de JSON Schema): bitmap_discovery exige verification_method \"commit\" con repository/commit iguales a los fijados en OPI_SOURCE_PROVENANCE.json; otros roles exigen al menos un campo de identidad reproducible coherente con verification_method. No se inventan commits Git para binarios o releases que no los tengan — para esos, verification_method debe ser \"binary_sha256\" o \"container_digest\", no \"commit\"."
+          },
+          "operator": {
+            "description": "null si no hubo una captura real de esta fuente por un operador concreto.",
+            "anyOf": [
+              { "type": "null" },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "base_url"],
+                "properties": {
+                  "name": { "type": "string", "minLength": 1 },
+                  "base_url": { "type": "string", "minLength": 1 }
+                }
+              }
+            ]
+          },
+          "request": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["method", "path", "parameters"],
+            "properties": {
+              "method": { "type": "string", "minLength": 1 },
+              "path": { "type": "string", "minLength": 1 },
+              "parameters": { "type": "object" }
+            }
+          },
+          "artifact_ids": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+            "description": "Debe estar vacío si capture_status no es \"captured\"."
+          },
+          "capture_status": {
+            "enum": ["captured", "not_captured_no_public_instance"]
+          },
+          "pagination": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["complete", "page_count", "pages"],
+            "properties": {
+              "complete": {
+                "type": "boolean",
+                "description": "Debe ser false si capture_status no es \"captured\". true solo si esta fuente declara explícitamente no tener páginas adicionales pendientes."
+              },
+              "page_count": { "type": "integer", "minimum": 0 },
+              "pages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["page_index", "artifact_id"],
+                  "properties": {
+                    "page_index": { "type": "integer", "minimum": 0 },
+                    "artifact_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+                  }
+                }
+              }
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 },
+            "description": "Obligatorio y no vacío si capture_status no es \"captured\" — debe explicar por qué. Puede estar vacío si capture_status es \"captured\" y no hay limitaciones que declarar."
+          }
+        }
+      }
+    },
+    "captured_artifacts": {
+      "type": "array",
+      "description": "Cada respuesta o página realmente capturada. Puede estar vacío si ninguna fuente tiene capture_status \"captured\". Sin campo de ruta: la ubicación es siempre artifacts/sha256/<hex de artifact_id>.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact_id", "source_id", "size_bytes", "content_type", "observed_at"],
+        "properties": {
+          "artifact_id": {
+            "type": "string",
+            "pattern": "^sha256:[0-9a-f]{64}$",
+            "description": "El hash IS la identidad y la ruta derivada — no existe un campo de ruta separado que pueda divergir de él."
+          },
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Debe existir entre sources[].source_id, y esa fuente debe listar este artifact_id en su propio artifact_ids."
+          },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "content_type": { "type": "string", "minLength": 1 },
+          "observed_at": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Momento real de observación. Solo existen entradas de captured_artifacts para capturas reales."
+          }
+        }
+      }
+    },
+    "resolution_result_canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "candidate_set_canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

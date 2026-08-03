@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/shadow-signal-v01.schema.json",
+  "title": "Bitmapverse Shadow Signal v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "signal_id", "case_id", "case_canonical_sha256", "role", "status", "authority", "recommendation", "confidence", "observations", "risks", "authorizes_transition", "mutates_state"],
+  "properties": {
+    "schema": { "const": "bitmapverse.shadow_signal.v0.1" },
+    "signal_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "case_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "case_canonical_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "role": { "enum": ["SCOUT", "KEEPER", "VOID"] },
+    "status": { "const": "shadow" },
+    "authority": { "const": "none" },
+    "recommendation": { "enum": ["continue_experiment", "preserve_with_warnings", "do_not_promote"] },
+    "confidence": { "enum": ["low", "medium", "high"] },
+    "observations": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "risks": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "authorizes_transition": { "const": false },
+    "mutates_state": { "const": false }
+  }
+}

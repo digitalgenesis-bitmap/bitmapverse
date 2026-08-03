@@ -1,0 +1,145 @@
+{
+  "schema": "bitmapverse.opi_source_provenance.v0.2.2",
+  "repository": "https://github.com/bestinslot-xyz/OPI",
+  "commit": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+  "commit_verified_via": "gh api repos/bestinslot-xyz/OPI/commits/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+  "commit_message": "refactor: move server startup wait logic earlier in initialization phase",
+  "commit_author_date": "2026-04-01T12:04:21Z",
+  "explicitly_not_used_as_normative_source": [
+    "switch-900/BitmapOCI"
+  ],
+  "note": "Todos los hashes y números de línea de este documento se obtuvieron leyendo directamente el contenido del commit fijado vía `gh api` (GitHub API autenticado), no de memoria ni de una URL de rama móvil. Cada archivo fue descargado como bytes crudos y hasheado localmente antes de citar cualquier línea.",
+  "files": [
+    {
+      "path": "ord/db_reader/src/server.rs",
+      "role": "Implementación real del RPC getBlockBitmapInscrs (filtro is_valid_bitmap, orden por inscription_number).",
+      "permanent_url": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/server.rs",
+      "sha256": "afd186deb42b18362e44eadf2ff0e2cec1b07331cb8ed6d4c11fb96013e31308",
+      "total_lines": 901,
+      "facts": [
+        {
+          "id": "is_valid_bitmap_definition",
+          "lines": "309-323",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/server.rs#L309-L323",
+          "verbatim_excerpt": "fn is_valid_bitmap(inscription_info: &InscriptionInfo) -> bool {\n  if inscription_info.inscription_number < 0 {\n    return false;\n  }\n  if inscription_info.is_json {\n    return false;\n  }\n  if !inscription_info\n    .content_type_hex\n    .to_lowercase()\n    .starts_with(\"746578742f706c61696e\")\n  {\n    return false;\n  }\n\n  true\n}",
+          "meaning": "Un candidato es válido solo si inscription_number >= 0, is_json es false, y content_type_hex en minúsculas empieza con el prefijo hexadecimal exacto de 'text/plain' (verificado por decodificación manual: 74 65 78 74 2f 70 6c 61 69 6e = t e x t / p l a i n)."
+        },
+        {
+          "id": "sort_by_inscription_number",
+          "lines": "727",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/server.rs#L727",
+          "verbatim_excerpt": "bitmap_inscrs.sort_by(|a, b| a.inscription_number.cmp(&b.inscription_number));",
+          "meaning": "Antes de devolver los candidatos de un bloque por RPC, el propio servidor los reordena ascendentemente por inscription_number — no por posición de transacción dentro del bloque (block_height/transaction_index)."
+        },
+        {
+          "id": "candidates_gathered_by_transfer_scan_not_by_tx_position_sort",
+          "lines": "680-722",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/server.rs#L680-L722",
+          "meaning": "El servidor primero recorre las transferencias del bloque en orden de clave (block_height, transaction_index) para encontrar reveals, y filtra con is_valid_bitmap por cada una; el orden final que se entrega al cliente es el del sort_by posterior (por inscription_number), no este orden de recorrido."
+        },
+        {
+          "id": "is_json_source_is_a_stored_flag_not_recomputed_here",
+          "lines": "69",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/server.rs#L69",
+          "verbatim_excerpt": "let is_json = raw[41] != 0;",
+          "meaning": "is_json se lee de un byte fijo dentro de un registro binario ya indexado por el fork de Ord incluido en este mismo repositorio (ord/), no se recalcula a partir del contenido en este archivo. Este documento no rastrea más allá de este punto cómo ese fork de Ord decide originalmente si una inscripción 'es JSON' — esa clasificación es una dependencia declarada, no redefinida ni reinterpretada aquí, tal como exige CONTRACT.md."
+        }
+      ]
+    },
+    {
+      "path": "ord/db_reader/src/api.rs",
+      "role": "Definición del trait RPC (nombres de método, tipos de solicitud/respuesta) que server.rs implementa.",
+      "permanent_url": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/api.rs",
+      "sha256": "440091f0f550af79a2396a5bba2464eda814442ed091e7ceccd3b159d37d16c7",
+      "total_lines": 126,
+      "facts": [
+        {
+          "id": "bitmap_inscription_struct",
+          "lines": "27-34",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/api.rs#L27-L34",
+          "verbatim_excerpt": "pub struct BitmapInscription {\n  pub tx_id: String,\n  pub txid: String,\n  pub inscription_id: String,\n  pub inscription_number: i32,\n  pub content_hex: String,\n}",
+          "meaning": "La respuesta RPC de un candidato ya filtrado solo expone inscription_id, inscription_number y content_hex (más identificadores de transacción) — no expone is_json ni content_type_hex al cliente; esos campos ya se consumieron en el filtro del lado del servidor (server.rs)."
+        },
+        {
+          "id": "get_block_bitmap_inscrs_rpc_signature",
+          "lines": "117-121",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/ord/db_reader/src/api.rs#L117-L121",
+          "verbatim_excerpt": "#[method(name = \"getBlockBitmapInscrs\")]\n  async fn get_block_bitmap_inscrs(\n    &self,\n    block_height: u32,\n  ) -> RpcResult<Option<Vec<BitmapInscription>>>;"
+        }
+      ]
+    },
+    {
+      "path": "modules/bitmap_index/bitmap_index.py",
+      "role": "Indexador Python: consume getBlockBitmapInscrs, decodifica bitmap_number desde content_hex, aplica el corte por altura de bloque, e inserta con unicidad por bitmap_number.",
+      "permanent_url": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_index/bitmap_index.py",
+      "sha256": "81e31a81cc60d4a09924758d83abe0fff93b4de8b6e7e1c2753748e0ac0326c2",
+      "total_lines": 362,
+      "facts": [
+        {
+          "id": "get_bitmap_number_decoding",
+          "lines": "133-147",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_index/bitmap_index.py#L133-L147",
+          "verbatim_excerpt": "def get_bitmap_number(content_hex):\n  content = None\n  try:\n    content = codecs.decode(content_hex, \"hex\").decode('utf-8')\n  except:\n    pass\n  if content is None: return None\n  if not content.endswith('.bitmap'): return None\n  content = content[:-len('.bitmap')]\n  if len(content) == 0: return None\n  for ch in content:\n    if ord(ch) > ord('9') or ord(ch) < ord('0'):\n      return None\n  if ord(content[0]) == ord('0') and len(content) != 1: return None\n  return int(content)",
+          "meaning": "Decodifica hex->UTF-8 (rechaza si falla cualquiera de las dos), exige sufijo exacto '.bitmap', retira solo ese sufijo, exige parte restante no vacía y compuesta exclusivamente de dígitos ASCII '0'-'9' (comparación por punto de código, por lo que dígitos Unicode que no sean ASCII 0-9 no cuentan como dígitos), rechaza ceros iniciales salvo el caso exacto '0' (equivalente a '0.bitmap'), y convierte a entero."
+        },
+        {
+          "id": "block_existence_check",
+          "lines": "203-205",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_index/bitmap_index.py#L203-L205",
+          "verbatim_excerpt": "if bitmap_number > block_height: \n      print(\"bitmap_number > block_height: \" + str(bitmap_number) + \" > \" + str(block_height))\n      continue",
+          "meaning": "bitmap_number no puede exceder la altura del bloque donde se inscribe la reclamación — reproduce el rechazo de Districts correspondientes a bloques todavía inexistentes en el momento de la inscripción."
+        },
+        {
+          "id": "first_valid_claim_wins_via_unique_insert",
+          "lines": "206-211",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_index/bitmap_index.py#L206-L211",
+          "verbatim_excerpt": "cur.execute('''INSERT INTO bitmaps (inscription_id, inscription_number, bitmap_number, block_height) VALUES (%s, %s, %s, %s) ON CONFLICT (bitmap_number) \n                    DO NOTHING RETURNING id;''', \n                (inscr_id, inscr_num, bitmap_number, block_height))\n    if cur.rowcount == 0: \n      print(\"bitmap_number already exists: \" + str(bitmap_number))\n      continue",
+          "meaning": "La tabla bitmaps tiene un índice único sobre bitmap_number (ver db_init.sql). El primer INSERT para un bitmap_number dado gana; cualquier intento posterior con el mismo bitmap_number se ignora silenciosamente (DO NOTHING). Los bloques se procesan en orden ascendente (bucle principal, líneas 329-362) y, dentro de un bloque, los candidatos llegan ya ordenados por inscription_number (heredado de server.rs línea 727) — así que 'la primera reclamación válida' significa la de menor (block_height, luego inscription_number)."
+        },
+        {
+          "id": "sequential_block_processing_loop",
+          "lines": "329-362",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_index/bitmap_index.py#L329-L362",
+          "meaning": "El indexador procesa bloques uno a la vez en orden ascendente de altura (bucle while True con current_block = último indexado + 1), confirmado por lectura directa del bucle principal."
+        }
+      ]
+    },
+    {
+      "path": "modules/bitmap_index/db_init.sql",
+      "role": "Esquema de base de datos: confirma el índice único sobre bitmap_number citado arriba.",
+      "permanent_url": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_index/db_init.sql",
+      "sha256": "d1d22afe6c50551aafc5eff0bd32015c6627bf38e458d33b459713ef2ef72a65",
+      "total_lines": 29,
+      "facts": [
+        {
+          "id": "unique_index_bitmap_number",
+          "lines": "17",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_index/db_init.sql#L17",
+          "verbatim_excerpt": "CREATE UNIQUE INDEX bitmaps_bitmap_number_idx ON public.bitmaps USING btree (bitmap_number);"
+        }
+      ]
+    },
+    {
+      "path": "modules/bitmap_api/api.js",
+      "role": "Servidor HTTP público que expone la consulta usada para el descubrimiento de la inscripción fundacional de un District.",
+      "permanent_url": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_api/api.js",
+      "sha256": "aa0d85488de71d5b4cb31ae1953177c111560eeb1242a64f0761962b8a6ac4a0",
+      "sha256_note": "Coincide exactamente con el hash de este mismo archivo ya registrado en la evidencia congelada de Prueba A — confirma que el hash citado en ese momento era genuino, no fabricado.",
+      "total_lines": 134,
+      "facts": [
+        {
+          "id": "get_inscription_id_of_bitmap_endpoint",
+          "lines": "113-133",
+          "permanent_url_with_lines": "https://github.com/bestinslot-xyz/OPI/blob/da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633/modules/bitmap_api/api.js#L113-L133",
+          "verbatim_excerpt": "app.get('/v1/bitmap/get_inscription_id_of_bitmap', async (request, response) => {\n  let bitmap_number = request.query.bitmap_number\n\n  let query = ` select inscription_id\n                from bitmaps\n                where bitmap_number = $1;`",
+          "meaning": "Confirma exactamente la consulta documentada en CONTRACT.md: GET /v1/bitmap/get_inscription_id_of_bitmap con el parámetro de query string bitmap_number. No hay ruta /bitmap/{district} en este archivo."
+        }
+      ]
+    }
+  ],
+  "explicitly_out_of_scope_of_this_verification": [
+    "Cómo el fork de Ord incluido en ord/ decide originalmente si una inscripción es_json (rastreado solo hasta el byte crudo leído en server.rs línea 69, no más allá).",
+    "El comportamiento de indexación de Ord para inscripciones 'cursed' más allá de la comprobación inscription_number < 0.",
+    "Cualquier código de switch-900/BitmapOCI — no consultado, no usado como fuente."
+  ]
+}

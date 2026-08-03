@@ -1,0 +1,21 @@
+{
+  "_synthetic": true,
+  "_note": "Salida esperada, calculada con la implementación de referencia de bitmap_discovery_opi_v1 mantenida fuera de este paquete, a partir de synthetic-opi-discovery.input.json.",
+  "winning_inscription_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai0",
+  "winning_inscription_number": 10,
+  "rejected_candidates": [
+    {
+      "inscription_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbi0",
+      "reason": "bitmap_number (1234567) > block_height (1000000): block does not exist yet"
+    },
+    {
+      "inscription_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeei0",
+      "reason": "is_json is true"
+    },
+    {
+      "inscription_id": "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddi0",
+      "reason": "content_type_hex does not start with the text/plain hex prefix"
+    }
+  ],
+  "explanation": "El ganador es inscription_number 10 (id empieza con 'a'), no el que aparece primero en el array de entrada (is_json, inscription_number 40) ni el segundo candidato válido (inscription_number 20). El candidato del bloque 1000000 se rechaza porque 1234567 > 1000000 (el District todavía no existía como bloque en ese momento)."
+}

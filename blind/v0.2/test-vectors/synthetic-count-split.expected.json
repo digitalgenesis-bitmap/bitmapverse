@@ -1,0 +1,118 @@
+{
+  "_synthetic": true,
+  "_note": "Salida esperada, calculada con scripts/b1-prep/jcs.py a partir de synthetic-count-split.input.json. Un implementador conforme debe producir bytes canónicos y SHA-256 idénticos a los aquí registrados.",
+  "resolution_result": {
+    "schema": "bitmapverse.resolution_result.v0.2",
+    "contract_version": "0.2.0",
+    "resolver": "same_sat_latest_v0.1",
+    "bitmap_discovery_profile": "bitmapverse.bitmap_discovery.v0.2",
+    "district": 999999999,
+    "district_name": "999999999.bitmap",
+    "original_inscription_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai0",
+    "sat": 1111111111111111,
+    "selected_inscription_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccci0",
+    "selected_content_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "selected_position": {
+      "block_height": 999999,
+      "block_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "transaction_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "transaction_index": 5,
+      "inscription_index": 0
+    },
+    "resolution_snapshot": {
+      "height": 1000000,
+      "block_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "eligible_through_resolution_snapshot_count": 2,
+    "status": "experimental"
+  },
+  "candidate_set_through_resolution_snapshot": {
+    "schema": "bitmapverse.candidate_set.v0.2",
+    "contract_version": "0.2.0",
+    "district": 999999999,
+    "district_name": "999999999.bitmap",
+    "sat": 1111111111111111,
+    "resolution_snapshot": {
+      "height": 1000000,
+      "block_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "candidates": [
+      {
+        "inscription_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai0",
+        "sat": 1111111111111111,
+        "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "canonical_position": {
+          "block_height": 900000,
+          "block_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+          "transaction_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "transaction_index": 1,
+          "inscription_index": 0
+        }
+      },
+      {
+        "inscription_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccci0",
+        "sat": 1111111111111111,
+        "content_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "canonical_position": {
+          "block_height": 999999,
+          "block_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "transaction_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "transaction_index": 5,
+          "inscription_index": 0
+        }
+      }
+    ],
+    "candidate_count": 2,
+    "status": "experimental"
+  },
+  "evidence_manifest": {
+    "schema": "bitmapverse.evidence_manifest.v0.2",
+    "contract_version": "0.2.0",
+    "resolution_snapshot": {
+      "height": 1000000,
+      "block_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    "observation_tip": {
+      "height": 1000050,
+      "block_hash": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "observed_through_observation_tip_count": 3,
+    "eligible_through_resolution_snapshot_count": 2,
+    "excluded_after_resolution_snapshot_count": 1,
+    "chain_ancestry_proof": {
+      "method": "synthetic_test_vector_no_real_chain_verification",
+      "operator": null,
+      "evidence_captured": "N/A — synthetic vector, no real Bitcoin chain was consulted",
+      "evidence_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "result": {
+        "ancestor": true
+      },
+      "limitations": [
+        "Este es un vector sintético; no representa una verificación de cadena real."
+      ]
+    },
+    "bitmap_discovery": {
+      "profile": "bitmapverse.bitmap_discovery.v0.2",
+      "implementation": "synthetic_test_vector",
+      "operator": null
+    },
+    "resolution_result_canonical_sha256": "6ac06946ea6d0945035a3d2633bc89e3ce94ee7d70b7fb201e9440a274d0d8a1",
+    "candidate_set_canonical_sha256": "4ecc4dd2eb6d14c7228076e74b63d25d5795f20072d38064264dd5b425385351"
+  },
+  "canonical_hashes": {
+    "resolution_result": "6ac06946ea6d0945035a3d2633bc89e3ce94ee7d70b7fb201e9440a274d0d8a1",
+    "candidate_set_through_resolution_snapshot": "4ecc4dd2eb6d14c7228076e74b63d25d5795f20072d38064264dd5b425385351"
+  },
+  "invariant_check": {
+    "observed_through_observation_tip_count": 3,
+    "eligible_through_resolution_snapshot_count": 2,
+    "excluded_after_resolution_snapshot_count": 1,
+    "holds": true
+  },
+  "stability_demonstration": {
+    "claim": "resolution_result's canonical SHA-256 is identical whether or not the post-snapshot candidate (block_height 1000020) is known to exist, because it is not eligible and therefore never enters the selection.",
+    "resolution_result_canonical_sha256_with_excluded_candidate_known": "6ac06946ea6d0945035a3d2633bc89e3ce94ee7d70b7fb201e9440a274d0d8a1",
+    "resolution_result_canonical_sha256_if_excluded_candidate_had_never_been_observed": "6ac06946ea6d0945035a3d2633bc89e3ce94ee7d70b7fb201e9440a274d0d8a1",
+    "identical": true
+  }
+}

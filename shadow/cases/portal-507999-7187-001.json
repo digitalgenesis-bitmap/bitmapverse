@@ -1,0 +1,32 @@
+{
+  "schema": "bitmapverse.signal_case.v0.1",
+  "case_id": "portal-507999-7187-001",
+  "question": "¿Debe el portal experimental Freedeon ↔ Organa promoverse ahora a EMV pública?",
+  "status": "shadow",
+  "authority": "none",
+  "resolver": "same_sat_latest_v0.1",
+  "snapshot": {
+    "height": 959531,
+    "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e"
+  },
+  "evidence": {
+    "origin": {
+      "district": 507999,
+      "fixture": "fixtures/507999.snapshot.json",
+      "fixture_sha256": "57aca03f5c4463a693a94eaf45501be3351e8e3430b6b641f4008cee03d6bbe3"
+    },
+    "destination": {
+      "district": 7187,
+      "fixture": "fixtures/7187.snapshot.json",
+      "fixture_sha256": "a60c35876352916d54c773825db615bf8bce1b38191e0967df4a09a9d683cf57"
+    }
+  },
+  "evaluation": {
+    "roles": ["SCOUT", "KEEPER", "VOID"],
+    "blind_to_peer_signals": true
+  },
+  "limits": {
+    "may_authorize_transition": false,
+    "may_mutate_state": false
+  }
+}

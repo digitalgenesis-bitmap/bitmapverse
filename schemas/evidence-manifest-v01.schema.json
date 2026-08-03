@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/evidence-manifest-v01.schema.json",
+  "title": "Bitmapverse Evidence Manifest v0.1",
+  "description": "Esquema dependiente de resolution_result.v0.1. Registra la procedencia y las condiciones de observación de la evidencia detrás de un resolution_result, sin duplicar los fixtures congelados. No se declaran fuentes hipotéticas: cada campo refleja únicamente evidencia realmente disponible en el fixture de origen.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "observed_at",
+    "observed_candidate_count",
+    "eligible_candidate_count",
+    "excluded_after_snapshot",
+    "enumeration_complete_through_snapshot",
+    "reconstruction_method",
+    "sources",
+    "resolution_result_canonical_sha256"
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.evidence_manifest.v0.1" },
+    "observed_at": {
+      "type": "string",
+      "description": "Fecha declarada de observación tal como aparece en la evidencia congelada de origen (candidate_enumeration.observed_at)."
+    },
+    "observed_candidate_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Total de candidatos en la enumeración congelada, antes de filtrar por snapshot."
+    },
+    "eligible_candidate_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "excluded_after_snapshot": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "observed_candidate_count - eligible_candidate_count."
+    },
+    "enumeration_complete_through_snapshot": {
+      "type": "boolean"
+    },
+    "reconstruction_method": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "district_discovery",
+        "sat_resolution",
+        "candidate_enumeration",
+        "snapshot_boundary"
+      ],
+      "properties": {
+        "district_discovery": { "const": "opi" },
+        "sat_resolution": { "const": "ord" },
+        "candidate_enumeration": { "const": "same_sat" },
+        "snapshot_boundary": { "const": "bitcoin_block" }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opi", "ord"],
+      "properties": {
+        "opi": { "$ref": "#/$defs/source" },
+        "ord": { "$ref": "#/$defs/source" }
+      }
+    },
+    "resolution_result_canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 de los bytes canónicos (bitmapverse.canonical_json.v0.1) del resolution_result que este adaptador realmente produjo. Para JavaScript es el resolution_result.v0.1 completo y schema-válido. Para Python es el hash de resolution_result_core (todos los campos salvo eligible_candidate_count, que no puede derivarse de forma pura del result.json sellado) — nunca un resolution_result completo, porque ninguno existe del lado Python. Ver conformance/proof-a-v0.1/CANONICALIZATION.md."
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operator",
+        "implementation",
+        "version",
+        "query_or_endpoint",
+        "response_status",
+        "response_sha256"
+      ],
+      "properties": {
+        "operator": {
+          "type": ["string", "null"],
+          "description": "null cuando el fixture congelado no declara quién operó la consulta."
+        },
+        "implementation": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "query_or_endpoint": { "type": "string", "minLength": 1 },
+        "response_status": { "type": "string", "minLength": 1 },
+        "response_sha256": {
+          "type": ["string", "null"],
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "schema": "bitmapverse.shadow_council_run.v0.1",
+  "case_id": "portal-507999-7187-001",
+  "case_canonical_sha256": "9c62c6ca9298c33ab1c16ecb049b73aab01a55dc860b6ce62964518806d4a4f8",
+  "status": "shadow",
+  "authority": "none",
+  "independent_inputs": true,
+  "signals": [
+    {
+      "schema": "bitmapverse.shadow_signal.v0.1",
+      "signal_id": "portal-507999-7187-001-scout",
+      "case_id": "portal-507999-7187-001",
+      "case_canonical_sha256": "9c62c6ca9298c33ab1c16ecb049b73aab01a55dc860b6ce62964518806d4a4f8",
+      "role": "SCOUT",
+      "status": "shadow",
+      "authority": "none",
+      "authorizes_transition": false,
+      "mutates_state": false,
+      "recommendation": "continue_experiment",
+      "confidence": "medium",
+      "observations": [
+        "Los Districts 507999 y 7187 comparten un snapshot válido.",
+        "Ambas enumeraciones Ord congeladas declaran more:false y están completas hasta el corte."
+      ],
+      "risks": [
+        "La exploración todavía depende de fixtures preparados por la primera implementación.",
+        "No existe aún una reconstrucción independiente desde infraestructura viva."
+      ]
+    },
+    {
+      "schema": "bitmapverse.shadow_signal.v0.1",
+      "signal_id": "portal-507999-7187-001-keeper",
+      "case_id": "portal-507999-7187-001",
+      "case_canonical_sha256": "9c62c6ca9298c33ab1c16ecb049b73aab01a55dc860b6ce62964518806d4a4f8",
+      "role": "KEEPER",
+      "status": "shadow",
+      "authority": "none",
+      "authorizes_transition": false,
+      "mutates_state": false,
+      "recommendation": "preserve_with_warnings",
+      "confidence": "high",
+      "observations": [
+        "El expediente referencia los fixtures sin duplicarlos y verifica sus hashes exactos.",
+        "La evidencia histórica conserva snapshot, procedencia y límites epistemológicos."
+      ],
+      "risks": [
+        "Un hash preserva integridad, pero la recuperabilidad requiere conservar los datos originales.",
+        "Promover el portal antes de la implementación ciega debilitaría el significado de EMV."
+      ]
+    },
+    {
+      "schema": "bitmapverse.shadow_signal.v0.1",
+      "signal_id": "portal-507999-7187-001-void",
+      "case_id": "portal-507999-7187-001",
+      "case_canonical_sha256": "9c62c6ca9298c33ab1c16ecb049b73aab01a55dc860b6ce62964518806d4a4f8",
+      "role": "VOID",
+      "status": "shadow",
+      "authority": "none",
+      "authorizes_transition": false,
+      "mutates_state": false,
+      "recommendation": "do_not_promote",
+      "confidence": "high",
+      "observations": [
+        "La respuesta OPI original no fue capturada desde una instancia pública independiente.",
+        "Todavía no existe una segunda implementación ciega que reconstruya el mismo resultado."
+      ],
+      "risks": [
+        "Una coincidencia interna podría confundirse con reproducibilidad externa.",
+        "La interfaz podría presentarse prematuramente como estándar universal o estado vivo."
+      ]
+    }
+  ],
+  "transition": {
+    "authorized": false,
+    "state_mutated": false,
+    "reason": "Las señales interpretan y recomiendan; no autorizan transiciones."
+  }
+}

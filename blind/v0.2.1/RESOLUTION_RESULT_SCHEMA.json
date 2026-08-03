@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/blind/v0.2.1/resolution-result.schema.json",
+  "title": "Bitmapverse Blind B1 Resolution Result v0.2.1",
+  "description": "Resultado histórico estable de same_sat_latest_v0.1 bajo el contrato de salida v0.2.1 (ver blind/v0.2.1/CONTRACT.md, autosuficiente). Estable para el mismo District, el mismo bitmap_discovery_profile, el mismo resolver, el mismo resolution_snapshot y la misma cadena Bitcoin observada, con enumeración completa hasta el snapshot. No incluye block_timestamp ni ningún dato dependiente de observación — eso vive en evidence_manifest.v0.2.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract_version",
+    "resolver",
+    "bitmap_discovery_profile",
+    "district",
+    "district_name",
+    "original_inscription_id",
+    "sat",
+    "selected_inscription_id",
+    "selected_content_sha256",
+    "selected_position",
+    "resolution_snapshot",
+    "eligible_through_resolution_snapshot_count",
+    "status"
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.resolution_result.v0.2.1" },
+    "contract_version": { "const": "0.2.1" },
+    "resolver": { "const": "same_sat_latest_v0.1" },
+    "bitmap_discovery_profile": { "const": "bitmapverse.bitmap_discovery.v0.2.1" },
+    "district": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "district_name === `${district}.bitmap` se verifica en código, no expresable en JSON Schema puro."
+    },
+    "district_name": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.bitmap$"
+    },
+    "original_inscription_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}i[0-9]+$"
+    },
+    "sat": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "selected_inscription_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}i[0-9]+$"
+    },
+    "selected_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "selected_position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "block_height",
+        "block_hash",
+        "transaction_id",
+        "transaction_index",
+        "inscription_index"
+      ],
+      "properties": {
+        "block_height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "transaction_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "transaction_index": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "inscription_index": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "resolution_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      },
+      "description": "Sin block_timestamp: no determina el corte de elegibilidad. Contexto opcional, si existe, vive en evidence_manifest.v0.2.1."
+    },
+    "eligible_through_resolution_snapshot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Debe coincidir exactamente con candidate_set.candidate_count y con evidence_manifest.eligible_through_resolution_snapshot_count."
+    },
+    "status": { "const": "experimental" }
+  }
+}

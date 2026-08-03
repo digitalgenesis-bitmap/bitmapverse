@@ -1,0 +1,4 @@
+Reserved oracle SHA-256:
+2db6191f46954904e51e29daac4900d475cb5fac1d2159ec5b7bda8dd9879783
+
+This commitment fixes the comparison oracle before the independent submission. The oracle contents are not included in this package and must remain undisclosed until SUBMISSION.json is sealed.

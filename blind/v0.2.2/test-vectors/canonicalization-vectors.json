@@ -1,0 +1,190 @@
+{
+  "_note": "Vectores generados con una implementacion de referencia del 'perfil JCS restringido' v0.2.2 mantenida fuera de este paquete, verificados byte-identicos entre sus gemelas JavaScript y Python. Incluye cobertura Unicode dentro y fuera del BMP, y un vector que demuestra por que el orden de claves por unidad de codigo UTF-16 difiere del orden por punto de codigo. No contrastados contra los vectores oficiales de RFC 8785 (sin acceso a Internet en este entorno) - ver CANONICALIZATION.md.",
+  "vectors": [
+    {
+      "name": "empty_object",
+      "input": {},
+      "canonical_bytes_utf8": "{}",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "name": "empty_array",
+      "input": [],
+      "canonical_bytes_utf8": "[]",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "name": "null_true_false",
+      "input": {
+        "a": null,
+        "b": true,
+        "c": false
+      },
+      "canonical_bytes_utf8": "{\"a\":null,\"b\":true,\"c\":false}",
+      "sha256": "17073ac6186d8c60c0c0da712ce30cdb52ed5a9155f616983da39a9785dce715"
+    },
+    {
+      "name": "key_order_is_sorted_ascii",
+      "input": {
+        "zebra": 1,
+        "apple": 2,
+        "mango": 3
+      },
+      "canonical_bytes_utf8": "{\"apple\":2,\"mango\":3,\"zebra\":1}",
+      "sha256": "76b5f61f10004f6011524c1a0680f38c33e395fb281dad2d9c937d1597e58431"
+    },
+    {
+      "name": "nested_object_and_array",
+      "input": {
+        "b": [
+          3,
+          1,
+          2
+        ],
+        "a": {
+          "z": 1,
+          "y": 2
+        }
+      },
+      "canonical_bytes_utf8": "{\"a\":{\"y\":2,\"z\":1},\"b\":[3,1,2]}",
+      "sha256": "5a1802bc3b7af5e9b0ec838cd7f6b1dc4d15f5999ceef32f2e11f68c137e5066"
+    },
+    {
+      "name": "negative_integer_and_zero",
+      "input": {
+        "neg": -5,
+        "zero": 0
+      },
+      "canonical_bytes_utf8": "{\"neg\":-5,\"zero\":0}",
+      "sha256": "542bd317d20b3b067e45951609d00b4a6781ba5ed43e2d13702c8d42ffca7898"
+    },
+    {
+      "name": "max_safe_integer",
+      "input": {
+        "n": 9007199254740991
+      },
+      "canonical_bytes_utf8": "{\"n\":9007199254740991}",
+      "sha256": "e1da48c6a6089f06ecb4e0a2259e658e3786b2420f52baccdf929ec6460d7b41"
+    },
+    {
+      "name": "min_safe_integer",
+      "input": {
+        "n": -9007199254740991
+      },
+      "canonical_bytes_utf8": "{\"n\":-9007199254740991}",
+      "sha256": "d49d713821fc149f81ef6ca8054beeba696f5da052f0ab3e2d773808c5a9d625"
+    },
+    {
+      "name": "array_order_preserved_not_sorted",
+      "input": [
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "canonical_bytes_utf8": "[5,4,3,2,1]",
+      "sha256": "50e674656acf2ee93833646a9e1e0f22e231573572810d97685957f16d0906ca"
+    },
+    {
+      "name": "string_escapes",
+      "input": {
+        "s": "quote\" backslash\\ tab\tnewline\ncarriage\rformfeed\fbackspace\b control"
+      },
+      "canonical_bytes_utf8": "{\"s\":\"quote\\\" backslash\\\\ tab\\tnewline\\ncarriage\\rformfeed\\fbackspace\\b control\"}",
+      "sha256": "be55540ed8212f13c8b41d87da9ffba709b64efc0aa08291f7819e36350e1f94"
+    },
+    {
+      "name": "bmp_cjk_characters",
+      "input": {
+        "s": "中文測試"
+      },
+      "canonical_bytes_utf8": "{\"s\":\"中文測試\"}",
+      "sha256": "1260af83409fc08df0139b9846083e3ff504724d9621adec9e6e9e0d07e04300"
+    },
+    {
+      "name": "bmp_combining_characters",
+      "input": {
+        "s": "é"
+      },
+      "canonical_bytes_utf8": "{\"s\":\"é\"}",
+      "sha256": "1fc0bd7cc93fca8092a2041d7d01842876422aa7e2838acf42c14578e9f2be05"
+    },
+    {
+      "name": "astral_emoji",
+      "input": {
+        "s": "😀🚀✅"
+      },
+      "canonical_bytes_utf8": "{\"s\":\"😀🚀✅\"}",
+      "sha256": "af609c16fa1a3611ae0a99733dc05537516ece8bd10306544508dbf20b2afd07"
+    },
+    {
+      "name": "astral_mixed_with_bmp",
+      "input": {
+        "greeting": "héllo 😀 中文"
+      },
+      "canonical_bytes_utf8": "{\"greeting\":\"héllo 😀 中文\"}",
+      "sha256": "b4211f558fc788c99152ed98229a63aac6509e8d7d03b00a3a35604005707533"
+    },
+    {
+      "name": "utf16_vs_codepoint_key_order",
+      "input": {
+        "￿": "bmp_boundary_char",
+        "𐀀": "first_astral_char"
+      },
+      "canonical_bytes_utf8": "{\"𐀀\":\"first_astral_char\",\"￿\":\"bmp_boundary_char\"}",
+      "sha256": "528a7534ff4c296af4a2ac77b808a75725c5ada66090af6e91da24ff032db33c"
+    },
+    {
+      "name": "utf16_vs_codepoint_key_order_2",
+      "input": {
+        "": "bmp_private_use_start",
+        "😀": "emoji"
+      },
+      "canonical_bytes_utf8": "{\"😀\":\"emoji\",\"\":\"bmp_private_use_start\"}",
+      "sha256": "30f81fb4f64eabac88a0a917aa70fb43e12bcdae3bcedcebf1814372e500bdf3"
+    }
+  ],
+  "rejection_vectors": [
+    {
+      "name": "float_not_admitted",
+      "input": {
+        "x": 1.5
+      },
+      "rejected": true,
+      "error": "JCS restringido v0.2.1 rejects unsupported value of type <class 'float'>"
+    },
+    {
+      "name": "integer_above_safe_range",
+      "input": {
+        "x": 9007199254740992
+      },
+      "rejected": true,
+      "error": "JCS restringido v0.2.1 rejects integers outside the safe interoperable range: 9007199254740992"
+    },
+    {
+      "name": "integer_below_safe_range",
+      "input": {
+        "x": -9007199254740992
+      },
+      "rejected": true,
+      "error": "JCS restringido v0.2.1 rejects integers outside the safe interoperable range: -9007199254740992"
+    }
+  ],
+  "surrogate_rejection_vectors": [
+    {
+      "name": "isolated_high_surrogate",
+      "code_point_hex": "D800",
+      "rejected": true,
+      "rejected_actual": true,
+      "error": "JCS restringido v0.2.1 rejects strings containing isolated UTF-16 surrogates: '\\ud800'"
+    },
+    {
+      "name": "isolated_low_surrogate",
+      "code_point_hex": "DC00",
+      "rejected": true,
+      "rejected_actual": true,
+      "error": "JCS restringido v0.2.1 rejects strings containing isolated UTF-16 surrogates: '\\udc00'"
+    }
+  ]
+}

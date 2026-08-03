@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/blind/v0.2.1/evidence-manifest.schema.json",
+  "title": "Bitmapverse Blind B1 Evidence Manifest v0.2.1",
+  "description": "Manifiesto dependiente de la observación (CONTRACT.md §11-§13). No estable entre implementadores. Expande evidence_manifest.v0.2 con fuentes múltiples granulares (operador, implementación, versión/commit, endpoint, consulta, tiempos, tamaños, tipo de contenido, conteos reportados, paginación completa) y artefactos capturados individualmente verificables.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract_version",
+    "resolution_snapshot",
+    "observation_tip",
+    "observed_through_observation_tip_count",
+    "eligible_through_resolution_snapshot_count",
+    "excluded_after_resolution_snapshot_count",
+    "chain_ancestry_proof",
+    "bitmap_discovery",
+    "sources",
+    "captured_artifacts",
+    "resolution_result_canonical_sha256",
+    "candidate_set_canonical_sha256"
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.evidence_manifest.v0.2.1" },
+    "contract_version": { "const": "0.2.1" },
+    "resolution_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "block_timestamp": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Contexto opcional. No determina el corte de elegibilidad. null si la evidencia disponible no lo declara — nunca inventado."
+        }
+      }
+    },
+    "observation_tip": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991,
+          "description": "Debe ser >= resolution_snapshot.height — verificado en código."
+        },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "observed_through_observation_tip_count": { "type": "integer", "minimum": 0 },
+    "eligible_through_resolution_snapshot_count": { "type": "integer", "minimum": 0 },
+    "excluded_after_resolution_snapshot_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Invariante obligatorio (verificado en código): observed = eligible + excluded."
+    },
+    "chain_ancestry_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "operator", "evidence_captured", "evidence_sha256", "result", "limitations"],
+      "properties": {
+        "method": { "type": "string", "minLength": 1 },
+        "operator": { "type": ["string", "null"] },
+        "evidence_captured": { "type": "string", "minLength": 1 },
+        "evidence_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["ancestor"],
+          "properties": { "ancestor": { "type": "boolean" } }
+        },
+        "limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "bitmap_discovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "implementation", "operator"],
+      "properties": {
+        "profile": { "const": "bitmapverse.bitmap_discovery.v0.2.1" },
+        "implementation": { "type": "string", "minLength": 1 },
+        "operator": { "type": ["string", "null"] }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Una entrada por fuente consultada (descubrimiento de District, resolución de sat, enumeración de candidatos, verificación de ancestralidad, etc.).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role",
+          "operator",
+          "implementation",
+          "version_or_commit",
+          "endpoint",
+          "query",
+          "observed_at",
+          "response_status",
+          "response_size_bytes",
+          "response_content_type",
+          "response_sha256",
+          "reported_count",
+          "pagination"
+        ],
+        "properties": {
+          "role": {
+            "enum": ["district_discovery", "sat_resolution", "candidate_enumeration", "chain_ancestry"]
+          },
+          "operator": { "type": ["string", "null"] },
+          "implementation": { "type": "string", "minLength": 1 },
+          "version_or_commit": { "type": "string", "minLength": 1 },
+          "endpoint": { "type": "string", "minLength": 1 },
+          "query": { "type": "string", "minLength": 1 },
+          "observed_at": { "type": "string", "minLength": 1 },
+          "response_status": { "type": "string", "minLength": 1 },
+          "response_size_bytes": { "type": "integer", "minimum": 0 },
+          "response_content_type": { "type": "string", "minLength": 1 },
+          "response_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" },
+          "reported_count": { "type": ["integer", "null"], "minimum": 0 },
+          "pagination": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["complete", "page_count", "pages"],
+            "properties": {
+              "complete": {
+                "type": "boolean",
+                "description": "true solo si esta fuente declara explícitamente no tener páginas adicionales pendientes."
+              },
+              "page_count": { "type": "integer", "minimum": 0 },
+              "pages": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["page_index", "endpoint_or_query", "response_sha256", "response_size_bytes", "reported_count_this_page"],
+                  "properties": {
+                    "page_index": { "type": "integer", "minimum": 0 },
+                    "endpoint_or_query": { "type": "string", "minLength": 1 },
+                    "response_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                    "response_size_bytes": { "type": "integer", "minimum": 0 },
+                    "reported_count_this_page": { "type": "integer", "minimum": 0 }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "captured_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Cada página o respuesta capturada de cualquier fuente, referenciada aquí como un artefacto individual, separado y verificable — no solo resumida dentro de sources[].",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact_id", "source_role", "description", "sha256", "size_bytes", "content_type", "captured_at"],
+        "properties": {
+          "artifact_id": { "type": "string", "minLength": 1 },
+          "source_role": {
+            "enum": ["district_discovery", "sat_resolution", "candidate_enumeration", "chain_ancestry"]
+          },
+          "description": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "size_bytes": { "type": "integer", "minimum": 0 },
+          "content_type": { "type": "string", "minLength": 1 },
+          "captured_at": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "resolution_result_canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "candidate_set_canonical_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

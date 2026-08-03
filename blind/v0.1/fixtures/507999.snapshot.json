@@ -1,0 +1,87 @@
+{
+  "schema": "bitmapverse.same_sat_latest.fixture.v0.1",
+  "version": "0.1.0",
+  "status": "experimental",
+  "scope": "convención interna de Bitmapverse v0.1",
+  "fixture_id": "507999-at-959531",
+  "district": 507999,
+  "district_name": "507999.bitmap",
+  "resolver": "same_sat_latest_v0.1",
+  "snapshot_height": 959531,
+  "snapshot_block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+  "original_inscription_id": "2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0i0",
+  "sat": 1931628970942295,
+  "candidates": [
+    {
+      "inscription_id": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675i0",
+      "inscription_number": 126975376,
+      "sat": 1931628970942295,
+      "content_type": "text/html;charset=utf-8",
+      "content_length": 29280,
+      "content_sha256": "177e29dbaaf7cb10440535b4da29cd669332a336779dd96f0b0a408d4909775f",
+      "canonical_position": {
+        "block_height": 959318,
+        "block_hash": "00000000000000000000fccfe411b1b15ebaf223f31c68ffab02eadb4fa3d06c",
+        "transaction_id": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675",
+        "transaction_index": 2781,
+        "inscription_index": 0
+      }
+    },
+    {
+      "inscription_id": "2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0i0",
+      "inscription_number": 12933248,
+      "sat": 1931628970942295,
+      "content_type": "text/plain",
+      "content_length": 13,
+      "content_sha256": "09e9c97cb00ea968d94a1cc791e1474ed2727872bdbed18d55a4798719a3e1b2",
+      "declared_content": "507999.bitmap",
+      "canonical_position": {
+        "block_height": 795180,
+        "block_hash": "0000000000000000000473d19b8d4b5c27e07e35f567b0c3e77f0af3922fd06a",
+        "transaction_id": "2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0",
+        "transaction_index": 3849,
+        "inscription_index": 0
+      }
+    }
+  ],
+  "candidate_enumeration": {
+    "source": "ordinals.com",
+    "endpoint": "https://ordinals.com/r/sat/1931628970942295",
+    "observed_at": "2026-07-30",
+    "reported_count": 2,
+    "reported_more": false,
+    "response_body": "{\"ids\":[\"2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0i0\",\"16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675i0\"],\"more\":false,\"page\":0}",
+    "response_sha256": "91aeb721b2293f01f136827c6ab7e3139766ff6ffaec338e415f81ab60bfe74d",
+    "complete_through_snapshot": true
+  },
+  "source_manifest": {
+    "opi": {
+      "implementation": "https://github.com/bestinslot-xyz/OPI",
+      "commit": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+      "api_source_sha256": "aa0d85488de71d5b4cb31ae1953177c111560eeb1242a64f0761962b8a6ac4a0",
+      "query": "/v1/bitmap/get_inscription_id_of_bitmap?bitmap_number=507999",
+      "observed_at": "2026-07-30",
+      "response_sha256": null,
+      "response_status": "not_captured_no_public_instance"
+    },
+    "ord": {
+      "implementation": "ord server via ordinals.com",
+      "version": "not_exposed_by_public_server",
+      "observed_at": "2026-07-30",
+      "enumeration_response_sha256": "91aeb721b2293f01f136827c6ab7e3139766ff6ffaec338e415f81ab60bfe74d"
+    }
+  },
+  "provenance": [
+    "https://ordinals.com/r/inscription/2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0i0",
+    "https://ordinals.com/r/inscription/16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675i0",
+    "https://ordinals.com/r/blockhash/959531",
+    "https://mempool.space/api/block-height/795180",
+    "https://mempool.space/api/block-height/959318"
+  ],
+  "warnings": [
+    "La regla es experimental y no constituye un estándar universal de Bitmap.",
+    "La selección de contenido no demuestra que el código sea seguro.",
+    "La resolución no establece autoridad actual ni vínculo con Names.bitmap.",
+    "La implementación OPI quedó fijada por commit, pero no se capturó una respuesta de una instancia pública."
+  ]
+}

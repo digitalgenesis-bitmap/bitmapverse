@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/blind/v0.2/candidate-set.schema.json",
+  "title": "Bitmapverse Blind B1 Candidate Set v0.2",
+  "description": "candidate_set_through_resolution_snapshot: el conjunto COMPLETO de candidatos elegibles hasta resolution_snapshot, no solo el seleccionado. Objeto separado de resolution_result.v0.2 con su propia canonicalización y su propio SHA-256 — la selección y el conjunto completo son afirmaciones distintas y deben verificarse por separado (ver CONTRACT.md §3).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract_version",
+    "district",
+    "district_name",
+    "sat",
+    "resolution_snapshot",
+    "candidates",
+    "candidate_count",
+    "status"
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.candidate_set.v0.2" },
+    "contract_version": { "const": "0.2.0" },
+    "district": { "type": "integer", "minimum": 0 },
+    "district_name": { "type": "string", "pattern": "^[0-9]+\\.bitmap$" },
+    "sat": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991,
+      "description": "Todo candidato en `candidates` debe declarar este mismo sat — restricción entre campos verificada en código, no en el esquema."
+    },
+    "resolution_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "description": "Ordenado ascendentemente por (block_height, transaction_index, inscription_index) — orden verificado en código, no expresable como restricción de esquema puro.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["inscription_id", "sat", "content_sha256", "canonical_position"],
+        "properties": {
+          "inscription_id": { "type": "string", "pattern": "^[0-9a-f]{64}i[0-9]+$" },
+          "sat": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+          "content_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "canonical_position": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["block_height", "block_hash", "transaction_id", "transaction_index", "inscription_index"],
+            "properties": {
+              "block_height": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+              "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "transaction_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "transaction_index": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+              "inscription_index": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+            }
+          }
+        }
+      }
+    },
+    "candidate_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Debe ser exactamente len(candidates), y debe coincidir con resolution_result.eligible_through_resolution_snapshot_count para el mismo District y resolution_snapshot."
+    },
+    "status": { "const": "experimental" }
+  }
+}

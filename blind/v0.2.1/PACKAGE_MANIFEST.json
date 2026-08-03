@@ -1,0 +1,39 @@
+{
+  "schema": "bitmapverse.blind_package_manifest.v0.2.1",
+  "package_id": "same-sat-latest-b1-prep-v0.2.1",
+  "created_at": "2026-07-31",
+  "purpose": "Preparación de Prueba B1 — reconstrucción independiente de evidencia, contrato autosuficiente v0.2.1. No incluye fixtures, candidatos, IDs, sats ni hashes de contenido reales.",
+  "self_exclusion_note": "Este manifiesto se excluye a sí mismo de su propio listado 'files' para evitar circularidad. La completitud del paquete se verifica comparando la lista de archivos en disco contra Object.keys(files) más 'PACKAGE_MANIFEST.json' — ver tests/blind-v021-package.test.mjs.",
+  "files": {
+    "BITMAP_DISCOVERY_PROFILE.md": "da8f5614c1a1f88ae3c246e30001bd0f54f4cf6fe25103c4c5ad5c37620277c8",
+    "CANDIDATE_SET_SCHEMA.json": "1dc8cbe479ccb1f6ad342f93eaea8c16bce3f2f6caf00b19159e2b5548f919bc",
+    "CANONICALIZATION.md": "f3b7901ee05dd49e6da3b51ee2a5dae9a468218dfd799d21f3c4e797d4625f0a",
+    "CONTRACT.md": "126a0a2d1224f2395383d5f476e8d42aa434f02da3278bd02fb38e9c7c0d62e4",
+    "EVIDENCE_MANIFEST_SCHEMA.json": "39713671622334911b34ecdc868986f1ce84cccb73a939e925e7fda1b2654f10",
+    "FIELD_PROVENANCE.md": "0bb7640bc61be3f3e1bec9245cc2e5a1ae574c3b26a96b62b1ac3ab04e47b5ed",
+    "ORACLE_COMMITMENT.txt": "c8fd5cf2ecef5c8f3487746a0080530785eb65048871bf7442af9a7fcd892a32",
+    "README.md": "30555ed22a495d06cd62355baf6f57cf1ae617c7218c5a053527b8fcf51e6380",
+    "RESOLUTION_RESULT_SCHEMA.json": "6969478e14bd91d66bf496292948f62203d053811038d92637bba0cb4a2da525",
+    "TASK.md": "0cc43ab8cf2aa5a08f53122dc834ff90bcfcb1911b0f051449bf240118b20ae1",
+    "test-vectors/canonicalization-vectors.json": "b03de72360e8afc64ccee421e5eaf10626948e4ffcfd8832dc4b158b731c1385",
+    "test-vectors/synthetic-count-split.expected.json": "0f88d90f0d76cedf6998d79efa1c76d689c27231e7ef469ce50950215ffcff8f",
+    "test-vectors/synthetic-count-split.input.json": "d4050fb05cff46713eb497c483705884f6298192916b18c7c83449afe02ad12d"
+  },
+  "excluded": [
+    "oráculo reservado",
+    "nonce del oráculo reservado",
+    "instrucciones de revelación del oráculo reservado",
+    "fixtures reales",
+    "candidatos reales",
+    "inscription IDs reales",
+    "sats reales",
+    "hashes de contenido reales",
+    "resultado de Prueba A",
+    "hashes canónicos de resultados reales",
+    "código de los resolutores existentes",
+    "código de la capa de conformidad de Prueba A",
+    "pruebas anteriores",
+    "el paquete blind/v0.2 superseded (referenciado solo por estado, no incluido)",
+    "herramientas internas de preparación del paquete"
+  ]
+}

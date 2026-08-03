@@ -1,0 +1,30 @@
+{
+  "schema": "bitmapverse.blind_resolver_case.v0.1",
+  "case_id": "same-sat-latest-proof-a-001",
+  "status": "experimental",
+  "test_kind": "resolver_independence",
+  "resolver": "same_sat_latest_v0.1",
+  "snapshot": {
+    "height": 959531,
+    "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e"
+  },
+  "evidence": [
+    {
+      "fixture_id": "507999-at-959531",
+      "path": "fixtures/507999.snapshot.json",
+      "sha256": "5a935afb166b8af613885593874f9a4d166d06b875b6e3de5cf824002b9e96d8"
+    },
+    {
+      "fixture_id": "7187-at-959531",
+      "path": "fixtures/7187.snapshot.json",
+      "sha256": "d9d374df1fb651c51786f6002c0846f575a080f0a7073cedcd057b06149c6d36"
+    }
+  ],
+  "limits": {
+    "network_access": false,
+    "python_standard_library_only": true,
+    "prior_implementation_access": false,
+    "tests_from_prior_implementation": false,
+    "oracle_access_before_submission": false
+  }
+}

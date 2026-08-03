@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/resolution-result-v01.schema.json",
+  "title": "Bitmapverse Resolution Result v0.1",
+  "description": "Esquema estable e interoperable para la salida normalizada de same_sat_latest_v0.1, independiente del lenguaje de la implementación que la produjo. No sustituye el objeto nativo de cada resolutor; es el objetivo de traducción de los adaptadores externos.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "district",
+    "district_name",
+    "resolver",
+    "original_inscription_id",
+    "selected_inscription_id",
+    "selected_content_sha256",
+    "sat",
+    "selected_position",
+    "snapshot",
+    "eligible_candidate_count",
+    "status"
+  ],
+  "properties": {
+    "schema": { "const": "bitmapverse.resolution_result.v0.1" },
+    "district": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Número entero del District. La correspondencia district_name === `${district}.bitmap` es una restricción entre campos que este esquema no puede expresar por sí solo (ver conformance/proof-a-v0.1/CANONICALIZATION.md); los adaptadores y las pruebas de conformidad la verifican explícitamente."
+    },
+    "district_name": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.bitmap$"
+    },
+    "resolver": { "const": "same_sat_latest_v0.1" },
+    "original_inscription_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}i[0-9]+$"
+    },
+    "selected_inscription_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}i[0-9]+$"
+    },
+    "selected_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sat": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "selected_position": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "block_height",
+        "block_hash",
+        "transaction_id",
+        "transaction_index",
+        "inscription_index"
+      ],
+      "properties": {
+        "block_height": { "type": "integer", "minimum": 0 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "transaction_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "transaction_index": { "type": "integer", "minimum": 0 },
+        "inscription_index": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["block_height", "block_hash", "block_timestamp"],
+      "properties": {
+        "block_height": { "type": "integer", "minimum": 0 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "block_timestamp": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Timestamp declarado por el bloque Bitcoin; aporta contexto, no define el corte. null cuando la evidencia congelada disponible no lo declara — ver CANONICALIZATION.md sobre la excepción documentada de block_timestamp."
+        }
+      }
+    },
+    "eligible_candidate_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Cuenta solamente candidatos válidos hasta snapshot.block_height. No es el total de candidatos observados (ver evidence_manifest.observed_candidate_count)."
+    },
+    "status": { "const": "experimental" }
+  }
+}

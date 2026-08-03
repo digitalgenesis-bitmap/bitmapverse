@@ -1,0 +1,150 @@
+{
+  "_note": "Vectores generados con scripts/b1-prep/jcs.py, verificados byte-identicos contra scripts/b1-prep/jcs.mjs. No contrastados contra los vectores oficiales de RFC 8785 (sin acceso a Internet en este entorno) - ver CANONICALIZATION.md, 'Alcance y honestidad de la verificacion'.",
+  "vectors": [
+    {
+      "name": "empty_object",
+      "input": {},
+      "canonical_bytes_utf8": "{}",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "name": "empty_array",
+      "input": [],
+      "canonical_bytes_utf8": "[]",
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "name": "null_true_false",
+      "input": {
+        "a": null,
+        "b": true,
+        "c": false
+      },
+      "canonical_bytes_utf8": "{\"a\":null,\"b\":true,\"c\":false}",
+      "sha256": "17073ac6186d8c60c0c0da712ce30cdb52ed5a9155f616983da39a9785dce715"
+    },
+    {
+      "name": "key_order_is_sorted_ascii",
+      "input": {
+        "zebra": 1,
+        "apple": 2,
+        "mango": 3
+      },
+      "canonical_bytes_utf8": "{\"apple\":2,\"mango\":3,\"zebra\":1}",
+      "sha256": "76b5f61f10004f6011524c1a0680f38c33e395fb281dad2d9c937d1597e58431"
+    },
+    {
+      "name": "nested_object_and_array",
+      "input": {
+        "b": [
+          3,
+          1,
+          2
+        ],
+        "a": {
+          "z": 1,
+          "y": 2
+        }
+      },
+      "canonical_bytes_utf8": "{\"a\":{\"y\":2,\"z\":1},\"b\":[3,1,2]}",
+      "sha256": "5a1802bc3b7af5e9b0ec838cd7f6b1dc4d15f5999ceef32f2e11f68c137e5066"
+    },
+    {
+      "name": "negative_and_zero_integers",
+      "input": {
+        "neg": -5,
+        "zero": 0,
+        "neg_zero_input": 0
+      },
+      "canonical_bytes_utf8": "{\"neg\":-5,\"neg_zero_input\":0,\"zero\":0}",
+      "sha256": "09a849addd792b56553eda48c6133188830236fae918f95240e1691da2f33469"
+    },
+    {
+      "name": "max_safe_integer",
+      "input": {
+        "n": 9007199254740991
+      },
+      "canonical_bytes_utf8": "{\"n\":9007199254740991}",
+      "sha256": "e1da48c6a6089f06ecb4e0a2259e658e3786b2420f52baccdf929ec6460d7b41"
+    },
+    {
+      "name": "min_safe_integer",
+      "input": {
+        "n": -9007199254740991
+      },
+      "canonical_bytes_utf8": "{\"n\":-9007199254740991}",
+      "sha256": "d49d713821fc149f81ef6ca8054beeba696f5da052f0ab3e2d773808c5a9d625"
+    },
+    {
+      "name": "unicode_beyond_ascii_raw_utf8",
+      "input": {
+        "s": "canonicalización — 中文 — ✅"
+      },
+      "canonical_bytes_utf8": "{\"s\":\"canonicalización — 中文 — ✅\"}",
+      "sha256": "323949c4713147c5a290fd69998aec97ee72bdace7df60e78eacbd225d50e2f1"
+    },
+    {
+      "name": "string_escapes",
+      "input": {
+        "s": "quote\" backslash\\ tab\tnewline\ncarriage\rformfeed\fbackspace\b control"
+      },
+      "canonical_bytes_utf8": "{\"s\":\"quote\\\" backslash\\\\ tab\\tnewline\\ncarriage\\rformfeed\\fbackspace\\b control\"}",
+      "sha256": "be55540ed8212f13c8b41d87da9ffba709b64efc0aa08291f7819e36350e1f94"
+    },
+    {
+      "name": "array_order_preserved_not_sorted",
+      "input": [
+        5,
+        4,
+        3,
+        2,
+        1
+      ],
+      "canonical_bytes_utf8": "[5,4,3,2,1]",
+      "sha256": "50e674656acf2ee93833646a9e1e0f22e231573572810d97685957f16d0906ca"
+    },
+    {
+      "name": "realistic_shape_synthetic_ids_only",
+      "input": {
+        "schema": "bitmapverse.resolution_result.v0.2",
+        "district": 999999999,
+        "district_name": "999999999.bitmap",
+        "selected_position": {
+          "block_height": 999999,
+          "block_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+          "transaction_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "transaction_index": 5,
+          "inscription_index": 0
+        }
+      },
+      "canonical_bytes_utf8": "{\"district\":999999999,\"district_name\":\"999999999.bitmap\",\"schema\":\"bitmapverse.resolution_result.v0.2\",\"selected_position\":{\"block_hash\":\"4444444444444444444444444444444444444444444444444444444444444444\",\"block_height\":999999,\"inscription_index\":0,\"transaction_id\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"transaction_index\":5}}",
+      "sha256": "46f4b6f317ef3014f8679575b8d3f8dcf5decd2941796bff6af2b64dcfec331c"
+    }
+  ],
+  "rejection_vectors": [
+    {
+      "name": "float_not_admitted",
+      "input": {
+        "x": 1.5
+      },
+      "rejected": true,
+      "error": "JCS (scoped subset) rejects unsupported value of type <class 'float'>"
+    },
+    {
+      "name": "integer_above_safe_range",
+      "input": {
+        "x": 9007199254740992
+      },
+      "rejected": true,
+      "error": "JCS (scoped subset) rejects integers outside the safe interoperable range: 9007199254740992"
+    },
+    {
+      "name": "integer_below_safe_range",
+      "input": {
+        "x": -9007199254740992
+      },
+      "rejected": true,
+      "error": "JCS (scoped subset) rejects integers outside the safe interoperable range: -9007199254740992"
+    }
+  ]
+}

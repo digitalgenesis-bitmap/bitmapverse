@@ -1,0 +1,57 @@
+{
+  "_synthetic": true,
+  "_note": "Caso completamente inventado, sin relación con 507999.bitmap ni 7187.bitmap. Ningún ID, sat o hash aquí corresponde a una inscripción real. Existe solo para probar el invariante observed = eligible + excluded, no para revelar nada sobre los casos reales bajo prueba.",
+  "district": 999999999,
+  "district_name": "999999999.bitmap",
+  "sat": 1111111111111111,
+  "resolution_snapshot": {
+    "height": 1000000,
+    "block_hash": "1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "observation_tip": {
+    "height": 1000050,
+    "block_hash": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "observed_candidates": [
+    {
+      "inscription_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaai0",
+      "sat": 1111111111111111,
+      "content_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "declared_content": "999999999.bitmap",
+      "canonical_position": {
+        "block_height": 900000,
+        "block_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+        "transaction_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "transaction_index": 1,
+        "inscription_index": 0
+      },
+      "_role": "original — declared_content matches district_name, earliest eligible position"
+    },
+    {
+      "inscription_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccci0",
+      "sat": 1111111111111111,
+      "content_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "canonical_position": {
+        "block_height": 999999,
+        "block_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+        "transaction_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "transaction_index": 5,
+        "inscription_index": 0
+      },
+      "_role": "eligible reinscription — before resolution_snapshot.height (1000000), later tuple than original, so this is selected"
+    },
+    {
+      "inscription_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeei0",
+      "sat": 1111111111111111,
+      "content_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "canonical_position": {
+        "block_height": 1000020,
+        "block_hash": "5555555555555555555555555555555555555555555555555555555555555555",
+        "transaction_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        "transaction_index": 2,
+        "inscription_index": 0
+      },
+      "_role": "excluded — after resolution_snapshot.height (1000000) but not after observation_tip.height (1000050). Must NOT affect resolution_result or candidate_set; must appear only in evidence_manifest's observed/excluded counts."
+    }
+  ]
+}

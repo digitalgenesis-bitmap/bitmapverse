@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bitmapverse.local/schemas/signal-case-v01.schema.json",
+  "title": "Bitmapverse Signal Case v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "case_id", "question", "status", "authority", "resolver", "snapshot", "evidence", "evaluation", "limits"],
+  "properties": {
+    "schema": { "const": "bitmapverse.signal_case.v0.1" },
+    "case_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "question": { "type": "string", "minLength": 1 },
+    "status": { "const": "shadow" },
+    "authority": { "const": "none" },
+    "resolver": { "const": "same_sat_latest_v0.1" },
+    "snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["height", "block_hash"],
+      "properties": {
+        "height": { "type": "integer", "minimum": 0 },
+        "block_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["origin", "destination"],
+      "properties": {
+        "origin": { "$ref": "#/$defs/evidenceReference" },
+        "destination": { "$ref": "#/$defs/evidenceReference" }
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["roles", "blind_to_peer_signals"],
+      "properties": {
+        "roles": { "const": ["SCOUT", "KEEPER", "VOID"] },
+        "blind_to_peer_signals": { "const": true }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["may_authorize_transition", "may_mutate_state"],
+      "properties": {
+        "may_authorize_transition": { "const": false },
+        "may_mutate_state": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["district", "fixture", "fixture_sha256"],
+      "properties": {
+        "district": { "type": "integer", "minimum": 0 },
+        "fixture": { "type": "string", "pattern": "^fixtures/[0-9]+\\.snapshot\\.json$" },
+        "fixture_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}
