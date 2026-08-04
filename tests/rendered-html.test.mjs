@@ -35,14 +35,14 @@ test("renderiza el portal experimental con ambos resultados resueltos", async ()
     html,
     /<title>Bitmapverse v0\.1 — Portal experimental<\/title>/i,
   );
-  assert.match(html, /Dos territorios\./);
-  assert.match(html, /Una ruta verificable\./);
+  assert.match(html, /Two territories\./);
+  assert.match(html, /One verifiable route\./);
   assert.match(html, /507999\.bitmap/);
   assert.match(html, /7187\.bitmap/);
   assert.match(html, /HEIGHT (?:<!-- -->)?959531/);
   assert.match(html, /same_sat_latest_v0\.1/);
-  assert.match(html, /Convención interna de Bitmapverse v0\.1/);
-  assert.match(html, /No es todavía una EMV pública/);
+  assert.match(html, /Internal Bitmapverse v0\.1 convention/);
+  assert.match(html, /Not yet a public MVE/);
   assert.doesNotMatch(html, /Your site is taking shape|Codex is working/);
 });
 
@@ -60,10 +60,10 @@ test("la interfaz conserva evidencia, límites e interacción sin el starter", a
   assert.match(explorer, /setRouteDirection/);
   assert.match(explorer, /selected_content_sha256/);
   assert.match(explorer, /enumeration_response_sha256/);
-  assert.match(explorer, /Respuesta OPI no capturada/);
+  assert.match(explorer, /OPI response not captured/);
   assert.match(explorer, /target="_blank"/);
   assert.match(explorer, /rel="noreferrer"/);
-  assert.match(layout, /lang="es"/);
+  assert.match(layout, /lang="en"/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
 
@@ -74,4 +74,50 @@ test("la interfaz conserva evidencia, límites e interacción sin el starter", a
     access(new URL("../app/_sites-preview/preview.css", import.meta.url)),
   );
   await assert.rejects(access(new URL("public/_sites-preview", projectRoot)));
+});
+
+test("el Candidato EMV local mantiene Experiencia como vista inicial, Verificación disponible, y los límites epistemológicos exigidos", async () => {
+  const response = await render();
+  const html = await response.text();
+  const explorerSource = await readFile(
+    new URL("../app/portal-explorer.tsx", import.meta.url),
+    "utf8",
+  );
+
+  // 1. The initial view is "Experience": its controls are present and
+  // the content exclusive to "Verification" is not rendered by default.
+  assert.match(html, /LOCAL MVE CANDIDATE/);
+  assert.match(html, /EXPERIENCE/);
+  assert.match(html, /OPEN SELECTED CONTENT/);
+  assert.doesNotMatch(html, /ORIGINAL INSCRIPTION/);
+  assert.doesNotMatch(html, /SELECTED RESULT/);
+
+  // 2. "Verification" can be opened: the control exists in the initial
+  // view and, at the source level, its technical content is gated
+  // exactly on that same state (this test does not simulate clicks in a
+  // real browser).
+  assert.match(html, /VERIFICATION/);
+  assert.match(html, /VIEW TECHNICAL VERIFICATION/);
+  assert.match(explorerSource, /onClick=\{\(\) => setView\("verification"\)\}/);
+  assert.match(explorerSource, /view === "verification" && \(/);
+  assert.match(explorerSource, /ORIGINAL INSCRIPTION/);
+
+  // 3. Freedeon and Organa remain visible.
+  assert.match(html, /Freedeon/);
+  assert.match(html, /Organa/);
+
+  // 4. The route can be reversed.
+  assert.match(html, /REVERSE ROUTE/);
+  assert.match(explorerSource, /setRouteDirection/);
+
+  // 5. The EXPERIMENTAL label remains visible.
+  assert.match(html, /EXPERIMENTAL/);
+
+  // 6. It is not presented as a public MVE or as a universal standard.
+  assert.match(
+    html,
+    /Not yet a public MVE or a universal Bitmap standard/,
+  );
+  assert.doesNotMatch(html, /\bis\s+(?:the|a)\s+public\s+MVE\b/i);
+  assert.doesNotMatch(html, /\bpublic MVE\b(?!\s+or)/);
 });

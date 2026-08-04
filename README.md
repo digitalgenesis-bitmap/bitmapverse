@@ -27,6 +27,23 @@ No contiene todavía:
 
 Véase [BITMAPVERSE_V01_CONTRACT.md](./BITMAPVERSE_V01_CONTRACT.md).
 
+## Candidato EMV local
+
+El portal Freedeon ↔ Organa se organiza en dos niveles pensados para una
+persona no técnica:
+
+- **Experiencia** (vista inicial): explica en lenguaje simple qué es
+  Bitmapverse, qué territorios participan, la ruta Freedeon ↔ Organa (con
+  opción de invertirla) y qué contenido fue resuelto, sin abrir con hashes.
+- **Verificación** (se abre desde Experiencia): conserva toda la evidencia
+  técnica existente — District, inscripción original, inscripción
+  seleccionada, sat, posición canónica, hashes, snapshot, regla aplicada,
+  enlaces a Ord, y qué evidencia sigue ausente.
+
+Esto lo convierte en un **Candidato de Experiencia Mínima Verificable (EMV)
+local**: todavía no es una EMV pública ni un estándar universal de Bitmap,
+como también indica la lista anterior.
+
 ## Verificación local
 
 ```bash
