@@ -1,3 +1,6 @@
+// Public, CI-safe checks only. The nonce leak-scan that requires reading
+// the real private nonce moved to tests/private-oracle-audit.test.mjs
+// (npm run test:private-audit, local-only, not part of npm run test:all).
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
@@ -45,49 +48,8 @@ test("oracle/reserved/b1-v0.2/ no longer exists in the repository tree", async (
   assert.equal(entries.includes("b1-v0.2"), false);
 });
 
-test("the v0.2.1 nonce never leaks into any tracked-or-trackable repo file", async () => {
-  // The nonce is the one value in the reserved oracle that is genuinely,
-  // uniquely secret: a fresh random 32 bytes with no legitimate reason to
-  // exist anywhere but the private folder. This is a real repo-wide scan,
-  // not scoped to blind/v0.2.1/ — if this ever fires, .gitignore alone
-  // did not prevent a leak; something *wrote* the nonce into a tracked
-  // file, which is exactly the risk this guards against.
-  //
-  // Deliberately NOT scanning repo-wide for the oracle's inscription
-  // IDs/sats/content hashes here: those describe 507999.bitmap and
-  // 7187.bitmap, the same two Districts Prueba A already resolved and
-  // published (fixtures/507999.snapshot.json, blind/v0.1/fixtures/*,
-  // conformance/proof-a-v0.1/report.json, tests/same-sat-latest-v01.test.mjs,
-  // blind/audits/proof-a-001.md — all legitimately, historically public
-  // well before this task). Scanning the whole repo for those values
-  // would flag dozens of already-verified historical files as "leaking"
-  // facts that were never secret to begin with. The meaningful check for
-  // those values is narrower and scoped: does blind/v0.2.1/ itself (the
-  // new blind package) reference them? That's covered by
-  // tests/blind-v021-package.test.mjs, mirroring the same check already
-  // proven for blind/v0.2/.
-  const PRIVATE_ROOT = process.env.BITMAPVERSE_PRIVATE_DIR
-    ? `${process.env.BITMAPVERSE_PRIVATE_DIR}/bitmapverse/oracle/b1-v0.2.1`
-    : null;
-  const nonceHex = (await readFile(`${PRIVATE_ROOT}/nonce.hex`, "utf8")).trim();
-  assert.match(nonceHex, /^[0-9a-f]{64}$/);
-
-  // "Files git would track" = respects .gitignore automatically.
-  const candidateFiles = git(["ls-files", "--others", "--cached", "--exclude-standard"])
-    .split("\n")
-    .filter(Boolean);
-
-  const offenders = [];
-  for (const relative of candidateFiles) {
-    let content;
-    try {
-      content = await readFile(new URL(relative, projectRoot), "utf8");
-    } catch {
-      continue; // binary or unreadable — not a text leak vector
-    }
-    if (content.includes(nonceHex)) {
-      offenders.push(relative);
-    }
-  }
-  assert.deepEqual(offenders, []);
-});
+// The repo-wide nonce leak-scan requires reading the real private nonce
+// (a fresh random 32 bytes with no legitimate reason to exist anywhere but
+// the private folder). That real-secret read must not happen as part of
+// the default, CI-safe suite — see tests/private-oracle-audit.test.mjs
+// (npm run test:private-audit, local-only) for that check.

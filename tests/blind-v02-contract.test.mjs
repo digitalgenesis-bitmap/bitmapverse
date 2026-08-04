@@ -8,17 +8,43 @@ import { validate } from "../scripts/b1-prep/json-schema-lite.mjs";
 import { canonicalize, canonicalizeToBytes } from "../scripts/b1-prep/jcs.mjs";
 
 const packageRoot = new URL("../blind/v0.2/", import.meta.url);
-// v0.2's reserved oracle no longer lives in the repository (secrets were
-// relocated to a private, permission-restricted folder outside the repo
-// as part of hardening for v0.2.1 — see blind/PREDECESSOR_STATUS.md and
-// tests/oracle-secrets-git-protection.test.mjs). This is the verified,
-// byte-identical archived copy, not a re-derivation.
-const oracleDir = process.env.BITMAPVERSE_PRIVATE_DIR
-  ? new URL(`file://${process.env.BITMAPVERSE_PRIVATE_DIR}/bitmapverse/oracle/b1-v0.2.1/archived-v0.2/`)
-  : null;
+// Real-oracle-dependent checks (schema validation against the actual
+// private oracle, and the real-ID-leak scan) moved to
+// tests/private-oracle-audit.test.mjs (npm run test:private-audit,
+// local-only, never part of npm run test:all). Everything in this file
+// now runs on schemas, test-vectors, and synthetic fixtures only.
 
 async function loadSchema(name) {
   return JSON.parse(await readFile(new URL(name, packageRoot), "utf8"));
+}
+
+// A synthetic, schema-valid RESOLUTION_RESULT_SCHEMA v0.2 instance, used
+// only as a baseline to mutate in the rejection tests below. No real
+// oracle data — the schema's rejection behavior does not depend on the
+// values being real.
+function syntheticResolutionResult() {
+  return {
+    schema: "bitmapverse.resolution_result.v0.2",
+    contract_version: "0.2.0",
+    resolver: "same_sat_latest_v0.1",
+    bitmap_discovery_profile: "bitmapverse.bitmap_discovery.v0.2",
+    district: 1234567,
+    district_name: "1234567.bitmap",
+    original_inscription_id: `${"0".repeat(64)}i0`,
+    sat: 1000000000,
+    selected_inscription_id: `${"1".repeat(64)}i1`,
+    selected_content_sha256: "2".repeat(64),
+    selected_position: {
+      block_height: 900000,
+      block_hash: "3".repeat(64),
+      transaction_id: "4".repeat(64),
+      transaction_index: 0,
+      inscription_index: 0,
+    },
+    resolution_snapshot: { height: 959531, block_hash: "5".repeat(64) },
+    eligible_through_resolution_snapshot_count: 1,
+    status: "experimental",
+  };
 }
 
 // --- Schemas are well-formed and internally consistent.
@@ -35,62 +61,26 @@ test("los tres esquemas v0.2 son JSON válido con additionalProperties:false en 
   }
 });
 
-// --- The real reserved oracle (never read into the blind package) must
-// validate cleanly against the schemas that ship inside the package. This
-// exercises the schemas against real data without putting real data in the
-// package itself.
-
-test("el oráculo reservado real valida contra los esquemas del paquete", async () => {
-  const rrSchema = await loadSchema("RESOLUTION_RESULT_SCHEMA.json");
-  const csSchema = await loadSchema("CANDIDATE_SET_SCHEMA.json");
-  const oracle = JSON.parse(await readFile(new URL("oracle.json", oracleDir), "utf8"));
-
-  for (const rr of Object.values(oracle.resolution_results)) {
-    const { valid, errors } = validate(rrSchema, rr);
-    assert.equal(valid, true, errors.join("; "));
-  }
-  for (const cs of Object.values(oracle.candidate_sets_through_resolution_snapshot)) {
-    const { valid, errors } = validate(csSchema, cs);
-    assert.equal(valid, true, errors.join("; "));
-  }
-});
-
-test("resolution_result y candidate_set del oráculo real coinciden en el conteo elegible", async () => {
-  const oracle = JSON.parse(await readFile(new URL("oracle.json", oracleDir), "utf8"));
-  for (const districtName of Object.keys(oracle.resolution_results)) {
-    const rr = oracle.resolution_results[districtName];
-    const cs = oracle.candidate_sets_through_resolution_snapshot[districtName];
-    assert.equal(rr.eligible_through_resolution_snapshot_count, cs.candidate_count, districtName);
-    assert.equal(cs.candidates.length, cs.candidate_count, districtName);
-  }
-});
-
 // --- Schema rejects malformed instances (real assert.throws-equivalent:
 // validate() returning valid:false is this validator's error-reporting
 // contract, asserted explicitly, not inferred from a side computation).
 
 test("RESOLUTION_RESULT_SCHEMA rechaza district_name con formato inválido", async () => {
   const schema = await loadSchema("RESOLUTION_RESULT_SCHEMA.json");
-  const oracle = JSON.parse(await readFile(new URL("oracle.json", oracleDir), "utf8"));
-  const good = Object.values(oracle.resolution_results)[0];
-  const bad = { ...good, district_name: "not-a-district" };
+  const bad = { ...syntheticResolutionResult(), district_name: "not-a-district" };
   assert.equal(validate(schema, bad).valid, false);
 });
 
 test("RESOLUTION_RESULT_SCHEMA rechaza un campo obligatorio ausente", async () => {
   const schema = await loadSchema("RESOLUTION_RESULT_SCHEMA.json");
-  const oracle = JSON.parse(await readFile(new URL("oracle.json", oracleDir), "utf8"));
-  const good = Object.values(oracle.resolution_results)[0];
-  const bad = { ...good };
+  const bad = syntheticResolutionResult();
   delete bad.eligible_through_resolution_snapshot_count;
   assert.equal(validate(schema, bad).valid, false);
 });
 
 test("RESOLUTION_RESULT_SCHEMA rechaza un entero fuera del rango seguro", async () => {
   const schema = await loadSchema("RESOLUTION_RESULT_SCHEMA.json");
-  const oracle = JSON.parse(await readFile(new URL("oracle.json", oracleDir), "utf8"));
-  const good = Object.values(oracle.resolution_results)[0];
-  const bad = { ...good, sat: 9007199254740992 };
+  const bad = { ...syntheticResolutionResult(), sat: 9007199254740992 };
   assert.equal(validate(schema, bad).valid, false);
 });
 
@@ -247,23 +237,6 @@ test("caso sintético: una inscripción posterior al snapshot no cambia resoluti
   assert.equal(expected.evidence_manifest.excluded_after_resolution_snapshot_count, 1);
 });
 
-test("caso sintético no revela ningún ID real de 507999.bitmap o 7187.bitmap", async () => {
-  const oracle = JSON.parse(await readFile(new URL("oracle.json", oracleDir), "utf8"));
-  const realIds = new Set();
-  for (const rr of Object.values(oracle.resolution_results)) {
-    realIds.add(rr.original_inscription_id);
-    realIds.add(rr.selected_inscription_id);
-  }
-  const input = await readFile(
-    new URL("test-vectors/synthetic-count-split.input.json", packageRoot),
-    "utf8",
-  );
-  const expectedRaw = await readFile(
-    new URL("test-vectors/synthetic-count-split.expected.json", packageRoot),
-    "utf8",
-  );
-  for (const id of realIds) {
-    assert.equal(input.includes(id), false);
-    assert.equal(expectedRaw.includes(id), false);
-  }
-});
+// The check that the synthetic vector doesn't leak real 507999.bitmap /
+// 7187.bitmap inscription IDs requires reading the real oracle to know
+// which IDs to check for — moved to tests/private-oracle-audit.test.mjs.

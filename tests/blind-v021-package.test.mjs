@@ -7,14 +7,12 @@ import { join } from "node:path";
 import test from "node:test";
 
 const packageRoot = new URL("../blind/v0.2.1/", import.meta.url);
-const projectRoot = new URL("../", import.meta.url);
-// Secrets live entirely outside the repository now (see task: proteger y
-// rotar secretos) — this is the one authorized private path, never a
-// path inside the repo.
-const PRIVATE_ORACLE_DIR = process.env.BITMAPVERSE_PRIVATE_DIR
-  ? `${process.env.BITMAPVERSE_PRIVATE_DIR}/bitmapverse/oracle/b1-v0.2.1`
-  : null;
 const zipPath = new URL("../bitmapverse-blind-v0.2.1.zip", import.meta.url);
+// The real-secret leak scan (which needs the private oracle to know what
+// values to scan for) moved to tests/private-oracle-audit.test.mjs
+// (npm run test:private-audit, local-only, never part of npm run test:all).
+// Everything below runs on the package's own files and the public
+// fixtures/ only.
 
 function sha256(buffer) {
   return createHash("sha256").update(buffer).digest("hex");
@@ -52,81 +50,6 @@ test("el manifiesto se excluye explícitamente de su propio listado", async () =
   const manifest = JSON.parse(await readFile(new URL("PACKAGE_MANIFEST.json", packageRoot), "utf8"));
   assert.equal("PACKAGE_MANIFEST.json" in manifest.files, false);
   assert.match(manifest.self_exclusion_note, /circularidad/);
-});
-
-// --- Leak scan, scoped narrowly to the blind package. Real inscription
-// IDs/sats/content hashes for 507999.bitmap and 7187.bitmap are already
-// legitimately public elsewhere in this repository (Prueba A revealed
-// them — fixtures/*.json, blind/v0.1/fixtures/*, conformance reports).
-// Scanning the whole repo for them would flag dozens of already-verified
-// historical files as "leaking" facts that were never secret. What DOES
-// matter here: the blind/v0.2.1 PACKAGE itself — what an implementer
-// actually receives — must never reference them, regardless of whether
-// they're public elsewhere. See tests/oracle-secrets-git-protection.test.mjs
-// for the genuinely repo-wide check (the nonce, which has no legitimate
-// reason to appear anywhere but the private folder).
-
-async function collectRealSecretsForPackageScan() {
-  const secrets = new Set();
-
-  for (const fixturePath of ["fixtures/507999.snapshot.json", "fixtures/7187.snapshot.json"]) {
-    const fixture = JSON.parse(await readFile(new URL(fixturePath, projectRoot), "utf8"));
-    secrets.add(fixture.original_inscription_id);
-    secrets.add(String(fixture.sat));
-    for (const candidate of fixture.candidates) {
-      secrets.add(candidate.inscription_id);
-      secrets.add(String(candidate.sat));
-      secrets.add(candidate.content_sha256);
-      secrets.add(candidate.canonical_position.transaction_id);
-    }
-  }
-
-  const oracle = JSON.parse(await readFile(`${PRIVATE_ORACLE_DIR}/oracle.json`, "utf8"));
-  for (const rr of Object.values(oracle.resolution_results)) {
-    secrets.add(rr.original_inscription_id);
-    secrets.add(rr.selected_inscription_id);
-    secrets.add(rr.selected_content_sha256);
-    secrets.add(String(rr.sat));
-    secrets.add(rr.selected_position.transaction_id);
-  }
-  for (const cs of Object.values(oracle.candidate_sets_through_resolution_snapshot)) {
-    for (const c of cs.candidates) {
-      secrets.add(c.inscription_id);
-      secrets.add(c.content_sha256);
-      secrets.add(c.canonical_position.transaction_id);
-    }
-  }
-
-  const nonceHex = (await readFile(`${PRIVATE_ORACLE_DIR}/nonce.hex`, "utf8")).trim();
-  secrets.add(nonceHex);
-
-  // resolution_snapshot.height/block_hash are explicitly PERMITTED
-  // content (CONTRACT.md §14). One eligible candidate in each fixture
-  // sits exactly at snapshot height, so its canonical_position.block_hash
-  // legitimately equals the snapshot's own hash.
-  for (const fixturePath of ["fixtures/507999.snapshot.json", "fixtures/7187.snapshot.json"]) {
-    const fixture = JSON.parse(await readFile(new URL(fixturePath, projectRoot), "utf8"));
-    secrets.delete(fixture.snapshot_block_hash);
-  }
-
-  return [...secrets].filter((s) => s.length >= 16);
-}
-
-test("ningún ID, sat, hash de contenido o nonce reales aparece en el paquete ciego v0.2.1", async () => {
-  const secrets = await collectRealSecretsForPackageScan();
-  assert.ok(secrets.length > 10, "expected a non-trivial number of real secret values to scan for");
-
-  const files = await collectFiles(packageRoot);
-  for (const relative of files) {
-    const content = await readFile(new URL(relative, packageRoot), "utf8");
-    for (const secret of secrets) {
-      assert.equal(
-        content.includes(secret),
-        false,
-        `${relative} leaks a real secret value (${secret.slice(0, 12)}...)`,
-      );
-    }
-  }
 });
 
 test("el paquete no referencia código, pruebas, herramientas o resultados previos", async () => {

@@ -21,6 +21,7 @@
     "test:blind-v022": "node --test tests/blind-v022-package.test.mjs tests/blind-v022-contract.test.mjs tests/blind-v022-corrections.test.mjs tests/blind-v022-manifest-integrity.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "test:all": "npm run test:core && npm run test:blind && npm run test:blind-v02 && npm run test:blind-v021 && npm run test:blind-v022 && npm run test:conformance && npm run lint && npm run build && node --test tests/rendered-html.test.mjs",
+    "test:private-audit": "node --test tests/private-oracle-audit.test.mjs",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

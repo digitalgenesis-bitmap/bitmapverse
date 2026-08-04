@@ -8,17 +8,19 @@
  *   - every declared size and SHA-256 matches the real file;
  *   - no reference to a nonexistent artifact_id/source_id inside any
  *     evidence_manifest-shaped content shipped in test-vectors/;
- *   - no cross-source artifact ownership violation;
- *   - no secrets, oracles, nonces, or private files anywhere in the tree.
+ *   - no cross-source artifact ownership violation.
+ *
+ * Deliberately does not read any private oracle/nonce material — this
+ * runs as part of npm run test:all and must stay clean-clone/CI-safe. The
+ * real-secret leak scan for this package lives in
+ * tests/private-oracle-audit.test.mjs (npm run test:private-audit,
+ * local-only).
  */
-import { readFile, readdir, stat } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { validateReferentialIntegrity } from "./evidence-manifest-integrity.mjs";
 
 const packageRoot = new URL("../../blind/v0.2.2/", import.meta.url);
-const PRIVATE_ORACLE_DIR = process.env.BITMAPVERSE_PRIVATE_DIR
-  ? `${process.env.BITMAPVERSE_PRIVATE_DIR}/bitmapverse/oracle/b1-v0.2.1`
-  : null;
 
 const REQUIRED_NORMATIVE_FILES = [
   "CONTRACT.md",
@@ -101,37 +103,6 @@ export async function verifyDraftManifest() {
       const integrity = validateReferentialIntegrity(manifestLike);
       if (!integrity.valid) {
         for (const e of integrity.errors) errors.push(`${relative}: evidence_manifest integrity: ${e}`);
-      }
-    }
-  }
-
-  // No secrets anywhere in the package.
-  let secrets = [];
-  try {
-    const oracle = JSON.parse(await readFile(`${PRIVATE_ORACLE_DIR}/oracle.json`, "utf8"));
-    const nonceHex = (await readFile(`${PRIVATE_ORACLE_DIR}/nonce.hex`, "utf8")).trim();
-    secrets = [nonceHex];
-    for (const rr of Object.values(oracle.resolution_results)) {
-      secrets.push(rr.original_inscription_id, rr.selected_inscription_id, rr.selected_content_sha256, String(rr.sat));
-    }
-  } catch {
-    // Private oracle directory not accessible from this environment —
-    // not this checker's job to require it; the git-protection test
-    // suite already covers the nonce-leak case repo-wide.
-  }
-  for (const relative of onDisk) {
-    let stats;
-    try {
-      stats = await stat(new URL(relative, packageRoot));
-    } catch {
-      continue;
-    }
-    if (!stats.isFile()) continue;
-    const content = await readFile(new URL(relative, packageRoot), "utf8").catch(() => null);
-    if (content === null) continue;
-    for (const secret of secrets) {
-      if (secret.length >= 16 && content.includes(secret)) {
-        errors.push(`${relative} leaks a real secret value (${secret.slice(0, 12)}...)`);
       }
     }
   }
