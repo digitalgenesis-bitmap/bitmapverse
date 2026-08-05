@@ -1,60 +1,60 @@
-# Protocolo de implementación independiente — Bitmapverse v0.1
+# Independent implementation protocol — Bitmapverse v0.1
 
-Fecha: 2026-07-31  
-Estado: paquete preparado; implementación independiente todavía no ejecutada.
+Date: 2026-07-31  
+Status: package prepared; independent implementation not yet executed.
 
-## Corrección epistemológica
+## Epistemological correction
 
-SCOUT, KEEPER y VOID son actualmente funciones deterministas predefinidas. La ejecución realizada demuestra separación estructural, límites de autoridad y reproducibilidad del protocolo del Consejo de Señales en sombra.
+SCOUT, KEEPER, and VOID are currently predefined deterministic functions. The run performed demonstrates structural separation, authority limits, and reproducibility of the Shadow Council of Signals protocol.
 
-No demuestra deliberación inteligente autónoma ni la existencia de tres Hypheons.
+It does not demonstrate autonomous intelligent deliberation or the existence of three Hypheons.
 
-## Separación de responsabilidades
+## Separation of responsibilities
 
-| Artefacto | Responsabilidad |
+| Artifact | Responsibility |
 |---|---|
-| Contrato ciego | Define la regla normativa que debe reinterpretarse. |
-| Caso | Define el snapshot, los archivos permitidos y los límites del experimento. |
-| Fixtures sanitizados | Aportan evidencia congelada sin etiquetar el resultado. |
-| Compromiso del oráculo | Demuestra que el oráculo quedó fijado antes de la entrega. |
-| Oráculo reservado | Permite comparar resultados únicamente después del cierre. |
+| Blind contract | Defines the normative rule to be reimplemented. |
+| Case | Defines the snapshot, the allowed files, and the limits of the experiment. |
+| Sanitized fixtures | Provide frozen evidence without labeling the result. |
+| Oracle commitment | Demonstrates that the oracle was fixed before delivery. |
+| Reserved oracle | Allows comparing results only after closing. |
 
-El expediente no es una fuente total de verdad. Cada artefacto posee una responsabilidad delimitada.
+The case file is not a single source of total truth. Each artifact carries a bounded responsibility.
 
-## Prueba A — independencia del resolver
+## Proof A — resolver independence
 
-La instancia independiente recibe solamente `bitmapverse-blind-v0.1.zip`.
+The independent instance receives only `bitmapverse-blind-v0.1.zip`.
 
-Debe:
+It must:
 
-1. verificar el manifiesto;
-2. implementar el contrato en Python con biblioteca estándar;
-3. crear sus propias pruebas;
-4. registrar ambigüedades antes de conocer el oráculo;
-5. producir resultados para ambos fixtures;
-6. sellar los hashes de su entrega en `SUBMISSION.json`.
+1. verify the manifest;
+2. implement the contract in Python using only the standard library;
+3. create its own tests;
+4. record ambiguities before knowing the oracle;
+5. produce results for both fixtures;
+6. seal the hashes of its submission in `SUBMISSION.json`.
 
-Solo después se revela `oracle/reserved/same-sat-latest-v01.oracle.json` y se compara la salida.
+Only afterward is `oracle/reserved/same-sat-latest-v01.oracle.json` revealed and the output compared.
 
-El archivo del oráculo no está cifrado. Su reserva depende de entregar a la instancia únicamente el ZIP aislado. El SHA-256 público dentro del paquete impide cambiar silenciosamente el oráculo después de la entrega.
+The oracle file is not encrypted. Its secrecy depends on giving the instance only the isolated ZIP. The public SHA-256 inside the package prevents silently changing the oracle after delivery.
 
-## Prueba B — independencia de reconstrucción
+## Proof B — reconstruction independence
 
-Es un experimento separado y posterior. La segunda parte deberá consultar infraestructura compatible con Ord y reconstruir los fixtures sin recibir las enumeraciones preparadas por la primera implementación.
+This is a separate, later experiment. The second party must query Ord-compatible infrastructure and reconstruct the fixtures without receiving the enumerations prepared by the first implementation.
 
-Superar la Prueba A no autoriza afirmar que la evidencia haya sido reconstruida independientemente.
+Passing Proof A does not authorize claiming that the evidence was independently reconstructed.
 
-## Condición de comparación
+## Comparison outcomes
 
-- Coincidencia completa: el contrato fue suficientemente preciso para estos casos.
-- Divergencia por ambigüedad: corregir el contrato y repetir con una versión nueva.
-- Divergencia por error de implementación: conservar la entrega original y publicar una sucesora; nunca reescribirla.
+- Full match: the contract was precise enough for these cases.
+- Divergence due to ambiguity: fix the contract and repeat with a new version.
+- Divergence due to implementation error: keep the original submission and publish a successor; never rewrite it.
 
-Ninguno de estos resultados convierte la regla en estándar universal de Bitmap.
+None of these outcomes turns the rule into a universal Bitmap standard.
 
-## Integridad del paquete
+## Package integrity
 
-- Archivo: `bitmapverse-blind-v0.1.zip`
+- File: `bitmapverse-blind-v0.1.zip`
 - SHA-256: `20e2e66890a469e853487acb124e2e938c3a3bb303bd6d9439fa538af25ae0d4`
 
-El hash debe actualizarse si el ZIP se vuelve a generar después de modificar el paquete.
+The hash must be updated if the ZIP is regenerated after the package changes.

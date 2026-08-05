@@ -1,180 +1,180 @@
-# Contrato Bitmapverse v0.1
+# Bitmapverse v0.1 Contract
 
-Estado: experimental  
-Fecha: 2026-07-29  
-Responsable público: The Source Revelator  
-Regla implementada: `same_sat_latest_v0.1`
+Status: experimental  
+Date: 2026-07-29  
+Publicly accountable: The Source Revelator  
+Rule implemented: `same_sat_latest_v0.1`
 
-## 1. Hipótesis mínima
+## 1. Minimal hypothesis
 
-Dados:
+Given:
 
-- un District Bitmap original resuelto mediante una implementación compatible de OPI;
-- el satoshi asignado a esa inscripción;
-- el conjunto completo de inscripciones observadas sobre ese mismo satoshi;
-- una altura y un hash de bloque congelados;
+- an original Bitmap District resolved through a compatible OPI implementation;
+- the satoshi assigned to that inscription;
+- the full set of inscriptions observed on that same satoshi;
+- a frozen block height and hash;
 
-dos implementaciones independientes deben seleccionar la misma inscripción vigente hasta ese snapshot.
+two independent implementations must select the same current inscription through that snapshot.
 
-Bitmapverse v0.1 no afirma que esta regla sea el estándar universal de Bitmap. Es una convención interna, versionada y refutable.
+Bitmapverse v0.1 does not claim that this rule is the universal Bitmap standard. It is an internal, versioned, and refutable convention.
 
-## 2. Resultado esperado
+## 2. Expected result
 
-La regla devuelve:
+The rule returns:
 
-- el District consultado;
-- la inscripción original;
-- el satoshi compartido;
-- la inscripción seleccionada;
-- la posición canónica utilizada;
-- el snapshot aplicado;
-- la procedencia de la evidencia;
-- advertencias que impidan confundir resolución con seguridad, autoridad o vigencia posterior.
+- the queried District;
+- the original inscription;
+- the shared satoshi;
+- the selected inscription;
+- the canonical position used;
+- the snapshot applied;
+- the provenance of the evidence;
+- warnings that prevent conflating resolution with security, authority, or later validity.
 
-Si solo existe la inscripción original dentro del snapshot, devuelve la original.
+If only the original inscription exists within the snapshot, it returns the original.
 
-## 3. Snapshot canónico
+## 3. Canonical snapshot
 
-Cada fixture declara obligatoriamente:
+Each fixture must declare:
 
 - `snapshot_height`;
 - `snapshot_block_hash`.
-- `candidate_enumeration`, incluido el cuerpo de respuesta congelado y su SHA-256;
-- `source_manifest`, con la implementación, versión o commit y estado de cada fuente;
-- `content_sha256` para cada candidato.
+- `candidate_enumeration`, including the frozen response body and its SHA-256;
+- `source_manifest`, with each source's implementation, version or commit, and status;
+- `content_sha256` for each candidate.
 
-El hash identifica el bloque exacto observado en esa altura. Antes de resolver, una implementación conectada debe comprobar que ese hash continúa siendo canónico.
+The hash identifies the exact block observed at that height. Before resolving, a connected implementation must confirm that hash is still canonical.
 
-Si una reorganización sustituye ese bloque:
+If a reorg replaces that block:
 
-- el fixture histórico no se reescribe silenciosamente;
-- la resolución devuelve una advertencia de snapshot no canónico;
-- un snapshot sucesor debe publicarse como evidencia nueva.
+- the historical fixture is not silently rewritten;
+- resolution returns a non-canonical-snapshot warning;
+- a successor snapshot must be published as new evidence.
 
-Esta implementación pura opera sobre evidencia ya congelada. La comprobación contra una cadena viva pertenece al adaptador de infraestructura, no al núcleo determinista.
+This pure implementation operates on already-frozen evidence. Checking against a live chain belongs to the infrastructure adapter, not to the deterministic core.
 
-## 4. Orden canónico
+## 4. Canonical order
 
-“Latest” nunca depende del orden de una respuesta de API.
+"Latest" never depends on the order of an API response.
 
-Las inscripciones elegibles se ordenan ascendentemente mediante la tupla:
+Eligible inscriptions are sorted ascending by the tuple:
 
 1. `block_height`;
 2. `transaction_index`;
 3. `inscription_index`.
 
-Definiciones:
+Definitions:
 
-- `block_height`: altura del bloque que contiene la transacción reveal;
-- `transaction_index`: posición cero-basada de esa transacción dentro del bloque Bitcoin;
-- `inscription_index`: sufijo `iN` del inscription ID, que identifica la inscripción dentro de la transacción.
+- `block_height`: the height of the block containing the reveal transaction;
+- `transaction_index`: the zero-based position of that transaction within the Bitcoin block;
+- `inscription_index`: the `iN` suffix of the inscription ID, identifying the inscription within the transaction.
 
-La inscripción vigente es la última tupla que no exceda `snapshot_height`.
+The current inscription is the last tuple that does not exceed `snapshot_height`.
 
-Un fixture es inválido si:
+A fixture is invalid if:
 
-- omite cualquiera de esos tres componentes;
-- contiene dos candidatos con la misma posición;
-- contiene una inscripción cuyo sat no coincide con el sat declarado;
-- no incluye la inscripción original;
-- declara como original una inscripción distinta de la encontrada por su ID.
-- su lista no coincide exactamente con la enumeración congelada;
-- la enumeración declara páginas adicionales;
-- el cuerpo de enumeración no coincide con su SHA-256;
-- un candidato situado en `snapshot_height` declara otro hash de bloque.
+- it omits any of those three components;
+- it contains two candidates with the same position;
+- it contains an inscription whose sat does not match the declared sat;
+- it does not include the original inscription;
+- it declares as original an inscription other than the one found by its ID;
+- its list does not exactly match the frozen enumeration;
+- the enumeration declares additional pages;
+- the enumeration body does not match its SHA-256;
+- a candidate located at `snapshot_height` declares a different block hash.
 
-`complete_through_snapshot` significa que la fuente de enumeración reportó el conjunto completo observado hasta el corte. No demuestra por sí solo que el proveedor carezca de errores; la segunda implementación ciega deberá reconstruir y contrastar esa igualdad.
+`complete_through_snapshot` means the enumeration source reported the full set observed through the cutoff. It does not by itself demonstrate that the provider is error-free; the second blind implementation must reconstruct and cross-check that equality.
 
-## 5. Algoritmo `same_sat_latest_v0.1`
+## 5. `same_sat_latest_v0.1` algorithm
 
-1. Leer el District original previamente descubierto mediante OPI.
-2. Verificar que el contenido declarado del original coincide con `<district>.bitmap`.
-3. Identificar el sat de esa inscripción.
-4. Reunir todas las inscripciones asignadas al mismo sat hasta el snapshot.
-5. Validar sus posiciones canónicas.
-6. Ordenarlas por la tupla canónica.
-7. Seleccionar la última.
-8. Si solo existe la original, seleccionar la original.
-9. Entregar resultado, evidencia, procedencia y advertencias.
+1. Read the original District previously discovered via OPI.
+2. Verify that the original's declared content matches `<district>.bitmap`.
+3. Identify that inscription's sat.
+4. Gather every inscription assigned to the same sat through the snapshot.
+5. Validate their canonical positions.
+6. Sort them by the canonical tuple.
+7. Select the last one.
+8. If only the original exists, select the original.
+9. Return the result, evidence, provenance, and warnings.
 
-## 6. Límites de v0.1
+## 6. v0.1 limits
 
-Quedan expresamente fuera:
+Explicitly out of scope:
 
-- children alojados en otros sats;
+- children hosted on other sats;
 - delegates;
-- Names.bitmap y su vínculo con Districts;
-- interpretación de Bitmap Metadata;
-- portales universales;
-- relaciones inferidas;
-- resolución posterior al snapshot;
-- disputas entre reglas alternativas;
-- autoridad actual, firmas del controlador o seguridad del contenido;
-- ejecución de código de terceros dentro de un contexto privilegiado.
+- Names.bitmap and its link to Districts;
+- Bitmap Metadata interpretation;
+- universal portals;
+- inferred relationships;
+- resolution after the snapshot;
+- disputes between alternative rules;
+- current authority, controller signatures, or content security;
+- executing third-party code within a privileged context.
 
-La pregunta sobre Names.bitmap permanece abierta y no bloquea esta implementación.
+The question of Names.bitmap remains open and does not block this implementation.
 
-## 7. Casos iniciales
+## 7. Initial cases
 
 ### Freedeon — `507999.bitmap`
 
-Debe resolver desde la inscripción original del District hacia la reinscripción HTML confirmada de Freedeon.
+Must resolve from the District's original inscription to Freedeon's confirmed HTML reinscription.
 
-Esto demuestra publicación territorial on-chain de un artefacto HTML autocontenido. No demuestra autonomía, cognición, continuidad de ejecución ni soberanía ontológica.
+This demonstrates territorial on-chain publication of a self-contained HTML artifact. It does not demonstrate autonomy, cognition, execution continuity, or ontological sovereignty.
 
 ### Organa — `7187.bitmap`
 
-Debe resolver desde la inscripción original hacia la segunda reinscripción Organa observada hasta el snapshot.
+Must resolve from the original inscription to the second Organa reinscription observed through the snapshot.
 
-Esto demuestra un linaje de reinscripciones sobre el mismo sat. No adopta las afirmaciones de Organa sobre ejecución privada, agentes u organización autónoma.
+This demonstrates a lineage of reinscriptions on the same sat. It does not adopt Organa's claims about private execution, agents, or autonomous organization.
 
-## 8. Criterios de refutación
+## 8. Refutation criteria
 
-La hipótesis mínima falla si:
+The minimal hypothesis fails if:
 
-- dos clientes honestos, con los mismos fixtures y esta versión del contrato, seleccionan IDs diferentes;
-- el resultado cambia al reordenar los candidatos de entrada;
-- una inscripción posterior al snapshot altera el resultado;
-- se acepta un candidato de otro sat;
-- el resultado no muestra suficiente evidencia para repetir la selección;
-- la implementación presenta esta convención interna como estándar universal.
+- two honest clients, with the same fixtures and this contract version, select different IDs;
+- the result changes when the input candidates are reordered;
+- an inscription after the snapshot alters the result;
+- a candidate from another sat is accepted;
+- the result does not show enough evidence to repeat the selection;
+- the implementation presents this internal convention as a universal standard.
 
-## 9. Terminología
+## 9. Terminology
 
-- **EMV — Experiencia Mínima Verificable:** experiencia más pequeña que permite observar, repetir y refutar la afirmación central.
-- **Autocontenido:** contiene su aplicación, aunque puede consultar infraestructura Ord compatible.
-- **Reproducible:** otra implementación obtiene el mismo resultado desde la misma evidencia.
-- **Experimental:** convención interna versionada; no estándar universal.
-- **Histórico:** una declaración anterior permanece registrada aunque una sucesora la reemplace.
+- **MVE — Minimum Verifiable Experience:** the smallest experience that allows the central claim to be observed, repeated, and refuted.
+- **Self-contained:** contains its own application, though it may query compatible Ord infrastructure.
+- **Reproducible:** another implementation obtains the same result from the same evidence.
+- **Experimental:** a versioned internal convention; not a universal standard.
+- **Historical:** an earlier statement remains on record even after a successor replaces it.
 
-## 10. Secuencia de construcción
+## 10. Build sequence
 
-1. Portal experimental privado de ida y vuelta entre Freedeon y Organa.
-2. Consejo de Señales en sombra.
-3. Segunda implementación ciega de la regla y reconstrucción de fixtures.
-4. Solo si ambas implementaciones coinciden, promoción del portal a **EMV pública**.
+1. Private round-trip experimental portal between Freedeon and Organa.
+2. Shadow Council of Signals.
+3. Second blind implementation of the rule and fixture reconstruction.
+4. Only if both implementations agree, promotion of the portal to a **public MVE**.
 
-La interfaz puede construirse y probarse antes de la implementación ciega, pero no debe recibir todavía el nombre de Experiencia Mínima Verificable. El portal será una interfaz sobre evidencia; no será un estándar de interconexión entre todos los Bitmap.
+The interface may be built and tested before the blind implementation, but it must not yet be called a Minimum Verifiable Experience. The portal will be an interface over evidence; it will not be a standard for interconnecting all Bitmaps.
 
-## 11. Consejo de Señales en sombra v0.1
+## 11. Shadow Council of Signals v0.1
 
-El Consejo recibe un expediente estructurado que referencia —sin duplicarlos— los fixtures congelados de `507999.bitmap` y `7187.bitmap` mediante sus hashes SHA-256.
+The Council receives a structured case file that references — without duplicating them — the frozen fixtures of `507999.bitmap` and `7187.bitmap` by their SHA-256 hashes.
 
-Tres roles evalúan el mismo expediente sin leer las respuestas de sus pares:
+Three roles evaluate the same case file without reading their peers' responses:
 
-- **SCOUT:** busca posibilidades y propone continuar el experimento;
-- **KEEPER:** protege memoria, procedencia y reversibilidad;
-- **VOID:** intenta refutar la promoción y explicita evidencia faltante.
+- **SCOUT:** looks for possibilities and proposes continuing the experiment;
+- **KEEPER:** protects memory, provenance, and reversibility;
+- **VOID:** tries to refute the promotion and makes missing evidence explicit.
 
-Estas funciones son roles. No son automáticamente EONs ni Hypheons.
+These functions are roles. They are not automatically EONs or Hypheons.
 
-El Consejo opera exclusivamente en sombra:
+The Council operates exclusively in shadow:
 
-- no autoriza transiciones;
-- no modifica estado;
-- no mueve fondos;
-- no establece verdad;
-- no convierte el portal en EMV;
-- no resuelve conflictos entre reglas alternativas.
+- it does not authorize transitions;
+- it does not change state;
+- it does not move funds;
+- it does not establish truth;
+- it does not turn the portal into an MVE;
+- it does not resolve conflicts between alternative rules.
 
-La salida deliberadamente disonante es información: v0.1 debe conservar las tres señales, no reducirlas por mayoría ni fingir consenso.
+The deliberately dissonant output is information: v0.1 must keep the three signals, not reduce them by majority vote or fake consensus.
