@@ -55,7 +55,7 @@ npm run test:blind
 npm test
 ```
 
-`npm test` runs thirteen resolver tests, six Shadow Council tests, four blind-package isolation tests, builds the application, and uses two rendering tests to verify that the portal shows both territories, the snapshot, the rule, and its epistemic limits.
+`npm test` runs thirteen resolver tests, six Shadow Council tests, four blind-package isolation tests, builds the application, and uses three rendering tests to verify that the portal shows both territories, the snapshot, the rule, and its epistemic limits.
 
 The interface allows you to:
 

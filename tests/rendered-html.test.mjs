@@ -25,7 +25,7 @@ async function render() {
   );
 }
 
-test("renderiza el portal experimental con ambos resultados resueltos", async () => {
+test("renders the experimental portal with both results resolved", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -46,7 +46,7 @@ test("renderiza el portal experimental con ambos resultados resueltos", async ()
   assert.doesNotMatch(html, /Your site is taking shape|Codex is working/);
 });
 
-test("la interfaz conserva evidencia, límites e interacción sin el starter", async () => {
+test("the interface preserves evidence, limits, and interaction without the starter", async () => {
   const [page, explorer, layout, css, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/portal-explorer.tsx", import.meta.url), "utf8"),
@@ -76,7 +76,7 @@ test("la interfaz conserva evidencia, límites e interacción sin el starter", a
   await assert.rejects(access(new URL("public/_sites-preview", projectRoot)));
 });
 
-test("el Candidato EMV local mantiene Experiencia como vista inicial, Verificación disponible, y los límites epistemológicos exigidos", async () => {
+test("the local MVE Candidate keeps Experience as the initial view, Verification available, and the required epistemic limits", async () => {
   const response = await render();
   const html = await response.text();
   const explorerSource = await readFile(
