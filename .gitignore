@@ -49,3 +49,6 @@ next-env.d.ts
 __pycache__/
 *.pyc
 /conformance/proof-a-v0.1/derived/
+
+# local Claude Code configuration
+.claude/
