@@ -1,0 +1,76 @@
+{
+  "schema": "bitmapverse.same_sat_latest.fixture.v0.1",
+  "version": "0.1.0",
+  "status": "experimental",
+  "scope": "convención interna de Bitmapverse v0.1",
+  "fixture_id": "937336-at-959531",
+  "district": 937336,
+  "district_name": "937336.bitmap",
+  "resolver": "same_sat_latest_v0.1",
+  "snapshot_height": 959531,
+  "snapshot_block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e",
+  "original_inscription_id": "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0",
+  "sat": 1715489001085578,
+  "expected_selected_inscription_id": "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0",
+  "candidates": [
+    {
+      "inscription_id": "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0",
+      "inscription_number": 119946830,
+      "sat": 1715489001085578,
+      "content_type": "text/plain",
+      "content_length": 13,
+      "content_sha256": "23b1e175eaffc554b4513a53a591c730764b2277028bb5519528e6900f796d9d",
+      "declared_content": "937336.bitmap",
+      "canonical_position": {
+        "block_height": 937336,
+        "block_hash": "000000000000000000008e42644fe63120248b979cc04532647ee2cd0ae00ac0",
+        "transaction_id": "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1",
+        "transaction_index": 130,
+        "inscription_index": 0
+      }
+    }
+  ],
+  "candidate_enumeration": {
+    "source": "ordinals.com",
+    "endpoint": "https://ordinals.com/r/sat/1715489001085578",
+    "observed_at": "2026-08-28",
+    "reported_count": 1,
+    "reported_more": false,
+    "response_body": "{\"ids\":[\"7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0\"],\"more\":false,\"page\":0}",
+    "response_sha256": "07161b2cfe7a4aff0e9c80e2c2833e73d09798e606df8e00e5c5539b519f27d2",
+    "complete_through_snapshot": true
+  },
+  "source_manifest": {
+    "opi": {
+      "implementation": "https://github.com/bestinslot-xyz/OPI",
+      "commit": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+      "api_source_sha256": "aa0d85488de71d5b4cb31ae1953177c111560eeb1242a64f0761962b8a6ac4a0",
+      "query": "/v1/bitmap/get_inscription_id_of_bitmap?bitmap_number=937336",
+      "observed_at": "2026-08-28",
+      "response_sha256": null,
+      "response_status": "not_captured_no_public_instance"
+    },
+    "ord": {
+      "implementation": "ord server via ordinals.com",
+      "version": "not_exposed_by_public_server",
+      "observed_at": "2026-08-28",
+      "enumeration_response_sha256": "07161b2cfe7a4aff0e9c80e2c2833e73d09798e606df8e00e5c5539b519f27d2"
+    }
+  },
+  "provenance": [
+    "https://ordinals.com/r/inscription/7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0",
+    "https://ordinals.com/content/7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0",
+    "https://ordinals.com/r/sat/1715489001085578",
+    "https://ordinals.com/r/blockhash/937336",
+    "https://ordinals.com/r/blockhash/959531",
+    "https://mempool.space/api/tx/7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1/status",
+    "https://mempool.space/api/block/000000000000000000008e42644fe63120248b979cc04532647ee2cd0ae00ac0/txids"
+  ],
+  "warnings": [
+    "La regla es experimental y no constituye un estándar universal de Bitmap.",
+    "937336 es, en la evidencia existente del repositorio, un District candidato para bitmapverse.bitmap, no una afirmación normativa definitiva de unicidad bajo enumeración OPI completa.",
+    "El único candidato observado sobre este sat es la inscripción original; ninguna reinscripción posterior fue encontrada a través del snapshot.",
+    "La resolución no establece autoridad actual ni vínculo normativo con bitmapverse.bitmap.",
+    "La implementación OPI quedó fijada por commit, pero no se capturó una respuesta de una instancia pública."
+  ]
+}

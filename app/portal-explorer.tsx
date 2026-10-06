@@ -6,7 +6,7 @@ import type { ResolverResult } from "../src/resolvers/same-sat-latest-v01.mjs";
 type Territory = {
   label: string;
   role: string;
-  accent: "green" | "amber";
+  accent: "green" | "amber" | "blue";
   result: ResolverResult;
 };
 
@@ -78,7 +78,7 @@ export function PortalExplorer({
       <section className="hero" id="top">
         <div className="eyebrow">LOCAL MVE CANDIDATE</div>
         <h1>
-          Two territories.
+          Three territories.
           <br />
           <span>One verifiable route.</span>
         </h1>
@@ -86,7 +86,7 @@ export function PortalExplorer({
           Bitmapverse observes a fixed Bitcoin snapshot, applies the
           experimental same_sat_latest_v0.1 rule to each District, and shows
           which content that rule selects within the snapshot. Here you can
-          explore two test territories and the route connecting them.
+          explore three test territories and the route connecting them.
         </p>
         <div className="snapshot-bar">
           <div>

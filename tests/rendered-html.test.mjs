@@ -35,10 +35,11 @@ test("renders the experimental portal with both results resolved", async () => {
     html,
     /<title>Bitmapverse v0\.1 — Portal experimental<\/title>/i,
   );
-  assert.match(html, /Two territories\./);
+  assert.match(html, /Three territories\./);
   assert.match(html, /One verifiable route\./);
   assert.match(html, /507999\.bitmap/);
   assert.match(html, /7187\.bitmap/);
+  assert.match(html, /937336\.bitmap/);
   assert.match(html, /HEIGHT (?:<!-- -->)?959531/);
   assert.match(html, /same_sat_latest_v0\.1/);
   assert.match(html, /Internal Bitmapverse v0\.1 convention/);
@@ -57,6 +58,7 @@ test("the interface preserves evidence, limits, and interaction without the star
 
   assert.match(page, /resolveSameSatLatestV01\(freedeonFixture\)/);
   assert.match(page, /resolveSameSatLatestV01\(organaFixture\)/);
+  assert.match(page, /resolveSameSatLatestV01\(bitmapverseFixture\)/);
   assert.match(explorer, /setRouteDirection/);
   assert.match(explorer, /selected_content_sha256/);
   assert.match(explorer, /enumeration_response_sha256/);
@@ -102,9 +104,11 @@ test("the local MVE Candidate keeps Experience as the initial view, Verification
   assert.match(explorerSource, /view === "verification" && \(/);
   assert.match(explorerSource, /ORIGINAL INSCRIPTION/);
 
-  // 3. Freedeon and Organa remain visible.
+  // 3. Freedeon and Organa remain visible; Bitmapverse joins as a third
+  // territory produced by the same resolver mechanism.
   assert.match(html, /Freedeon/);
   assert.match(html, /Organa/);
+  assert.match(html, /Bitmapverse/);
 
   // 4. The route can be reversed.
   assert.match(html, /REVERSE ROUTE/);

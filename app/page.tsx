@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import freedeonFixture from "../fixtures/507999.snapshot.json";
 import organaFixture from "../fixtures/7187.snapshot.json";
+import bitmapverseFixture from "../fixtures/937336.snapshot.json";
 import { resolveSameSatLatestV01 } from "../src/resolvers/same-sat-latest-v01.mjs";
 import { PortalExplorer } from "./portal-explorer";
 
@@ -23,6 +24,12 @@ export default function Home() {
       role: "CONTRASTE EXTERNO",
       accent: "amber" as const,
       result: resolveSameSatLatestV01(organaFixture),
+    },
+    {
+      label: "Bitmapverse",
+      role: "CANDIDATO EXPERIMENTAL",
+      accent: "blue" as const,
+      result: resolveSameSatLatestV01(bitmapverseFixture),
     },
   ];
 

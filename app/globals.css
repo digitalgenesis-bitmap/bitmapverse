@@ -9,6 +9,8 @@
   --green-dark: #173e27;
   --amber: #ffb84d;
   --amber-dark: #4a2d0d;
+  --blue: #5ec8ff;
+  --blue-dark: #123047;
 }
 
 * {
@@ -191,7 +193,7 @@ footer {
 
 .portal-stage {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 100px;
   align-items: center;
   position: relative;
@@ -234,6 +236,12 @@ footer {
 .territory-card.amber:hover {
   border-color: rgba(255, 184, 77, 0.62);
   background: linear-gradient(145deg, rgba(74, 45, 13, 0.42), #0d110e 62%);
+}
+
+.territory-card.blue.active,
+.territory-card.blue:hover {
+  border-color: rgba(94, 200, 255, 0.62);
+  background: linear-gradient(145deg, rgba(18, 48, 71, 0.42), #0d110e 62%);
 }
 
 .territory-role,
@@ -301,6 +309,11 @@ footer {
   box-shadow: 0 0 28px var(--amber);
 }
 
+.blue .territory-orbit span {
+  background: var(--blue);
+  box-shadow: 0 0 28px var(--blue);
+}
+
 .territory-card > strong {
   font-size: 34px;
   letter-spacing: -0.04em;
@@ -335,6 +348,10 @@ footer {
 
 .amber .card-action {
   color: var(--amber);
+}
+
+.blue .card-action {
+  color: var(--blue);
 }
 
 .portal-link {
