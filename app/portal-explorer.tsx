@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { ResolverResult } from "../src/resolvers/same-sat-latest-v01.mjs";
+import type { DistrictParcels } from "../src/parcels/district-parcels-v01.mjs";
 
 type Territory = {
   label: string;
@@ -33,8 +34,10 @@ function EvidenceRow({
 
 export function PortalExplorer({
   territories,
+  districtParcels,
 }: {
   territories: Territory[];
+  districtParcels: DistrictParcels;
 }) {
   const [activeDistrict, setActiveDistrict] = useState(
     territories[0].result.district,
@@ -96,6 +99,10 @@ export function PortalExplorer({
           <div>
             <span>RULE</span>
             <strong>same_sat_latest_v0.1</strong>
+          </div>
+          <div data-parcel-proof="">
+            <span>{`District: ${districtParcels.block_height}.bitmap`}</span>
+            <strong>{`Parcels: ${districtParcels.parcels.length}`}</strong>
           </div>
         </div>
       </section>

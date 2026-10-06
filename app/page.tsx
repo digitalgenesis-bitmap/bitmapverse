@@ -3,6 +3,8 @@ import freedeonFixture from "../fixtures/507999.snapshot.json";
 import organaFixture from "../fixtures/7187.snapshot.json";
 import bitmapverseFixture from "../fixtures/937336.snapshot.json";
 import { resolveSameSatLatestV01 } from "../src/resolvers/same-sat-latest-v01.mjs";
+import parcelIdentities937336 from "../data/parcels/937336.parcel-identities.json";
+import { toDistrictParcelsV01 } from "../src/parcels/district-parcels-v01.mjs";
 import { PortalExplorer } from "./portal-explorer";
 
 export const metadata: Metadata = {
@@ -33,5 +35,12 @@ export default function Home() {
     },
   ];
 
-  return <PortalExplorer territories={territories} />;
+  const districtParcels = toDistrictParcelsV01(parcelIdentities937336);
+
+  return (
+    <PortalExplorer
+      territories={territories}
+      districtParcels={districtParcels}
+    />
+  );
 }
