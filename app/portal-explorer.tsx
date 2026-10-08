@@ -46,6 +46,11 @@ export function PortalExplorer({
     "forward",
   );
   const [view, setView] = useState<View>("experience");
+  const [selectedParcel, setSelectedParcel] = useState<
+    DistrictParcels["parcels"][number] | null
+  >(null);
+
+  const controlParcel = districtParcels.parcels[130];
 
   const active = useMemo(
     () =>
@@ -125,6 +130,23 @@ export function PortalExplorer({
           VERIFICATION
         </button>
       </nav>
+
+      <section className="view-toggle" aria-label="Parcel interaction proof">
+        <button
+          type="button"
+          data-parcel-index={controlParcel.transaction_index}
+          onClick={() => setSelectedParcel(controlParcel)}
+        >
+          {`PARCEL ${controlParcel.transaction_index}`}
+        </button>
+        {selectedParcel && (
+          <output aria-live="polite">
+            {`Parcel index: ${selectedParcel.transaction_index}`}
+            <br />
+            {`Transaction ID: ${selectedParcel.transaction_id}`}
+          </output>
+        )}
+      </section>
 
       {view === "experience" && (
         <>
