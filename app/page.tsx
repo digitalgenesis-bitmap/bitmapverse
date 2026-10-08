@@ -13,7 +13,15 @@ export const metadata: Metadata = {
     "Ruta reproducible entre 507999.bitmap y 7187.bitmap, congelada en un snapshot de Bitcoin.",
 };
 
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ district?: string | string[] }>;
+}) {
+  const districtParam = (await searchParams).district;
+  const requestedDistrict =
+    typeof districtParam === "string" ? districtParam : undefined;
+
   const territories = [
     {
       label: "Freedeon",
@@ -41,6 +49,7 @@ export default function Home() {
     <PortalExplorer
       territories={territories}
       districtParcels={districtParcels}
+      requestedDistrict={requestedDistrict}
     />
   );
 }

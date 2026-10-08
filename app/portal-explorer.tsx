@@ -35,12 +35,17 @@ function EvidenceRow({
 export function PortalExplorer({
   territories,
   districtParcels,
+  requestedDistrict,
 }: {
   territories: Territory[];
   districtParcels: DistrictParcels;
+  requestedDistrict?: string;
 }) {
+  const requestedTerritory = territories.find(
+    ({ result }) => String(result.district) === requestedDistrict,
+  );
   const [activeDistrict, setActiveDistrict] = useState(
-    territories[0].result.district,
+    (requestedTerritory ?? territories[0]).result.district,
   );
   const [routeDirection, setRouteDirection] = useState<"forward" | "reverse">(
     "forward",
