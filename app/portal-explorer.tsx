@@ -54,8 +54,28 @@ export function PortalExplorer({
   const [selectedParcel, setSelectedParcel] = useState<
     DistrictParcels["parcels"][number] | null
   >(null);
+  const [parcelIndexInput, setParcelIndexInput] = useState("");
 
   const controlParcel = districtParcels.parcels[130];
+
+  function selectParcelFromInput() {
+    if (parcelIndexInput.trim() === "") {
+      setSelectedParcel(null);
+      return;
+    }
+
+    const index = Number(parcelIndexInput);
+    const parcel = Number.isInteger(index)
+      ? districtParcels.parcels[index]
+      : undefined;
+
+    if (!parcel || parcel.transaction_index !== index) {
+      setSelectedParcel(null);
+      return;
+    }
+
+    setSelectedParcel(parcel);
+  }
 
   const active = useMemo(
     () =>
@@ -137,6 +157,21 @@ export function PortalExplorer({
       </nav>
 
       <section className="view-toggle" aria-label="Parcel interaction proof">
+        <label>
+          <span>PARCEL INDEX</span>
+          <input
+            aria-label="Parcel transaction index"
+            type="number"
+            min={0}
+            max={districtParcels.parcels.length - 1}
+            step={1}
+            value={parcelIndexInput}
+            onChange={(event) => setParcelIndexInput(event.target.value)}
+          />
+        </label>
+        <button type="button" onClick={selectParcelFromInput}>
+          SELECT PARCEL
+        </button>
         <button
           type="button"
           data-parcel-index={controlParcel.transaction_index}
