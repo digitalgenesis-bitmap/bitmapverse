@@ -85,6 +85,10 @@ export function PortalExplorer({
     [activeDistrict, territories],
   );
 
+  const isDirectDistrictEntry =
+    requestedTerritory?.result.district === active.result.district &&
+    active.result.district === districtParcels.block_height;
+
   const route =
     routeDirection === "forward"
       ? `${territories[0].result.district_name} → ${territories[1].result.district_name}`
@@ -111,9 +115,22 @@ export function PortalExplorer({
       <section className="hero" id="top">
         <div className="eyebrow">LOCAL MVE CANDIDATE</div>
         <h1>
-          Three territories.
-          <br />
-          <span>One verifiable route.</span>
+          {isDirectDistrictEntry ? (
+            <>
+              {active.result.district_name}
+              <br />
+              <span>
+                {districtParcels.parcels.length.toLocaleString("en-US")} real
+                parcels to explore
+              </span>
+            </>
+          ) : (
+            <>
+              Three territories.
+              <br />
+              <span>One verifiable route.</span>
+            </>
+          )}
         </h1>
         <p className="hero-copy">
           Bitmapverse observes a fixed Bitcoin snapshot, applies the
