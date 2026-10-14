@@ -15,6 +15,11 @@ export const metadata: Metadata = {
     "Ruta reproducible entre 507999.bitmap y 7187.bitmap, congelada en un snapshot de Bitcoin.",
 };
 
+const canonicalNameIdentities = [
+  bitmapverseNameIdentity,
+  bitmapverseNameIdentity.additional_identity,
+];
+
 export default async function Home({
   searchParams,
 }: {
@@ -25,7 +30,10 @@ export default async function Home({
     typeof districtParam === "string" ? districtParam : undefined;
   let requestedDistrict = requestedEntry;
 
-  if (requestedEntry === bitmapverseNameIdentity.name) {
+  if (
+    requestedEntry &&
+    canonicalNameIdentities.some(({ name }) => name === requestedEntry)
+  ) {
     const nameResolution = await resolveName(requestedEntry, {
       nameIdentity: bitmapverseNameIdentity,
     });
