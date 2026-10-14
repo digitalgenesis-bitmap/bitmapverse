@@ -25,8 +25,10 @@ async function responseText(fetchImpl, url) {
 }
 
 export function canonicalParentForName(name, nameIdentity) {
-  requireValue(nameIdentity?.name === name, `canonical identity source does not match ${name}`);
-  const parent = nameIdentity?.canonical_inscription_id;
+  const identities = [nameIdentity, nameIdentity?.additional_identity]
+    .filter((identity) => identity?.name === name);
+  requireValue(identities.length === 1, `canonical identity source has ${identities.length} matches for ${name}`);
+  const parent = identities[0].canonical_inscription_id;
   requireValue(INSCRIPTION_ID.test(parent), `canonical parent for ${name} is not a valid inscription ID`);
   return parent;
 }

@@ -1,4 +1,8 @@
 {
   "name": "bitmapverse.bitmap",
-  "canonical_inscription_id": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0"
+  "canonical_inscription_id": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0",
+  "additional_identity": {
+    "name": "freedeon.bitmap",
+    "canonical_inscription_id": "54cddbef036061623679d1b7e608704da0268c83fb822430375782c62960f446i0"
+  }
 }

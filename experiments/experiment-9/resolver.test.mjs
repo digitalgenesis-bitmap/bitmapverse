@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveName } from "./resolver.mjs";
+import { canonicalParentForName, resolveName } from "./resolver.mjs";
 
 const parent = `${"a".repeat(64)}i0`;
 const earlier = `${"b".repeat(64)}i0`;
@@ -12,6 +12,10 @@ const mempoolBase = "https://bitcoin.test";
 const nameIdentity = {
   name: "example.bitmap",
   canonical_inscription_id: parent,
+  additional_identity: {
+    name: "second.bitmap",
+    canonical_inscription_id: unrelatedParent,
+  },
 };
 
 function routeFetch(routes, requests) {
@@ -34,6 +38,15 @@ function transaction(id, height, blockHash) {
     status: { confirmed: true, block_height: height, block_hash: blockHash },
   };
 }
+
+test("selects the one additional canonical identity without a Name-to-District mapping", () => {
+  assert.equal(canonicalParentForName("example.bitmap", nameIdentity), parent);
+  assert.equal(canonicalParentForName("second.bitmap", nameIdentity), unrelatedParent);
+  assert.throws(
+    () => canonicalParentForName("unknown.bitmap", nameIdentity),
+    /canonical identity source has 0 matches/,
+  );
+});
 
 test("discovers children from the canonical parent and applies frozen FiF/LiL precedence", async () => {
   const requests = [];
