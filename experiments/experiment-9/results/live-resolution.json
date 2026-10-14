@@ -1,0 +1,32 @@
+{
+  "schema": "bitmapverse.experiment-9.live-resolution.v0.1",
+  "status": "PASS",
+  "input": "bitmapverse.bitmap",
+  "parent_inscription_id": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0",
+  "discovery_mechanism": "ordinals.com /r/children pagination + reciprocal /r/parents validation",
+  "discovered_child_count": 1,
+  "qualifying_authorized_child_count": 1,
+  "authorized_candidates": [
+    {
+      "inscription_id": "62b1268600254cf9717350a21c3f02b37f195965bd68732a1a8081339847b1b3i0",
+      "content": "937336.bitmap",
+      "authorization": "ord_direct_parent",
+      "block_height": 971397,
+      "block_hash": "00000000000000000001b0631b4f02d75e52dea090484a582fa5a2f5f7356ad0",
+      "transaction_index": 2784,
+      "txid": "62b1268600254cf9717350a21c3f02b37f195965bd68732a1a8081339847b1b3"
+    }
+  ],
+  "precedence": {
+    "rule": "FiF(block_height, transaction_index, inscription_id index); LiL selects LAST",
+    "selected_key": [971397, 2784, 0]
+  },
+  "selected_child_inscription_id": "62b1268600254cf9717350a21c3f02b37f195965bd68732a1a8081339847b1b3i0",
+  "resolved_target": "937336.bitmap",
+  "hardcoded_child_id": false,
+  "hardcoded_name_to_district": false,
+  "external_dependencies": [
+    "https://ordinals.com",
+    "https://mempool.space/api"
+  ]
+}
