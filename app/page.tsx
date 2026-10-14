@@ -4,6 +4,8 @@ import organaFixture from "../fixtures/7187.snapshot.json";
 import bitmapverseFixture from "../fixtures/937336.snapshot.json";
 import { resolveSameSatLatestV01 } from "../src/resolvers/same-sat-latest-v01.mjs";
 import parcelIdentities937336 from "../data/parcels/937336.parcel-identities.json";
+import bitmapverseNameIdentity from "../data/bitmapverse-name-identity.json";
+import { resolveName } from "../experiments/experiment-9/resolver.mjs";
 import { toDistrictParcelsV01 } from "../src/parcels/district-parcels-v01.mjs";
 import { PortalExplorer } from "./portal-explorer";
 
@@ -19,8 +21,16 @@ export default async function Home({
   searchParams: Promise<{ district?: string | string[] }>;
 }) {
   const districtParam = (await searchParams).district;
-  const requestedDistrict =
+  const requestedEntry =
     typeof districtParam === "string" ? districtParam : undefined;
+  let requestedDistrict = requestedEntry;
+
+  if (requestedEntry === bitmapverseNameIdentity.name) {
+    const nameResolution = await resolveName(requestedEntry, {
+      nameIdentity: bitmapverseNameIdentity,
+    });
+    requestedDistrict = nameResolution.resolved_target.replace(/\.bitmap$/, "");
+  }
 
   const territories = [
     {
