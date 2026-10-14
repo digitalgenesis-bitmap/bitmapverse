@@ -4,7 +4,7 @@ import { selectCurrentBinding } from "../experiment-8c-r/resolver.mjs";
 
 const INSCRIPTION_ID = /^(?<txid>[0-9a-f]{64})i(?<index>0|[1-9][0-9]*)$/;
 const DISTRICT = /^[0-9]+\.bitmap$/;
-const DEFAULT_IDENTITY_CATALOG = new URL("../experiment-0/experiment.json", import.meta.url);
+const DEFAULT_NAME_IDENTITY = new URL("../../data/bitmapverse-name-identity.json", import.meta.url);
 const DEFAULT_ORD_BASE = "https://ordinals.com";
 const DEFAULT_MEMPOOL_BASE = "https://mempool.space/api";
 
@@ -24,10 +24,9 @@ async function responseText(fetchImpl, url) {
   return response.text();
 }
 
-export function canonicalParentForName(name, identityCatalog) {
-  const matches = identityCatalog?.pairs?.filter((pair) => pair.name === name) ?? [];
-  requireValue(matches.length === 1, `canonical identity catalog has ${matches.length} matches for ${name}`);
-  const parent = matches[0]?.name_authority?.winning_inscription_id;
+export function canonicalParentForName(name, nameIdentity) {
+  requireValue(nameIdentity?.name === name, `canonical identity source does not match ${name}`);
+  const parent = nameIdentity?.canonical_inscription_id;
   requireValue(INSCRIPTION_ID.test(parent), `canonical parent for ${name} is not a valid inscription ID`);
   return parent;
 }
@@ -100,10 +99,10 @@ export async function resolveName(name, options = {}) {
   requireValue(typeof fetchImpl === "function", "fetch implementation is unavailable");
   const ordBase = options.ordBase ?? DEFAULT_ORD_BASE;
   const mempoolBase = options.mempoolBase ?? DEFAULT_MEMPOOL_BASE;
-  const identityCatalog = options.identityCatalog
-    ?? JSON.parse(await readFile(options.identityCatalogUrl ?? DEFAULT_IDENTITY_CATALOG, "utf8"));
+  const nameIdentity = options.nameIdentity
+    ?? JSON.parse(await readFile(options.nameIdentityUrl ?? DEFAULT_NAME_IDENTITY, "utf8"));
 
-  const parent = canonicalParentForName(name, identityCatalog);
+  const parent = canonicalParentForName(name, nameIdentity);
   const discoveredChildren = await enumerateChildren(parent, fetchImpl, ordBase);
   const candidates = [];
   const blockTxids = new Map();

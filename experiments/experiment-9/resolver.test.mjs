@@ -9,8 +9,9 @@ const later = `${"c".repeat(64)}i1`;
 const unrelatedParent = `${"d".repeat(64)}i0`;
 const ordBase = "https://ord.test";
 const mempoolBase = "https://bitcoin.test";
-const identityCatalog = {
-  pairs: [{ name: "example.bitmap", name_authority: { winning_inscription_id: parent } }],
+const nameIdentity = {
+  name: "example.bitmap",
+  canonical_inscription_id: parent,
 };
 
 function routeFetch(routes, requests) {
@@ -53,7 +54,7 @@ test("discovers children from the canonical parent and applies frozen FiF/LiL pr
   };
 
   const result = await resolveName("example.bitmap", {
-    identityCatalog,
+    nameIdentity,
     fetchImpl: routeFetch(routes, requests),
     ordBase,
     mempoolBase,
@@ -76,7 +77,7 @@ test("fails closed when reciprocal parent evidence does not authorize a discover
 
   await assert.rejects(
     resolveName("example.bitmap", {
-      identityCatalog,
+      nameIdentity,
       fetchImpl: routeFetch(routes, requests),
       ordBase,
       mempoolBase,
@@ -95,7 +96,7 @@ test("ignores an authorized child whose exact content is not a numeric .bitmap t
 
   await assert.rejects(
     resolveName("example.bitmap", {
-      identityCatalog,
+      nameIdentity,
       fetchImpl: routeFetch(routes, requests),
       ordBase,
       mempoolBase,

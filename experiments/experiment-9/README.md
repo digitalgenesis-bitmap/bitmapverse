@@ -9,8 +9,8 @@ data; the existing discovery resolvers stopped at local fixtures.
 
 ## Minimal removal
 
-`resolver.mjs` starts only with the Name string. It reads the existing
-Experiment 0 identity catalog, discovers every child through Ord's paginated
+`resolver.mjs` starts only with the Name string. It reads the tracked canonical
+identity at `data/bitmapverse-name-identity.json`, discovers every child through Ord's paginated
 `/r/children` surface, confirms the direct parent through `/r/parents`, reads
 the exact child content through `/content`, obtains confirmed block position
 from the already-used public Ord and mempool.space surfaces, and passes the
