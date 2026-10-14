@@ -4,7 +4,7 @@ import { selectCurrentBinding } from "../experiment-8c-r/resolver.mjs";
 
 const INSCRIPTION_ID = /^(?<txid>[0-9a-f]{64})i(?<index>0|[1-9][0-9]*)$/;
 const DISTRICT = /^[0-9]+\.bitmap$/;
-const DEFAULT_NAME_IDENTITY = new URL("../../data/bitmapverse-name-identity.json", import.meta.url);
+const defaultNameIdentityUrl = () => new URL("../../data/bitmapverse-name-identity.json", import.meta.url);
 const DEFAULT_ORD_BASE = "https://ordinals.com";
 const DEFAULT_MEMPOOL_BASE = "https://mempool.space/api";
 
@@ -100,7 +100,7 @@ export async function resolveName(name, options = {}) {
   const ordBase = options.ordBase ?? DEFAULT_ORD_BASE;
   const mempoolBase = options.mempoolBase ?? DEFAULT_MEMPOOL_BASE;
   const nameIdentity = options.nameIdentity
-    ?? JSON.parse(await readFile(options.nameIdentityUrl ?? DEFAULT_NAME_IDENTITY, "utf8"));
+    ?? JSON.parse(await readFile(options.nameIdentityUrl ?? defaultNameIdentityUrl(), "utf8"));
 
   const parent = canonicalParentForName(name, nameIdentity);
   const discoveredChildren = await enumerateChildren(parent, fetchImpl, ordBase);
