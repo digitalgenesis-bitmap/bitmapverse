@@ -1,0 +1,27 @@
+{
+  "schema": "bitmapverse.public-authorization-artifact.v0.1",
+  "binding": {
+    "scheme": "bitmapverse.la-puerta.v0.1",
+    "id": "edc5ae41b465f193cf22cdfad698de5b6c8c23d242b626c0d23c0ff0b4dc82ca",
+    "name_inscription_id": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0",
+    "district_inscription_id": "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0"
+  },
+  "message": {
+    "encoding": "utf-8",
+    "line_endings": "LF",
+    "terminal_newline": false,
+    "bytes": 1092,
+    "sha256": "bfa6b84854419d3629373ecf66cf6869766c7c606dd279f991941d027e42f833",
+    "text": "BITMAPVERSE EXPERIMENT 22 / DISTRICT-HOLDER AUTHORIZATION / v0.1\n{\"schema\":\"bitmapverse.authorization.event.v0.1\",\"experiment\":\"bitmapverse.experiment-22.district-holder-authorization\",\"binding_id\":\"edc5ae41b465f193cf22cdfad698de5b6c8c23d242b626c0d23c0ff0b4dc82ca\",\"kind\":\"CREATE\",\"sequence\":0,\"previous_event_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"scope\":\"bitmapverse-authorization\",\"name_inscription_id\":\"9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0\",\"district_inscription_id\":\"7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0\",\"authority_snapshot\":{\"height\":972169,\"block_hash\":\"00000000000000000000634ef8bc8d9e4d893a836896b62a3e9bab888dd8bbf7\"},\"name_controller\":{\"address\":\"bc1p63hr0qrxdwwhygguukrt2fvtsx567d2ry5r9rum9w5wqv2yn5mtq8q0sze\",\"script_pubkey\":\"5120d46e3780666b9d72211ce586b5258b81a9af3543250651f365751c062893a6d6\"},\"district_controller\":{\"address\":\"bc1psphv4vlce9f37zqc7jt8w3gnynfxxh3zmjuvxpqv0vjs3t3mcdesyfk5tk\",\"script_pubkey\":\"5120806ecab3f8c9531f0818f49677451324d2635e22dcb8c3040c7b2508ae3bc373\"}}"
+  },
+  "signatures": {
+    "name": {
+      "format": "bip322-simple",
+      "signature": "AUAB+hJ3DoAigap0puoMxo09qy67RdbaweQjlEytAfmTnya1pCZYHqA0ncIoECdB4zuELPcD1MBYbHvR9XFDEoqN"
+    },
+    "district": {
+      "format": "bip322-simple",
+      "signature": "AUAgJYUU7hwzxVpSabdU5JUv1fxKUhgiHUqeCPGUbrpvJo4QWsYqoefVCAtnQ5PuAqiSlytltLHP8qBGfRK5YX0J"
+    }
+  }
+}
