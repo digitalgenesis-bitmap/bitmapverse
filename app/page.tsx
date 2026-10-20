@@ -6,19 +6,39 @@ import { resolveSameSatLatestV01 } from "../src/resolvers/same-sat-latest-v01.mj
 import parcelIdentities937336 from "../data/parcels/937336.parcel-identities.json";
 import bitmapverseNameIdentity from "../data/bitmapverse-name-identity.json";
 import { resolveName } from "../experiments/experiment-9/resolver.mjs";
+import bitmapverseAuthorization from "../experiments/experiment-23/public-authorization-artifact.v0.1.json";
+import bitmapworldAuthorization from "../experiments/experiment-26/bitmapworld.public-authorization-artifact.v0.1.json";
+import bitmapmetaverseAuthorization from "../experiments/experiment-26/bitmapmetaverse.public-authorization-artifact.v0.1.json";
 import { toDistrictParcelsV01 } from "../src/parcels/district-parcels-v01.mjs";
 import { PortalExplorer } from "./portal-explorer";
 
 export const metadata: Metadata = {
-  title: "Bitmapverse v0.1 — Portal experimental",
+  title: "Bitmapverse v0.1 — Experimental Portal",
   description:
-    "Ruta reproducible entre 507999.bitmap y 7187.bitmap, congelada en un snapshot de Bitcoin.",
+    "A reproducible route between 507999.bitmap and 7187.bitmap, frozen in a Bitcoin snapshot.",
 };
 
-const canonicalNameIdentities = [
-  bitmapverseNameIdentity,
-  bitmapverseNameIdentity.additional_identity,
+const canonicalNameIdentities = bitmapverseNameIdentity.identities;
+const publicAuthorizationArtifacts = [
+  bitmapverseAuthorization,
+  bitmapworldAuthorization,
+  bitmapmetaverseAuthorization,
 ];
+
+const publicEntryIdentities = publicAuthorizationArtifacts.map((artifact) => {
+  const identity = canonicalNameIdentities.find(
+    ({ canonical_inscription_id }) =>
+      canonical_inscription_id === artifact.binding.name_inscription_id,
+  );
+
+  if (!identity) {
+    throw new Error(
+      `No canonical Name identity matches public binding ${artifact.binding.id}`,
+    );
+  }
+
+  return identity;
+});
 
 export default async function Home({
   searchParams,
@@ -30,9 +50,41 @@ export default async function Home({
     typeof districtParam === "string" ? districtParam : undefined;
   let requestedDistrict = requestedEntry;
 
-  if (
+  const nameEntries = await Promise.all(
+    publicEntryIdentities.map(async ({ name }) => {
+      try {
+        const resolution = await resolveName(name, {
+          nameIdentity: bitmapverseNameIdentity,
+        });
+        return {
+          name,
+          districtName: resolution.resolved_target,
+          resolutionStatus: "resolved" as const,
+          authorizationStatus:
+            "PUBLIC AUTHORIZATION — CURRENT VERIFICATION NOT RUN" as const,
+        };
+      } catch {
+        return {
+          name,
+          districtName: null,
+          resolutionStatus: "unavailable" as const,
+          authorizationStatus:
+            "UNAVAILABLE — NAME RESOLUTION COULD NOT BE VERIFIED; CURRENT AUTHORIZATION VERIFICATION NOT RUN" as const,
+        };
+      }
+    }),
+  );
+
+  const requestedPublicEntry = nameEntries.find(
+    ({ name }) => name === requestedEntry,
+  );
+
+  if (requestedPublicEntry?.districtName) {
+    requestedDistrict = requestedPublicEntry.districtName.replace(/\.bitmap$/, "");
+  } else if (
     requestedEntry &&
-    canonicalNameIdentities.some(({ name }) => name === requestedEntry)
+    canonicalNameIdentities.some(({ name }) => name === requestedEntry) &&
+    !requestedPublicEntry
   ) {
     const nameResolution = await resolveName(requestedEntry, {
       nameIdentity: bitmapverseNameIdentity,
@@ -68,6 +120,8 @@ export default async function Home({
       territories={territories}
       districtParcels={districtParcels}
       requestedDistrict={requestedDistrict}
+      requestedEntryName={requestedPublicEntry?.name}
+      nameEntries={nameEntries}
     />
   );
 }

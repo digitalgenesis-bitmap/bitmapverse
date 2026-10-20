@@ -429,6 +429,75 @@ footer {
   color: var(--green);
 }
 
+.name-entry-selector {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto 28px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr) minmax(260px, 1fr);
+  gap: 24px;
+  align-items: center;
+  border: 1px solid var(--line);
+  background: rgba(12, 16, 13, 0.7);
+}
+
+.name-entry-selector h2 {
+  margin: 10px 0 0;
+  font-size: clamp(24px, 3vw, 38px);
+  letter-spacing: -0.04em;
+}
+
+.name-entry-selector p {
+  margin: 10px 0 0;
+  color: #9aa097;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.name-entry-selector .name-entry-verification-notice {
+  color: var(--amber);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+}
+
+.name-entry-selector label,
+.name-entry-status {
+  display: grid;
+  gap: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.name-entry-selector label > span,
+.name-entry-status > span {
+  color: var(--green);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
+.name-entry-selector select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-size: 11px;
+}
+
+.name-entry-status {
+  padding-left: 24px;
+  border-left: 1px solid var(--line);
+}
+
+.name-entry-status strong {
+  overflow-wrap: anywhere;
+  color: #d5d9d2;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
 .view-toggle {
   width: min(1180px, calc(100% - 48px));
   margin: 34px auto 0;
@@ -477,6 +546,134 @@ footer {
   flex-direction: column;
   gap: 10px;
   flex: 0 0 auto;
+}
+
+.enter-3d {
+  padding: 14px 16px;
+  border: 1px solid var(--green);
+  background: var(--green);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.bitmapverse-3d-shell {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background: #050806;
+  outline: none;
+}
+
+.bitmapverse-3d-canvas,
+.bitmapverse-3d-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.bitmapverse-3d-canvas canvas {
+  cursor: grab;
+  touch-action: none;
+}
+
+.bitmapverse-3d-canvas canvas:active {
+  cursor: grabbing;
+}
+
+.bitmapverse-3d-identity,
+.bitmapverse-3d-controls,
+.bitmapverse-3d-readout,
+.bitmapverse-3d-exit {
+  position: absolute;
+  z-index: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.bitmapverse-3d-identity {
+  top: 28px;
+  left: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  pointer-events: none;
+}
+
+.bitmapverse-3d-identity span,
+.bitmapverse-3d-readout span {
+  color: var(--green);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+}
+
+.bitmapverse-3d-identity strong {
+  font-size: clamp(24px, 4vw, 48px);
+  letter-spacing: -0.05em;
+}
+
+.bitmapverse-3d-identity small {
+  max-width: min(620px, calc(100vw - 190px));
+  color: #b7bdb6;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+}
+
+.bitmapverse-3d-controls {
+  bottom: 28px;
+  left: 32px;
+  color: #b7bdb6;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  pointer-events: none;
+}
+
+.bitmapverse-3d-controls p {
+  margin: 6px 0 0;
+}
+
+.bitmapverse-3d-readout {
+  right: 32px;
+  bottom: 28px;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 7px 14px;
+  padding: 13px 15px;
+  border: 1px solid rgba(231, 232, 223, 0.18);
+  background: rgba(5, 8, 6, 0.74);
+  pointer-events: none;
+}
+
+.bitmapverse-3d-readout strong {
+  min-width: 154px;
+  color: #d5d9d2;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: right;
+}
+
+.bitmapverse-3d-exit {
+  top: 28px;
+  right: 32px;
+  padding: 12px 15px;
+  border: 1px solid rgba(231, 232, 223, 0.5);
+  background: rgba(5, 8, 6, 0.78);
+  color: var(--paper);
+  cursor: pointer;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+
+.bitmapverse-3d-exit:hover,
+.bitmapverse-3d-exit:focus-visible {
+  border-color: var(--green);
+  color: var(--green);
+  outline: none;
 }
 
 .secondary-link {
@@ -778,6 +975,40 @@ footer p {
   .method h3 {
     margin-top: 44px;
   }
+
+  .name-entry-selector {
+    grid-template-columns: 1fr;
+  }
+
+  .name-entry-status {
+    padding: 18px 0 0;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
+  .bitmapverse-3d-identity,
+  .bitmapverse-3d-controls {
+    left: 18px;
+  }
+
+  .bitmapverse-3d-identity,
+  .bitmapverse-3d-exit {
+    top: 18px;
+  }
+
+  .bitmapverse-3d-exit,
+  .bitmapverse-3d-readout {
+    right: 18px;
+  }
+
+  .bitmapverse-3d-controls,
+  .bitmapverse-3d-readout {
+    bottom: 18px;
+  }
+
+  .bitmapverse-3d-readout {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -788,4 +1019,28 @@ footer p {
   .territory-card {
     transition: none;
   }
+}
+
+.bitmapverse-3d-controls .bitmapverse-3d-prompt {
+  color: var(--green);
+}
+
+.bitmapverse-3d-response {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%);
+  padding: 13px 18px;
+  border: 1px solid var(--green);
+  background: rgba(5, 8, 6, 0.82);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+.bitmapverse-3d-response p {
+  margin: 6px 0 0;
+  color: #d5d9d2;
 }

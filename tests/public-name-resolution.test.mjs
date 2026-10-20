@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const CANONICAL_ID = "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0";
+const BITMAPWORLD_ID = "f1aeada2eabe8e5ef2c0232bcfdcadf0f38d17ecbd45481ded0b4d35ab366545i0";
+const BITMAPMETAVERSE_ID = "868445efe742649fd9d885df257722226a9eb689c8da07441e87bc64af35afffi0";
 
 async function render(path) {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -37,18 +39,26 @@ function resolvedDistrict(raw) {
   return match[1];
 }
 
-test("Experiment #16 admits both tracked canonical Names while rejecting an unknown Name", async () => {
+test("Experiment #21 admits all tracked canonical Names while rejecting an unknown Name", async () => {
   const [identity, pageSource] = await Promise.all([
     readFile(new URL("../data/bitmapverse-name-identity.json", import.meta.url), "utf8").then(JSON.parse),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
   ]);
-  assert.equal(identity.name, "bitmapverse.bitmap");
-  assert.equal(identity.canonical_inscription_id, CANONICAL_ID);
-  assert.equal(identity.additional_identity.name, "freedeon.bitmap");
+  assert.deepEqual(identity.identities.map(({ name }) => name), [
+    "bitmapverse.bitmap",
+    "freedeon.bitmap",
+    "bitmapworld.bitmap",
+    "bitmapmetaverse.bitmap",
+  ]);
+  assert.equal(identity.identities[0].canonical_inscription_id, CANONICAL_ID);
+  assert.equal(identity.identities[2].canonical_inscription_id, BITMAPWORLD_ID);
+  assert.equal(identity.identities[3].canonical_inscription_id, BITMAPMETAVERSE_ID);
   assert.match(pageSource, /resolveName\(requestedEntry/);
   assert.match(pageSource, /nameIdentity: bitmapverseNameIdentity/);
-  assert.match(pageSource, /bitmapverseNameIdentity\.additional_identity/);
+  assert.match(pageSource, /bitmapverseNameIdentity\.identities/);
   assert.doesNotMatch(pageSource, /freedeon\.bitmap/);
+  assert.doesNotMatch(pageSource, /bitmapworld\.bitmap/);
+  assert.doesNotMatch(pageSource, /bitmapmetaverse\.bitmap/);
   assert.doesNotMatch(pageSource, /62b1268600254cf9717350a21c3f02b37f195965bd68732a1a8081339847b1b3i0/);
   assert.doesNotMatch(pageSource, /671d0cd26273823019dc974653eccc787f0e166b6e5407cdacbe71b2df1cb025i0/);
 
@@ -57,6 +67,14 @@ test("Experiment #16 admits both tracked canonical Names while rejecting an unkn
   assert.equal(activeDistrict(nameEntry.html), "937336.bitmap");
   assert.match(nameEntry.html, /<h1>\s*937336\.bitmap/);
   assert.match(nameEntry.html, /Parcels: (?:<!-- -->)?6778/);
+
+  const bitmapworldEntry = await render("/?district=bitmapworld.bitmap");
+  assert.equal(resolvedDistrict(bitmapworldEntry.raw), "937336");
+  assert.equal(activeDistrict(bitmapworldEntry.html), "937336.bitmap");
+
+  const bitmapmetaverseEntry = await render("/?district=bitmapmetaverse.bitmap");
+  assert.equal(resolvedDistrict(bitmapmetaverseEntry.raw), "937336");
+  assert.equal(activeDistrict(bitmapmetaverseEntry.html), "937336.bitmap");
 
   const secondNameEntry = await render("/?district=freedeon.bitmap");
   assert.equal(resolvedDistrict(secondNameEntry.raw), "507999");

@@ -7,15 +7,15 @@ const parent = `${"a".repeat(64)}i0`;
 const earlier = `${"b".repeat(64)}i0`;
 const later = `${"c".repeat(64)}i1`;
 const unrelatedParent = `${"d".repeat(64)}i0`;
+const thirdParent = `${"e".repeat(64)}i0`;
 const ordBase = "https://ord.test";
 const mempoolBase = "https://bitcoin.test";
 const nameIdentity = {
-  name: "example.bitmap",
-  canonical_inscription_id: parent,
-  additional_identity: {
-    name: "second.bitmap",
-    canonical_inscription_id: unrelatedParent,
-  },
+  identities: [
+    { name: "example.bitmap", canonical_inscription_id: parent },
+    { name: "second.bitmap", canonical_inscription_id: unrelatedParent },
+    { name: "third.bitmap", canonical_inscription_id: thirdParent },
+  ],
 };
 
 function routeFetch(routes, requests) {
@@ -39,13 +39,60 @@ function transaction(id, height, blockHash) {
   };
 }
 
-test("selects the one additional canonical identity without a Name-to-District mapping", () => {
+test("selects any configured identity and rejects unknown or duplicate names", () => {
   assert.equal(canonicalParentForName("example.bitmap", nameIdentity), parent);
   assert.equal(canonicalParentForName("second.bitmap", nameIdentity), unrelatedParent);
+  assert.equal(canonicalParentForName("third.bitmap", nameIdentity), thirdParent);
   assert.throws(
     () => canonicalParentForName("unknown.bitmap", nameIdentity),
     /canonical identity source has 0 matches/,
   );
+  assert.throws(
+    () => canonicalParentForName("example.bitmap", {
+      identities: [nameIdentity.identities[0], nameIdentity.identities[0]],
+    }),
+    /canonical identity source has 2 matches/,
+  );
+});
+
+test("supports a third identity, many-to-one targets, and different targets", async () => {
+  const firstChild = `${"3".repeat(64)}i0`;
+  const secondChild = `${"4".repeat(64)}i0`;
+  const thirdChild = `${"5".repeat(64)}i0`;
+  const firstBlock = "6".repeat(64);
+  const secondBlock = "7".repeat(64);
+  const thirdBlock = "8".repeat(64);
+  const routes = {
+    [`${ordBase}/r/children/${parent}/0`]: { ids: [firstChild], more: false, page: 0 },
+    [`${ordBase}/r/parents/${firstChild}/0`]: { ids: [parent], more: false, page_index: 0 },
+    [`${ordBase}/content/${firstChild}`]: "900.bitmap",
+    [`${ordBase}/r/inscription/${firstChild}`]: metadata(firstChild, 200),
+    [`${mempoolBase}/tx/${firstChild.slice(0, 64)}`]: transaction(firstChild, 200, firstBlock),
+    [`${mempoolBase}/block/${firstBlock}/txids`]: [firstChild.slice(0, 64)],
+    [`${ordBase}/r/children/${unrelatedParent}/0`]: { ids: [secondChild], more: false, page: 0 },
+    [`${ordBase}/r/parents/${secondChild}/0`]: { ids: [unrelatedParent], more: false, page_index: 0 },
+    [`${ordBase}/content/${secondChild}`]: "900.bitmap",
+    [`${ordBase}/r/inscription/${secondChild}`]: metadata(secondChild, 201),
+    [`${mempoolBase}/tx/${secondChild.slice(0, 64)}`]: transaction(secondChild, 201, secondBlock),
+    [`${mempoolBase}/block/${secondBlock}/txids`]: [secondChild.slice(0, 64)],
+    [`${ordBase}/r/children/${thirdParent}/0`]: { ids: [thirdChild], more: false, page: 0 },
+    [`${ordBase}/r/parents/${thirdChild}/0`]: { ids: [thirdParent], more: false, page_index: 0 },
+    [`${ordBase}/content/${thirdChild}`]: "901.bitmap",
+    [`${ordBase}/r/inscription/${thirdChild}`]: metadata(thirdChild, 202),
+    [`${mempoolBase}/tx/${thirdChild.slice(0, 64)}`]: transaction(thirdChild, 202, thirdBlock),
+    [`${mempoolBase}/block/${thirdBlock}/txids`]: [thirdChild.slice(0, 64)],
+  };
+  const fetchImpl = routeFetch(routes, []);
+
+  const [first, second, third] = await Promise.all([
+    resolveName("example.bitmap", { nameIdentity, fetchImpl, ordBase, mempoolBase }),
+    resolveName("second.bitmap", { nameIdentity, fetchImpl, ordBase, mempoolBase }),
+    resolveName("third.bitmap", { nameIdentity, fetchImpl, ordBase, mempoolBase }),
+  ]);
+
+  assert.equal(first.resolved_target, "900.bitmap");
+  assert.equal(second.resolved_target, "900.bitmap");
+  assert.equal(third.resolved_target, "901.bitmap");
 });
 
 test("discovers children from the canonical parent and applies frozen FiF/LiL precedence", async () => {

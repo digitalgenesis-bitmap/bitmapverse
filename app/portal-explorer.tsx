@@ -3,12 +3,20 @@
 import { useMemo, useState } from "react";
 import type { ResolverResult } from "../src/resolvers/same-sat-latest-v01.mjs";
 import type { DistrictParcels } from "../src/parcels/district-parcels-v01.mjs";
+import { Bitmapverse3DExperience } from "./bitmapverse-3d-experience";
 
 type Territory = {
   label: string;
   role: string;
   accent: "green" | "amber" | "blue";
   result: ResolverResult;
+};
+
+type NameEntry = {
+  name: string;
+  districtName: string | null;
+  resolutionStatus: "resolved" | "unavailable";
+  authorizationStatus: string;
 };
 
 type View = "experience" | "verification";
@@ -36,10 +44,14 @@ export function PortalExplorer({
   territories,
   districtParcels,
   requestedDistrict,
+  requestedEntryName,
+  nameEntries,
 }: {
   territories: Territory[];
   districtParcels: DistrictParcels;
   requestedDistrict?: string;
+  requestedEntryName?: string;
+  nameEntries: NameEntry[];
 }) {
   const requestedTerritory = territories.find(
     ({ result }) => String(result.district) === requestedDistrict,
@@ -55,8 +67,26 @@ export function PortalExplorer({
     DistrictParcels["parcels"][number] | null
   >(null);
   const [parcelIndexInput, setParcelIndexInput] = useState("");
+  const [is3DActive, setIs3DActive] = useState(false);
+  const [selectedEntryName, setSelectedEntryName] = useState(
+    requestedEntryName ?? "",
+  );
 
   const controlParcel = districtParcels.parcels[130];
+  const selectedEntry = nameEntries.find(
+    ({ name }) => name === selectedEntryName,
+  );
+
+  function selectNameEntry(name: string) {
+    setSelectedEntryName(name);
+    const entry = nameEntries.find((candidate) => candidate.name === name);
+    if (!entry?.districtName) return;
+
+    const target = territories.find(
+      ({ result }) => result.district_name === entry.districtName,
+    );
+    if (target) setActiveDistrict(target.result.district);
+  }
 
   function selectParcelFromInput() {
     if (parcelIndexInput.trim() === "") {
@@ -95,6 +125,32 @@ export function PortalExplorer({
       : `${territories[1].result.district_name} → ${territories[0].result.district_name}`;
 
   const contentUrl = `https://ordinals.com/content/${active.result.selected_inscription_id}`;
+
+  const isSelectedEntryResolved =
+    !selectedEntry ||
+    (selectedEntry.resolutionStatus === "resolved" &&
+      selectedEntry.districtName === active.result.district_name);
+
+  const canEnter3D =
+    active.result.district === districtParcels.block_height &&
+    districtParcels.block_height === 937336 &&
+    isSelectedEntryResolved;
+
+  if (is3DActive && canEnter3D) {
+    return (
+      <Bitmapverse3DExperience
+        onExit={() => setIs3DActive(false)}
+        entryName={selectedEntry?.name}
+        authorizationStatus={
+          selectedEntry?.authorizationStatus ?? "NO NAME IDENTITY SELECTED"
+        }
+        district={{
+          blockHeight: districtParcels.block_height,
+          transactionCount: districtParcels.transaction_count,
+        }}
+      />
+    );
+  }
 
   return (
     <main>
@@ -151,6 +207,52 @@ export function PortalExplorer({
             <span>{`District: ${districtParcels.block_height}.bitmap`}</span>
             <strong>{`Parcels: ${districtParcels.parcels.length}`}</strong>
           </div>
+        </div>
+      </section>
+
+      <section className="name-entry-selector" aria-label="Name entry selector">
+        <div>
+          <span className="section-kicker">AUTHORIZED ENTRY NAMES</span>
+          <h2>Three names. One District.</h2>
+          <p>
+            Choose a public Name binding as the identity carried into the
+            shared 937336.bitmap experience.
+          </p>
+          <p className="name-entry-verification-notice">
+            PUBLIC AUTHORIZATION — CURRENT VERIFICATION NOT RUN
+          </p>
+        </div>
+        <label>
+          <span>ENTRY NAME</span>
+          <select
+            aria-label="Entry Name"
+            value={selectedEntryName}
+            onChange={(event) => selectNameEntry(event.target.value)}
+          >
+            <option value="">NO NAME SELECTED</option>
+            {nameEntries.map((entry) => (
+              <option
+                key={entry.name}
+                value={entry.name}
+                disabled={entry.resolutionStatus === "unavailable"}
+              >
+                {entry.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="name-entry-status" aria-live="polite">
+          <span>SELECTED IDENTITY</span>
+          <strong data-selected-entry="">
+            {selectedEntry?.name ?? "NO NAME SELECTED"}
+          </strong>
+          <span>DESTINATION</span>
+          <strong>{selectedEntry?.districtName ?? "NOT RESOLVED"}</strong>
+          <span>AUTHORIZATION</span>
+          <strong data-authorization-state="">
+            {selectedEntry?.authorizationStatus ??
+              "NO NAME AUTHORIZATION SELECTED"}
+          </strong>
         </div>
       </section>
 
@@ -280,6 +382,15 @@ export function PortalExplorer({
               </p>
             </div>
             <div className="experience-cta-actions">
+              {canEnter3D && (
+                <button
+                  type="button"
+                  className="enter-3d"
+                  onClick={() => setIs3DActive(true)}
+                >
+                  ENTER 3D <span aria-hidden="true">→</span>
+                </button>
+              )}
               <a
                 className="primary-link"
                 href={contentUrl}

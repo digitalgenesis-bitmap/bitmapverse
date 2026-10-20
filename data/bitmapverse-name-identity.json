@@ -1,8 +1,20 @@
 {
-  "name": "bitmapverse.bitmap",
-  "canonical_inscription_id": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0",
-  "additional_identity": {
-    "name": "freedeon.bitmap",
-    "canonical_inscription_id": "54cddbef036061623679d1b7e608704da0268c83fb822430375782c62960f446i0"
-  }
+  "identities": [
+    {
+      "name": "bitmapverse.bitmap",
+      "canonical_inscription_id": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0"
+    },
+    {
+      "name": "freedeon.bitmap",
+      "canonical_inscription_id": "54cddbef036061623679d1b7e608704da0268c83fb822430375782c62960f446i0"
+    },
+    {
+      "name": "bitmapworld.bitmap",
+      "canonical_inscription_id": "f1aeada2eabe8e5ef2c0232bcfdcadf0f38d17ecbd45481ded0b4d35ab366545i0"
+    },
+    {
+      "name": "bitmapmetaverse.bitmap",
+      "canonical_inscription_id": "868445efe742649fd9d885df257722226a9eb689c8da07441e87bc64af35afffi0"
+    }
+  ]
 }
