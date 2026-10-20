@@ -1,0 +1,28 @@
+[
+  {
+    "name": "bitmapworld.bitmap",
+    "district": "937336.bitmap",
+    "binding_id": "fadf51c521a5f9c94e5303aa6d6826a689269371403d70da67dfaf7d04bf9dde",
+    "message": "BITMAPVERSE EXPERIMENT 25 / MULTI-NAME ONE DISTRICT / v0.1\n{\"schema\":\"bitmapverse.authorization.event.v0.1\",\"experiment\":\"bitmapverse.experiment-25.multi-name-one-district\",\"binding_id\":\"fadf51c521a5f9c94e5303aa6d6826a689269371403d70da67dfaf7d04bf9dde\",\"kind\":\"CREATE\",\"sequence\":0,\"previous_event_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"scope\":\"bitmapverse-authorization\",\"name_inscription_id\":\"f1aeada2eabe8e5ef2c0232bcfdcadf0f38d17ecbd45481ded0b4d35ab366545i0\",\"district_inscription_id\":\"7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0\",\"authority_snapshot\":{\"height\":972201,\"block_hash\":\"00000000000000000001012191d18b637ef54d53a90d09be638b5c6f13378231\"},\"name_controller\":{\"address\":\"bc1pupqk7jjtm7mucm9uvr2324c8jpm467ncgsy5zwe0g8szt906jk7s08k5jq\",\"script_pubkey\":\"5120e0416f4a4bdfb7cc6cbc60d515570790775d7a784409413b2f41e02595fa95bd\"},\"district_controller\":{\"address\":\"bc1psphv4vlce9f37zqc7jt8w3gnynfxxh3zmjuvxpqv0vjs3t3mcdesyfk5tk\",\"script_pubkey\":\"5120806ecab3f8c9531f0818f49677451324d2635e22dcb8c3040c7b2508ae3bc373\"}}",
+    "message_bytes": 1080,
+    "message_sha256": "3de168c726f012be3a96f40430f759fcd481d227cb07f750669f50911fec9d7f",
+    "authorization": {
+      "status": "REJECT",
+      "code": "AUTHORIZATION_ABSENT",
+      "required_signatures": ["name", "district"]
+    }
+  },
+  {
+    "name": "bitmapmetaverse.bitmap",
+    "district": "937336.bitmap",
+    "binding_id": "9687364ecb3e6c93d8ab365ad334f8be6eb402b42921d561d4361cefeda18fa9",
+    "message": "BITMAPVERSE EXPERIMENT 25 / MULTI-NAME ONE DISTRICT / v0.1\n{\"schema\":\"bitmapverse.authorization.event.v0.1\",\"experiment\":\"bitmapverse.experiment-25.multi-name-one-district\",\"binding_id\":\"9687364ecb3e6c93d8ab365ad334f8be6eb402b42921d561d4361cefeda18fa9\",\"kind\":\"CREATE\",\"sequence\":0,\"previous_event_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"scope\":\"bitmapverse-authorization\",\"name_inscription_id\":\"868445efe742649fd9d885df257722226a9eb689c8da07441e87bc64af35afffi0\",\"district_inscription_id\":\"7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0\",\"authority_snapshot\":{\"height\":972201,\"block_hash\":\"00000000000000000001012191d18b637ef54d53a90d09be638b5c6f13378231\"},\"name_controller\":{\"address\":\"bc1pupqk7jjtm7mucm9uvr2324c8jpm467ncgsy5zwe0g8szt906jk7s08k5jq\",\"script_pubkey\":\"5120e0416f4a4bdfb7cc6cbc60d515570790775d7a784409413b2f41e02595fa95bd\"},\"district_controller\":{\"address\":\"bc1psphv4vlce9f37zqc7jt8w3gnynfxxh3zmjuvxpqv0vjs3t3mcdesyfk5tk\",\"script_pubkey\":\"5120806ecab3f8c9531f0818f49677451324d2635e22dcb8c3040c7b2508ae3bc373\"}}",
+    "message_bytes": 1080,
+    "message_sha256": "2e16880d1f06d8977779e8bbe9d8a5550518b10565c80cd12b4d9729129e7ba5",
+    "authorization": {
+      "status": "REJECT",
+      "code": "AUTHORIZATION_ABSENT",
+      "required_signatures": ["name", "district"]
+    }
+  }
+]
