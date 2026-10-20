@@ -6,6 +6,7 @@ import { resolveSameSatLatestV01 } from "../src/resolvers/same-sat-latest-v01.mj
 import parcelIdentities937336 from "../data/parcels/937336.parcel-identities.json";
 import bitmapverseNameIdentity from "../data/bitmapverse-name-identity.json";
 import { resolveName } from "../experiments/experiment-9/resolver.mjs";
+import { resolvePubliclyAuthorizedName } from "../experiments/experiment-24/resolver.mjs";
 import bitmapverseAuthorization from "../experiments/experiment-23/public-authorization-artifact.v0.1.json";
 import bitmapworldAuthorization from "../experiments/experiment-26/bitmapworld.public-authorization-artifact.v0.1.json";
 import bitmapmetaverseAuthorization from "../experiments/experiment-26/bitmapmetaverse.public-authorization-artifact.v0.1.json";
@@ -56,12 +57,25 @@ export default async function Home({
         const resolution = await resolveName(name, {
           nameIdentity: bitmapverseNameIdentity,
         });
+        const authorization =
+          name === "bitmapverse.bitmap"
+            ? await resolvePubliclyAuthorizedName(name, {
+                nameResolver: async () => resolution,
+              })
+            : null;
+
         return {
           name,
           districtName: resolution.resolved_target,
           resolutionStatus: "resolved" as const,
           authorizationStatus:
-            "PUBLIC AUTHORIZATION — CURRENT VERIFICATION NOT RUN" as const,
+            authorization?.status === "ACCEPT"
+              ? ("AUTHORIZED" as const)
+              : authorization?.status === "REJECT"
+                ? ("NOT AUTHORIZED" as const)
+                : authorization?.status === "UNAVAILABLE"
+                  ? ("VERIFICATION UNAVAILABLE" as const)
+                  : ("CURRENT VERIFICATION NOT RUN" as const),
         };
       } catch {
         return {
