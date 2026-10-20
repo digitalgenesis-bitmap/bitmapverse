@@ -1,0 +1,27 @@
+{
+  "schema": "bitmapverse.public-authorization-artifact.v0.1",
+  "binding": {
+    "scheme": "bitmapverse.la-puerta.v0.1",
+    "id": "9687364ecb3e6c93d8ab365ad334f8be6eb402b42921d561d4361cefeda18fa9",
+    "name_inscription_id": "868445efe742649fd9d885df257722226a9eb689c8da07441e87bc64af35afffi0",
+    "district_inscription_id": "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0"
+  },
+  "message": {
+    "encoding": "utf-8",
+    "line_endings": "LF",
+    "terminal_newline": false,
+    "bytes": 1080,
+    "sha256": "2e16880d1f06d8977779e8bbe9d8a5550518b10565c80cd12b4d9729129e7ba5",
+    "text": "BITMAPVERSE EXPERIMENT 25 / MULTI-NAME ONE DISTRICT / v0.1\n{\"schema\":\"bitmapverse.authorization.event.v0.1\",\"experiment\":\"bitmapverse.experiment-25.multi-name-one-district\",\"binding_id\":\"9687364ecb3e6c93d8ab365ad334f8be6eb402b42921d561d4361cefeda18fa9\",\"kind\":\"CREATE\",\"sequence\":0,\"previous_event_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"scope\":\"bitmapverse-authorization\",\"name_inscription_id\":\"868445efe742649fd9d885df257722226a9eb689c8da07441e87bc64af35afffi0\",\"district_inscription_id\":\"7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0\",\"authority_snapshot\":{\"height\":972201,\"block_hash\":\"00000000000000000001012191d18b637ef54d53a90d09be638b5c6f13378231\"},\"name_controller\":{\"address\":\"bc1pupqk7jjtm7mucm9uvr2324c8jpm467ncgsy5zwe0g8szt906jk7s08k5jq\",\"script_pubkey\":\"5120e0416f4a4bdfb7cc6cbc60d515570790775d7a784409413b2f41e02595fa95bd\"},\"district_controller\":{\"address\":\"bc1psphv4vlce9f37zqc7jt8w3gnynfxxh3zmjuvxpqv0vjs3t3mcdesyfk5tk\",\"script_pubkey\":\"5120806ecab3f8c9531f0818f49677451324d2635e22dcb8c3040c7b2508ae3bc373\"}}"
+  },
+  "signatures": {
+    "name": {
+      "format": "bip322-simple",
+      "signature": "AUACPgQFJXcw9D/VZkgWvJJk+BLW7bOeOT9h+f9nTk15bTE7zJDeLCXQF1+tl8IIzI9bFD+3PqjvzHqtGw+81QDo"
+    },
+    "district": {
+      "format": "bip322-simple",
+      "signature": "AUAnU7xMdHzsifWECsIxamg9IQQCbO/HhOf53oJVGeNLYgxNrMU22coLLsn9CGkpCnEH294Kg6cUOCvev7kVmTWE"
+    }
+  }
+}
