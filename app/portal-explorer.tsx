@@ -15,7 +15,7 @@ type Territory = {
 type NameEntry = {
   name: string;
   districtName: string | null;
-  resolutionStatus: "resolved" | "unavailable";
+  resolutionStatus: "not_run" | "resolved" | "unavailable";
   authorizationStatus: string;
 };
 
@@ -79,13 +79,13 @@ export function PortalExplorer({
 
   function selectNameEntry(name: string) {
     setSelectedEntryName(name);
-    const entry = nameEntries.find((candidate) => candidate.name === name);
-    if (!entry?.districtName) return;
-
-    const target = territories.find(
-      ({ result }) => result.district_name === entry.districtName,
-    );
-    if (target) setActiveDistrict(target.result.district);
+    const url = new URL(window.location.href);
+    if (name) {
+      url.searchParams.set("district", name);
+    } else {
+      url.searchParams.delete("district");
+    }
+    window.location.assign(url.toString());
   }
 
   function selectParcelFromInput() {

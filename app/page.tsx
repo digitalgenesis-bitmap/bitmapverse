@@ -41,6 +41,8 @@ const publicEntryIdentities = publicAuthorizationArtifacts.map((artifact) => {
   return identity;
 });
 
+type DiagnosticPhase = "name-resolution" | "authorization";
+
 export default async function Home({
   searchParams,
 }: {
@@ -51,49 +53,125 @@ export default async function Home({
     typeof districtParam === "string" ? districtParam : undefined;
   let requestedDistrict = requestedEntry;
 
-  const nameEntries = await Promise.all(
-    publicEntryIdentities.map(async ({ name }) => {
-      try {
-        const resolution = await resolveName(name, {
-          nameIdentity: bitmapverseNameIdentity,
-        });
-        const authorization = await resolvePubliclyAuthorizedName(name, {
-          nameResolver: async () => resolution,
-        });
+  const selectedIdentity = publicEntryIdentities.find(
+    ({ name }) => name === requestedEntry,
+  );
+  const diagnosticId = crypto.randomUUID();
+  const explicitFetchCounts = {
+    nameResolution: 0,
+    authorization: 0,
+    failed: 0,
+    redirectedResponses: 0,
+  };
 
-        if (authorization.status === "UNAVAILABLE") {
-          console.warn("Public authorization unavailable", {
-            name,
-            status: authorization.status,
-            code: authorization.code,
-            reason: authorization.reason,
+  function diagnosticFetch(phase: DiagnosticPhase): typeof fetch {
+    return async (input, init) => {
+      if (phase === "name-resolution") {
+        explicitFetchCounts.nameResolution += 1;
+      } else {
+        explicitFetchCounts.authorization += 1;
+      }
+
+      const requestUrl =
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.href
+            : input.url;
+      let target = { origin: "invalid", pathname: "invalid" };
+      try {
+        const parsed = new URL(requestUrl);
+        target = { origin: parsed.origin, pathname: parsed.pathname };
+      } catch {
+        // The wrapped fetch remains responsible for handling invalid input.
+      }
+
+      try {
+        const response = await fetch(input, init);
+        if (response.redirected) {
+          explicitFetchCounts.redirectedResponses += 1;
+        }
+        if (!response.ok) {
+          explicitFetchCounts.failed += 1;
+          console.warn("Public authorization explicit fetch failed", {
+            diagnosticId,
+            name: selectedIdentity?.name,
+            phase,
+            origin: target.origin,
+            pathname: target.pathname,
+            status: response.status,
           });
         }
-
-        return {
-          name,
-          districtName: resolution.resolved_target,
-          resolutionStatus: "resolved" as const,
-          authorizationStatus:
-            authorization?.status === "ACCEPT"
-              ? ("AUTHORIZED" as const)
-              : authorization?.status === "REJECT"
-                ? ("NOT AUTHORIZED" as const)
-                : authorization?.status === "UNAVAILABLE"
-                  ? ("VERIFICATION UNAVAILABLE" as const)
-                  : ("CURRENT VERIFICATION NOT RUN" as const),
-        };
-      } catch {
-        return {
-          name,
-          districtName: null,
-          resolutionStatus: "unavailable" as const,
-          authorizationStatus:
-            "UNAVAILABLE — NAME RESOLUTION COULD NOT BE VERIFIED; CURRENT AUTHORIZATION VERIFICATION NOT RUN" as const,
-        };
+        return response;
+      } catch (error) {
+        explicitFetchCounts.failed += 1;
+        console.warn("Public authorization explicit fetch failed", {
+          diagnosticId,
+          name: selectedIdentity?.name,
+          phase,
+          origin: target.origin,
+          pathname: target.pathname,
+          error: error instanceof Error ? error.message : String(error),
+        });
+        throw error;
       }
-    }),
-  );
+    };
+  }
+
+  const nameEntries = publicEntryIdentities.map(({ name }) => ({
+    name,
+    districtName: null as string | null,
+    resolutionStatus: "not_run" as "not_run" | "resolved" | "unavailable",
+    authorizationStatus: "CURRENT VERIFICATION NOT RUN",
+  }));
+
+  if (selectedIdentity) {
+    const selectedEntry = nameEntries.find(
+      ({ name }) => name === selectedIdentity.name,
+    );
+
+    try {
+      const resolution = await resolveName(selectedIdentity.name, {
+        nameIdentity: bitmapverseNameIdentity,
+        fetchImpl: diagnosticFetch("name-resolution"),
+      });
+      const authorization = await resolvePubliclyAuthorizedName(
+        selectedIdentity.name,
+        {
+          fetchImpl: diagnosticFetch("authorization"),
+          nameResolver: async () => resolution,
+        },
+      );
+
+      if (authorization.status === "UNAVAILABLE") {
+        console.warn("Public authorization unavailable", {
+          name: selectedIdentity.name,
+          status: authorization.status,
+          code: authorization.code,
+          reason: authorization.reason,
+        });
+      }
+
+      if (selectedEntry) {
+        selectedEntry.districtName = resolution.resolved_target;
+        selectedEntry.resolutionStatus = "resolved";
+        selectedEntry.authorizationStatus =
+          authorization.status === "ACCEPT"
+            ? "AUTHORIZED"
+            : authorization.status === "REJECT"
+              ? "NOT AUTHORIZED"
+              : authorization.status === "UNAVAILABLE"
+                ? "VERIFICATION UNAVAILABLE"
+                : "CURRENT VERIFICATION NOT RUN";
+      }
+    } catch {
+      if (selectedEntry) {
+        selectedEntry.resolutionStatus = "unavailable";
+        selectedEntry.authorizationStatus =
+          "UNAVAILABLE — NAME RESOLUTION COULD NOT BE VERIFIED; CURRENT AUTHORIZATION VERIFICATION NOT RUN";
+      }
+    }
+  }
 
   const requestedPublicEntry = nameEntries.find(
     ({ name }) => name === requestedEntry,
@@ -108,8 +186,25 @@ export default async function Home({
   ) {
     const nameResolution = await resolveName(requestedEntry, {
       nameIdentity: bitmapverseNameIdentity,
+      fetchImpl: diagnosticFetch("name-resolution"),
     });
     requestedDistrict = nameResolution.resolved_target.replace(/\.bitmap$/, "");
+  }
+
+  const totalExplicitAttempts =
+    explicitFetchCounts.nameResolution + explicitFetchCounts.authorization;
+  if (totalExplicitAttempts > 0) {
+    console.warn("Public authorization explicit fetch summary", {
+      diagnosticId,
+      selectedName: selectedIdentity?.name ?? null,
+      nameResolutionAttempts: explicitFetchCounts.nameResolution,
+      authorizationAttempts: explicitFetchCounts.authorization,
+      totalExplicitAttempts,
+      failedAttempts: explicitFetchCounts.failed,
+      redirectedResponses: explicitFetchCounts.redirectedResponses,
+      limitation:
+        "Explicit fetch attempts only; redirects, framework activity, and other implicit subrequests may consume additional Worker budget.",
+    });
   }
 
   const territories = [

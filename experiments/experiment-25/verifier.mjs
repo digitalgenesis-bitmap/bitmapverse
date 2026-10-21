@@ -11,8 +11,6 @@ import {
   buildPreparedBinding,
 } from "./profile.mjs";
 
-const PRIVATE_SIGNATURE_DIRECTORY = new URL("../../outputs/experiment-25/", import.meta.url);
-
 function reject(code, reason, name) {
   return { status: "REJECT", code, reason, name };
 }
@@ -102,11 +100,12 @@ export function verifyPreparedAuthorization(prepared, {
 }
 
 export async function readPrivateSignatures() {
+  const privateSignatureDirectory = new URL("../../outputs/experiment-25/", import.meta.url);
   const result = {};
   for (const binding of ["bitmapworld", "bitmapmetaverse"]) {
     result[binding] = {
-      name: (await readFile(new URL(`${binding}.name.bip322`, PRIVATE_SIGNATURE_DIRECTORY), "utf8")).trim(),
-      district: (await readFile(new URL(`${binding}.district.bip322`, PRIVATE_SIGNATURE_DIRECTORY), "utf8")).trim(),
+      name: (await readFile(new URL(`${binding}.name.bip322`, privateSignatureDirectory), "utf8")).trim(),
+      district: (await readFile(new URL(`${binding}.district.bip322`, privateSignatureDirectory), "utf8")).trim(),
     };
   }
   return result;
