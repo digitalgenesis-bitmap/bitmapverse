@@ -61,6 +61,15 @@ export default async function Home({
           nameResolver: async () => resolution,
         });
 
+        if (authorization.status === "UNAVAILABLE") {
+          console.warn("Public authorization unavailable", {
+            name,
+            status: authorization.status,
+            code: authorization.code,
+            reason: authorization.reason,
+          });
+        }
+
         return {
           name,
           districtName: resolution.resolved_target,
