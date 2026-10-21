@@ -57,12 +57,9 @@ export default async function Home({
         const resolution = await resolveName(name, {
           nameIdentity: bitmapverseNameIdentity,
         });
-        const authorization =
-          name === "bitmapverse.bitmap"
-            ? await resolvePubliclyAuthorizedName(name, {
-                nameResolver: async () => resolution,
-              })
-            : null;
+        const authorization = await resolvePubliclyAuthorizedName(name, {
+          nameResolver: async () => resolution,
+        });
 
         return {
           name,
