@@ -1,6 +1,7 @@
 # Experiment #24 — Public evidence in the local resolver
 
-Status: **PASS / LOCAL**. It is not imported by the portal or production.
+Original experiment status: **PASS / LOCAL**. Experiment #27 later integrated
+this resolver into the portal and production.
 
 The live verification accepted the binding with both BIP-322 signatures valid,
 both current holders matching, and both Bitcoin outputs confirmed and unspent.
@@ -35,3 +36,29 @@ Run the live proof:
 ```sh
 node experiments/experiment-24/verify-live.mjs
 ```
+
+## Experiment #27 production repair closure — 23 October 2026
+
+The production Name-resolution path became unavailable when `ordinals.com`
+returned HTTP 403 for the `/r/children` requests used by the Experiment #9
+resolver. Authorization remained fail-closed and was not reported as current
+`ACCEPT` while Name resolution was unavailable.
+
+The repair changed only the selected-Name resolver's explicit `ordBase` from
+`https://ordinals.com` to `https://0rdinals.com`. No authorization, ownership,
+signature, or fail-closed rule changed.
+
+- Repair commit: `f4981895ca96d89409333feb258d5681c0a70661`
+- Cloudflare deployment: `ec039db1-6e21-455b-8b14-5fdefff84e51`
+- Production verification date: 23 October 2026
+
+Production verification confirmed:
+
+| Selected Name | Destination | Authorization | Entry |
+|---|---|---|---|
+| `bitmapverse.bitmap` | `937336.bitmap` | `AUTHORIZED` | `ENTER 3D` |
+| `bitmapworld.bitmap` | `937336.bitmap` | `AUTHORIZED` | `ENTER 3D` |
+| `bitmapmetaverse.bitmap` | `937336.bitmap` | `AUTHORIZED` | `ENTER 3D` |
+
+The remaining operational limitation is the selected-Name resolver's reliance
+on a single external Ord provider.
