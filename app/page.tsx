@@ -134,6 +134,7 @@ export default async function Home({
       const resolution = await resolveName(selectedIdentity.name, {
         nameIdentity: bitmapverseNameIdentity,
         fetchImpl: diagnosticFetch("name-resolution"),
+        ordBase: "https://0rdinals.com",
       });
       const authorization = await resolvePubliclyAuthorizedName(
         selectedIdentity.name,
