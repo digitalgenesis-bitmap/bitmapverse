@@ -1,0 +1,156 @@
+{
+  "schema": "bitmapverse.experiment_0.v0.1",
+  "status": "blocked",
+  "phase_a_authorized": false,
+  "pass_criterion_revision": {
+    "adopted_on": "2026-08-24",
+    "adopted_while_status": "blocked",
+    "adopted_before_final_result": true,
+    "previous_criterion": "Two complete independent reconstructions agree on both canonical SNS winners, both canonical Districts, all four sats and all four script controllers at snapshot 959531.",
+    "revised_criterion": {
+      "primary_reconstruction": "Reproducible reconstruction from Bitcoin-derived evidence under public rules pinned to OPI commit da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633.",
+      "independently_verified_critical_assertions": [
+        "snapshot_identity",
+        "decisive_inscription_existence_and_byte_content",
+        "decisive_prefix_completeness",
+        "decisive_candidate_order",
+        "normalization",
+        "winner_selection"
+      ],
+      "provenance_requirement": "Independent checks must have provenance separate from the primary reconstruction.",
+      "falsifiability_requirement": "No error capable of changing the result may depend on one uncontrasted source.",
+      "single_uncontrasted_reconstruction_sufficient": false,
+      "two_complete_independent_opi_stacks_required": false,
+      "two_complete_independent_opi_stacks_remain_valid": true
+    },
+    "epistemological_reason": "The tested property is reproducibility from Bitcoin under public rules plus independent falsifiability of critical claims, not duplication of every infrastructure component. Claim-level independence targets result-changing failure modes and avoids leaving shared-code errors untested.",
+    "expected_outputs_changed": false
+  },
+  "snapshot": {
+    "height": 959531,
+    "block_hash": "000000000000000000008d94f099ecc2e05da35160cabb2c3d6332db0130269e"
+  },
+  "rules": {
+    "opi_commit": "da24fb6cf4c2ef3f99d030ea2ef18ba9099b0633",
+    "sns_profile": "OPI sns_index at the pinned commit",
+    "bitmap_profile": "bitmap_discovery_opi_v1",
+    "controller_definition": "scriptPubKey of the UTXO containing the relevant inscription sat at the snapshot; an address is only a derived display value"
+  },
+  "revised_criterion_execution": {
+    "executed_on": "2026-08-24",
+    "criterion_revision_preceded_execution": true,
+    "evidence_bundle": {
+      "path": "critical-claims-evidence.json",
+      "sha256": "a2de0b1ed38c33d48b18a4886cd1b97a0bc1ca6fd31bfb4e37151255c77c56fe"
+    },
+    "clean_room_replay": {
+      "path": "verify-critical-claims.py",
+      "sha256": "ce2b8ff3d48d1ea9b03e537139ec4f9fad71f61d1e5a7d2a7d02e4075b45ab77",
+      "result": "blocked"
+    },
+    "critical_boundaries": {
+      "snapshot": "pass_three_operator_hash_match",
+      "decisive_inscription_existence_and_byte_content": "pass_two_metadata_content_sources_plus_two_identical_raw_bitcoin_sources",
+      "decisive_prefix_completeness": "blocked_no_provenance_separated_complete_opi_eligible_scan",
+      "order": "pass_for_observed_rows_conditional_on_prefix_completeness",
+      "normalization": "pass_for_decisive_plaintext_inputs_conditional_on_prefix_completeness",
+      "winner_selection": "pass_on_observed_stream_conditional_on_prefix_completeness"
+    },
+    "raw_transaction_checks": {
+      "54cddbef036061623679d1b7e608704da0268c83fb822430375782c62960f446": {
+        "bytes": 282,
+        "sha256": "798f024f0867f56f33649814b7ae9db3bcf4773fc61f7932cdc58e1b860098fe"
+      },
+      "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cb": {
+        "bytes": 271,
+        "sha256": "83bbbba59de82d373c7135df31240e2a06e049b9e74bf21fde386b1c924ff7bf"
+      },
+      "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1": {
+        "bytes": 297,
+        "sha256": "0b86c136cfee38a181aa6e40b97d79c75a46a7f90fc84f217128645e5cb36506"
+      }
+    },
+    "result_changing_disagreement_found": false,
+    "global_verdict": "blocked"
+  },
+  "pairs": [
+    {
+      "name": "freedeon.bitmap",
+      "district": "507999.bitmap",
+      "name_authority": {
+        "status": "provisional_match_pending_independent_sns_enumeration",
+        "candidate_count_reported_by_unisat": 1,
+        "winning_inscription_id": "54cddbef036061623679d1b7e608704da0268c83fb822430375782c62960f446i0",
+        "inscription_number": 126202872,
+        "genesis_height": 947360,
+        "content_type": "text/plain;charset=utf-8",
+        "content": "freedeon.bitmap",
+        "sat": 856419560185541,
+        "snapshot_output": "54cddbef036061623679d1b7e608704da0268c83fb822430375782c62960f446:0",
+        "snapshot_satpoint": "54cddbef036061623679d1b7e608704da0268c83fb822430375782c62960f446:0:0",
+        "snapshot_address": "bc1pv40yl4jyne02pulahpdrl98d2x3z9yd7g3c9kzm4ktyz69mdwe2qhmmrqz",
+        "controller_status": "pass"
+      },
+      "district_authority": {
+        "status": "pass_reused_and_cross_checked",
+        "district_inscription_id": "2505f63d9bf8aad28ddfc7b6dc49e0fa38a3196f7d159f29235585d3fd6958d0i0",
+        "inscription_number": 12933248,
+        "genesis_height": 795180,
+        "sat": 1931628970942295,
+        "snapshot_output": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675:0",
+        "snapshot_satpoint": "16c5bedd987167d6d5e7a8097d2dacb22ac112eaa0d6d5b1ff030578e75f9675:0:0",
+        "snapshot_address": "bc1p6plt6l3ysqjesanxew6vgjkmvdlzrpg3f0f7g02yxtqnf9y9tw2szjj7ku",
+        "current_output_created_at_height": 959318,
+        "controller_status": "pass"
+      }
+    },
+    {
+      "name": "bitmapverse.bitmap",
+      "district": "937336.bitmap",
+      "name_authority": {
+        "status": "provisional_match_pending_independent_sns_enumeration",
+        "search_match_count_reported_by_unisat": 4,
+        "exact_candidate_count_after_ord_content_verification": 1,
+        "winning_inscription_id": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cbi0",
+        "inscription_number": 102390971,
+        "genesis_height": 908414,
+        "content_type": "text/plain",
+        "content": "bitmapverse.bitmap",
+        "sat": 806453281134375,
+        "snapshot_output": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cb:0",
+        "snapshot_satpoint": "9acf85a192845d64b55d20dcec6af4589cd28dff6f0ad19b73b219f2551a57cb:0:0",
+        "snapshot_address": "bc1p63hr0qrxdwwhygguukrt2fvtsx567d2ry5r9rum9w5wqv2yn5mtq8q0sze",
+        "controller_status": "pass"
+      },
+      "district_authority": {
+        "status": "provisional_canonical_match_pending_independent_bitmap_enumeration",
+        "candidate_count_reported_by_unisat": 1,
+        "district_inscription_id": "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0",
+        "inscription_number": 119946830,
+        "genesis_height": 937336,
+        "content_type": "text/plain",
+        "content": "937336.bitmap",
+        "sat": 1715489001085578,
+        "snapshot_output": "75918e8617c3dfa078e23781475dd50089bf042878dc9f540017c89bbb836818:15",
+        "snapshot_satpoint": "75918e8617c3dfa078e23781475dd50089bf042878dc9f540017c89bbb836818:15:0",
+        "snapshot_address": "bc1psphv4vlce9f37zqc7jt8w3gnynfxxh3zmjuvxpqv0vjs3t3mcdesyfk5tk",
+        "current_output_created_at_height": 942807,
+        "controller_status": "pass"
+      }
+    }
+  ],
+  "first_falsifiable_uncertainty": {
+    "id": "independent_candidate_enumeration",
+    "description": "Under the revised PASS criterion, the unresolved critical boundary is provenance-separated verification of decisive-prefix completeness for both Names and 937336.bitmap, including every raw form accepted by the pinned normalization. Exact-text search alone is insufficient.",
+    "required_evidence": "A reproducible primary reconstruction plus an independently sourced, coverage-demonstrated scan capable of exposing any earlier OPI-valid registration for either Name or 937336.bitmap; independent snapshot, decisive inscription, order, normalization and winner replay evidence must also remain satisfied.",
+    "latest_attempt": {
+      "observed_on": "2026-08-24",
+      "sns_index_sha256": "baec46bc375ae8a86447d9a148361cdd94d2e28d4b69d5693384e1ab45769c62",
+      "sns_api_sha256": "5c9d9a0a10e560956af4cf80f7b701d9063cb1ac5463528228e6a542133abfc7",
+      "ordinalsbot_name_lookup_http_status": 403,
+      "ordinalsbot_snapshot_hash_query_http_status": 403,
+      "authorized_browser_session_available": false,
+      "result": "blocked_no_independent_complete_index_access"
+    }
+  }
+}
