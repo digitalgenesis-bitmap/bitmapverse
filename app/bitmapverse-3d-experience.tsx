@@ -16,6 +16,8 @@ type StructureResponse = {
 };
 
 const MOVE_KEYS = new Set(["KeyW", "KeyA", "KeyS", "KeyD"]);
+// Experiment #32: one permission-gated object. Its visibility is decided server-side.
+const PERMITTED_OBJECT_ID = "inert-test-object-001";
 
 export function Bitmapverse3DExperience({
   onExit,
@@ -30,6 +32,7 @@ export function Bitmapverse3DExperience({
 }) {
   const [inRange, setInRange] = useState(false);
   const [response, setResponse] = useState<StructureResponse | null>(null);
+  const [permittedObjectVisible, setPermittedObjectVisible] = useState(false);
   const districtRef = useRef(district);
   districtRef.current = district;
   const canvasHostRef = useRef<HTMLDivElement>(null);
@@ -77,6 +80,27 @@ export function Bitmapverse3DExperience({
     const structure = new THREE.Mesh(structureGeometry, structureMaterial);
     structure.position.set(0, 2.4, -2);
     scene.add(structure);
+
+    // Shown only when the server returns ALLOW for this object; DENY, errors or failures keep it absent.
+    const permittedObjectGeometry = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+    const permittedObjectMaterial = new THREE.MeshStandardMaterial({
+      color: 0xff8a1f,
+      roughness: 0.45,
+      metalness: 0.1,
+    });
+    const permittedObject = new THREE.Mesh(permittedObjectGeometry, permittedObjectMaterial);
+    permittedObject.name = PERMITTED_OBJECT_ID;
+    permittedObject.position.set(3.4, 0.6, 0.5);
+    const permissionRequest = new AbortController();
+    fetch("/api/verify-build", { cache: "no-store", signal: permissionRequest.signal })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((decision) => {
+        if (decision?.result === "ALLOW" && decision.object_id === PERMITTED_OBJECT_ID) {
+          scene.add(permittedObject);
+          setPermittedObjectVisible(true);
+        }
+      })
+      .catch(() => {});
 
     const light = new THREE.HemisphereLight(0xd9ffe5, 0x142033, 2.8);
     scene.add(light);
@@ -215,6 +239,7 @@ export function Bitmapverse3DExperience({
 
     return () => {
       window.cancelAnimationFrame(animationFrame);
+      permissionRequest.abort();
       resizeObserver.disconnect();
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
@@ -228,6 +253,8 @@ export function Bitmapverse3DExperience({
       groundMaterial.dispose();
       structureGeometry.dispose();
       structureMaterial.dispose();
+      permittedObjectGeometry.dispose();
+      permittedObjectMaterial.dispose();
       renderer.dispose();
       renderer.domElement.remove();
     };
@@ -238,6 +265,7 @@ export function Bitmapverse3DExperience({
       ref={shellRef}
       className="bitmapverse-3d-shell"
       tabIndex={-1}
+      data-permitted-object={permittedObjectVisible ? "visible" : "absent"}
       aria-label={`${entryName ?? "Direct District entry"} in BITMAPVERSE 937336.bitmap 3D environment`}
     >
       <div ref={canvasHostRef} className="bitmapverse-3d-canvas" />

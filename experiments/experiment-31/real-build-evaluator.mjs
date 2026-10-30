@@ -52,10 +52,11 @@ export async function evaluateRealBuild(request, grant, {
   revocationState,
   capture,
   expectedHashes = PINNED_CAPTURE_SHA256,
+  exp29Evidence,
 } = {}) {
   const base = { consensus_verified: false, on_chain_enforcement: false, revocation: EXPERIMENT_28_PROFILE.revocation };
   try {
-    const { evidence, observed, historical } = await deriveOwnershipEvidence({ capture, expectedHashes });
+    const { evidence, observed, historical } = await deriveOwnershipEvidence({ capture, expectedHashes, exp29Evidence });
 
     ensure(request !== null && typeof request === "object", "INVALID_REQUEST", "request");
     ensure(
@@ -64,7 +65,10 @@ export async function evaluateRealBuild(request, grant, {
       `ownership was observed at ${observed.tip_height}, not ${request.evaluation_height}`,
     );
 
-    const issuer = await verifyIssuerAuthority(grant, { mode: "EXP29_FROZEN" });
+    const issuer = await verifyIssuerAuthority(
+      grant,
+      exp29Evidence === undefined ? { mode: "EXP29_FROZEN" } : { mode: "EXP29_FROZEN", exp29Evidence },
+    );
     ensure(issuer.result === EXPERIMENT_30_PROFILE.real_positive, "ISSUER_AUTHORITY_DENIED", String(issuer.code));
 
     const policy = authorizeBuild(request, grant, { ownershipEvidence: evidence, revocationState });

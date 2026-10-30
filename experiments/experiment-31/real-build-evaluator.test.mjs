@@ -214,6 +214,23 @@ test("ADVERSARIAL: real-holder grant + TEST_KEY_FIXTURE evidence → DENY FIXTUR
   assert.equal(result.authority_mode, "TEST_KEY_FIXTURE");
 });
 
+test("INJECTED: Experiment #29 evidence bytes injected → same ALLOW; tampered or missing → DENY", async () => {
+  const { loadFrozenEvidence } = await import("../experiment-29/ownership-evaluator.mjs");
+  const exp29Evidence = await loadFrozenEvidence();
+  const injected = await evaluateRealBuild(request(), GRANT, { revocationState: revocations(), capture: pinned, exp29Evidence });
+  const fromDisk = await evaluateRealBuild(request(), GRANT, { revocationState: revocations() });
+  assert.equal(injected.result, "ALLOW");
+  assert.deepEqual(injected, fromDisk);
+
+  const key = Object.keys(exp29Evidence).find((path) => path.endsWith("blocks_tip_height"));
+  const tampered = { ...exp29Evidence, [key]: Buffer.from("973732") };
+  assertDeny(await evaluateRealBuild(request(), GRANT, { revocationState: revocations(), capture: pinned, exp29Evidence: tampered }), "HISTORICAL_EVIDENCE_REJECTED");
+  const missing = { ...exp29Evidence };
+  delete missing[key];
+  assertDeny(await evaluateRealBuild(request(), GRANT, { revocationState: revocations(), capture: pinned, exp29Evidence: missing }), "HISTORICAL_EVIDENCE_REJECTED");
+  assertDeny(await evaluateRealBuild(request(), GRANT, { revocationState: revocations(), capture: pinned, exp29Evidence: {} }), "HISTORICAL_EVIDENCE_REJECTED");
+});
+
 test("pinned capture manifest names exactly the six frozen files", () => {
   assert.equal(Object.keys(PINNED_CAPTURE_SHA256).length, 6);
   for (const [path, hash] of Object.entries(PINNED_CAPTURE_SHA256)) assert.equal(sha256(pinned[path]), hash, path);

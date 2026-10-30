@@ -123,9 +123,11 @@ export function isVerifiedOwnershipEvidence(evidence) {
 }
 
 // Returns { evidence, observed, historical }. `evidence` is accepted by Experiment #28 only by identity.
-export async function deriveOwnershipEvidence({ capture, expectedHashes = PINNED_CAPTURE_SHA256 } = {}) {
+// `capture` and `exp29Evidence` may be injected as raw bytes (for runtimes without filesystem access);
+// both are still checked against their pinned hashes.
+export async function deriveOwnershipEvidence({ capture, expectedHashes = PINNED_CAPTURE_SHA256, exp29Evidence } = {}) {
   const observed = verifyCapture(capture === undefined ? await loadCurrentCapture() : capture, expectedHashes);
-  const historical = evaluateHistoricalOwnership(await loadFrozenEvidence());
+  const historical = evaluateHistoricalOwnership(exp29Evidence === undefined ? await loadFrozenEvidence() : exp29Evidence);
   ensure(historical.result === "HISTORICAL_HOLDER", "HISTORICAL_EVIDENCE_REJECTED", String(historical.code));
   ensure(historical.output === `${TXID}:${VOUT}`, "OUTPUT_MISMATCH", historical.output);
   ensure(observed.tip_height >= historical.capture_tip_height, "CAPTURE_OLDER_THAN_HISTORICAL_EVIDENCE", String(observed.tip_height));

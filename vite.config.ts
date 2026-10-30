@@ -13,7 +13,7 @@ const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
 const localBindingConfig = {
   main: "./worker/index.ts",
-  compatibility_flags: ["nodejs_compat"],
+  // compatibility_flags come from wrangler.jsonc; repeating nodejs_compat here makes the runtime refuse to start.
   d1_databases: d1
     ? [
         {
