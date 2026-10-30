@@ -16,6 +16,7 @@ import {
   p2trScriptPubKey,
   verifyBip322P2TR,
 } from "../experiment-1/resolvers/resolver-js.mjs";
+import { isVerifiedOwnershipEvidence } from "../experiment-31/ownership-evidence.mjs";
 
 export const EXPERIMENT_28_PROFILE = Object.freeze({
   domain: "BITMAPVERSE DELEGATED PERMISSIONS / BUILD GRANT / v0.1\n",
@@ -25,7 +26,11 @@ export const EXPERIMENT_28_PROFILE = Object.freeze({
   district_inscription_id: "7b7c15dc952cde069a371f4628c05ffe56e164bc272cfd9ef29cd231b6b3a9d1i0",
   action: "build",
   authority_mode: "TEST_KEY_FIXTURE",
+  // Evidence sources this policy accepts. The source is echoed as authority_mode; it is never rewritten.
+  accepted_evidence_sources: Object.freeze(["TEST_KEY_FIXTURE", "REAL_PROVIDER_CORROBORATED", "SYNTHETIC_TEST_CAPTURE"]),
   revocation: "LOCAL_ONLY",
+  // Known real District holders. TEST_KEY_FIXTURE evidence may never authorize their grants.
+  known_real_holders: Object.freeze(["bc1psphv4vlce9f37zqc7jt8w3gnynfxxh3zmjuvxpqv0vjs3t3mcdesyfk5tk"]),
 });
 
 const HEX64 = /^[0-9a-f]{64}$/;
@@ -208,9 +213,20 @@ function checkOwnership(payload, request, evidence) {
     "evidence shape",
   );
   ensure(
-    evidence.source === EXPERIMENT_28_PROFILE.authority_mode,
+    EXPERIMENT_28_PROFILE.accepted_evidence_sources.includes(evidence.source),
     "UNSUPPORTED_EVIDENCE_SOURCE",
-    "only TEST_KEY_FIXTURE evidence is accepted by this experiment",
+    "evidence source is not an accepted authority mode",
+  );
+  ensure(
+    evidence.source === EXPERIMENT_28_PROFILE.authority_mode || isVerifiedOwnershipEvidence(evidence),
+    "UNVERIFIED_EVIDENCE",
+    "non-fixture evidence must be the exact object minted by the Experiment #31 evidence verifier",
+  );
+  ensure(
+    !(evidence.source === EXPERIMENT_28_PROFILE.authority_mode
+      && EXPERIMENT_28_PROFILE.known_real_holders.includes(payload.grantor.address)),
+    "FIXTURE_CANNOT_AUTHORIZE_REAL_HOLDER",
+    "a real District holder grant requires verified real evidence",
   );
   ensure(
     evidence.tip.height === request.evaluation_height,
@@ -241,9 +257,16 @@ function checkOwnership(payload, request, evidence) {
   );
 }
 
-function labels() {
+function evidenceMode(evidence) {
+  return isPlainObject(evidence)
+    && (evidence.source === EXPERIMENT_28_PROFILE.authority_mode || isVerifiedOwnershipEvidence(evidence))
+    ? evidence.source
+    : EXPERIMENT_28_PROFILE.authority_mode;
+}
+
+function labels(mode = EXPERIMENT_28_PROFILE.authority_mode) {
   return {
-    authority_mode: EXPERIMENT_28_PROFILE.authority_mode,
+    authority_mode: mode,
     revocation: EXPERIMENT_28_PROFILE.revocation,
   };
 }
@@ -251,6 +274,7 @@ function labels() {
 // request: { district, object_id, builder_address, evaluation_height }
 // grant:   { message, signature } | null
 export function authorizeBuild(request, grant, { ownershipEvidence, revocationState } = {}) {
+  const mode = evidenceMode(ownershipEvidence);
   try {
     ensure(grant !== undefined && grant !== null, "NO_PERMISSION", "no grant supplied");
     validateRequest(request);
@@ -284,14 +308,14 @@ export function authorizeBuild(request, grant, { ownershipEvidence, revocationSt
       grantor: payload.grantor.address,
       evaluation_height: request.evaluation_height,
       expires_at_height: payload.expires_at_height,
-      ...labels(),
+      ...labels(mode),
     };
   } catch (error) {
     return {
       result: "DENY",
       code: error instanceof Denial ? error.code : "VERIFICATION_ERROR",
       reason: error instanceof Denial ? error.reason : String(error?.message ?? error),
-      ...labels(),
+      ...labels(mode),
     };
   }
 }

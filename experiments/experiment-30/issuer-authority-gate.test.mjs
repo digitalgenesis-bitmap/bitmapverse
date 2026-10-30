@@ -246,7 +246,7 @@ test("10. reused implementations are byte-identical to their frozen versions", (
   const pinned = {
     "../experiment-1/resolvers/resolver-js.mjs": "edd210c4ee4e6ecb62243adc535426f2e1ccbf38a6413d2de5aec017effa5d60",
     "../experiment-1/tests/test-support.mjs": "6b30fa45ab192e9ff1106c6d36ee362445089e3594f4d8a6056876db4d942de0",
-    "../experiment-28/permission-verifier.mjs": "e5f54ea6f315aef18fdd218da8db291ce9e4d4762e53e3b4ec52b1ecdee74cdd",
+    "../experiment-28/permission-verifier.mjs": "240a4c96da29d2e18f7e2289f72441f214b8d333b5e75489e00d199e4d70c821",
     "../experiment-29/ownership-evaluator.mjs": "cde01524b1821569b002d4dec79947d359786f94bc66e08989cf02089328b32f",
     "../experiment-23/public-authorization-artifact.v0.1.json": "7be8b35184a6ee4381448fd4e67bf586b57b628302c7d2db26fd2699332b2efb",
   };
